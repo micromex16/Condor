@@ -535,13 +535,16 @@
   .stroke-dots { display:flex; gap:4px; align-items:center; margin-top:5px; }
   .stroke-dot { width:7px; height:7px; border-radius:50%; background:var(--gold);
     box-shadow:0 0 6px rgba(240,180,41,.7); flex-shrink:0; }
-  /* Scorecard table: dots below score number */
-  .sc-cell-inner { display:flex; flex-direction:column; align-items:center; gap:3px; line-height:1; }
-  .sc-dot-row { display:flex; gap:3px; justify-content:center; min-height:7px; }
-  .sc-dot { width:7px; height:7px; border-radius:50%; background:var(--gold);
-    box-shadow:0 0 6px rgba(240,180,41,.8); flex-shrink:0; }
-  .sc-dot-dim { width:7px; height:7px; border-radius:50%; background:rgba(240,180,41,.45);
-    box-shadow:0 0 4px rgba(240,180,41,.3); flex-shrink:0; }
+  /* ── SCORECARD POPS (stroke dots) ── */
+  /* Each cell is position:relative so pops sit in top-right corner */
+  .sc-td { position:relative; text-align:center; padding:8px 3px 4px; min-width:28px; }
+  .sc-td-empty { position:relative; text-align:center; padding:8px 3px 4px; min-width:28px; }
+  /* Pop dots cluster in top-right of cell */
+  .sc-pops { position:absolute; top:2px; right:2px; display:flex; flex-wrap:wrap;
+    gap:2px; max-width:16px; justify-content:flex-end; }
+  .sc-pop { width:5px; height:5px; border-radius:50%; flex-shrink:0; }
+  .sc-pop-scored { background:var(--gold); box-shadow:0 0 4px rgba(240,180,41,.7); }
+  .sc-pop-unscored { background:rgba(240,180,41,.4); }
 
 </style>
 </head>
@@ -2414,7 +2417,7 @@ function renderScorecard() {
   var frontHasScore = new Array(n).fill(false);
   var backHasScore  = new Array(n).fill(false);
 
-  // Build score cells — dots always show per player per hole
+  // Build score cells with top-right corner pops (like real scorecard)
   function buildHoleCells(holeIdx) {
     var hole = holes[holeIdx];
     return state.players.map(function(_, pi) {
@@ -2422,21 +2425,17 @@ function renderScorecard() {
       var scored  = gross !== null && gross !== undefined;
       var strokes = strokesOnHole(state.playingHandicaps[pi], hole.hcp);
 
-      // Build dot row — always render, dim if unscored
-      var dotPips = '';
-      for (var sd = 0; sd < strokes; sd++) {
-        dotPips += '<div class="'+(scored ? 'sc-dot' : 'sc-dot-dim')+'"></div>';
+      // Build pop dots — sit in top-right corner of cell
+      var popsHtml = '';
+      if (strokes > 0) {
+        var pipClass = scored ? 'sc-pop sc-pop-scored' : 'sc-pop sc-pop-unscored';
+        var pips = '';
+        for (var sd = 0; sd < strokes; sd++) pips += '<div class="'+pipClass+'"></div>';
+        popsHtml = '<div class="sc-pops">'+pips+'</div>';
       }
-      // Always reserve dot row space so rows stay same height
-      var dotHtml = '<div class="sc-dot-row">'+dotPips+'</div>';
 
       if (!scored) {
-        return '<td style="text-align:center;padding:5px 2px">' +
-          '<div class="sc-cell-inner">' +
-            '<span style="color:var(--panel4);font-size:12px;font-family:var(--ff-mono)">—</span>' +
-            dotHtml +
-          '</div>' +
-        '</td>';
+        return '<td class="sc-td-empty">'+popsHtml+'</td>';
       }
 
       // Scored — accumulate totals
@@ -2449,13 +2448,10 @@ function renderScorecard() {
       }
       var diff = net !== null ? net - hole.par : gross - hole.par;
       var cls  = diff <= -2 ? 'eagle' : diff === -1 ? 'birdie' : diff === 1 ? 'bogey' : diff >= 2 ? 'double' : '';
-      var scoreNum = cls ? '<span class="sc-circle '+cls+'">'+gross+'</span>' : '<span style="font-family:var(--ff-mono)">'+gross+'</span>';
-      return '<td class="sc-score '+cls+'" style="text-align:center;padding:5px 2px">' +
-        '<div class="sc-cell-inner">' +
-          scoreNum +
-          dotHtml +
-        '</div>' +
-      '</td>';
+      var scoreNum = cls
+        ? '<span class="sc-circle '+cls+'" style="font-family:var(--ff-mono)">'+gross+'</span>'
+        : '<span style="font-family:var(--ff-mono);font-size:13px">'+gross+'</span>';
+      return '<td class="sc-td sc-score '+cls+'">'+popsHtml+scoreNum+'</td>';
     });
   }
 
@@ -2515,14 +2511,11 @@ function renderScorecard() {
             '<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:'+tee.color+';flex-shrink:0"></span>' +
             '<span style="font-family:var(--ff-display);font-weight:700;font-size:13px;color:var(--text)">'+p.name.split(' ')[0]+'</span>' +
           '</div>' +
-          '<div style="display:flex;align-items:center;gap:5px;margin-top:3px;padding-left:13px">' +
-            '<span style="font-family:var(--ff-mono);font-size:10px;color:var(--text-muted)">HCP '+state.playingHandicaps[pi]+'</span>' +
+          '<div style="display:flex;align-items:center;gap:6px;margin-top:3px;padding-left:13px">' +
+            '<span style="font-family:var(--ff-mono);font-size:10px;color:var(--text-muted)">HCP&nbsp;'+state.playingHandicaps[pi]+'</span>' +
             (sideStrokesTotal > 0
-              ? '<span style="display:flex;gap:2px;align-items:center">' +
-                  Array(Math.min(sideStrokesTotal,9)).fill('<div class="sc-dot" style="width:5px;height:5px"></div>').join('') +
-                  (sideStrokesTotal > 9 ? '<span style="font-family:var(--ff-mono);font-size:9px;color:var(--gold)">+'+(sideStrokesTotal-9)+'</span>' : '') +
-                '</span>'
-              : '') +
+              ? '<span style="font-family:var(--ff-mono);font-size:10px;color:var(--gold);font-weight:700">'+sideStrokesTotal+'&nbsp;pop'+(sideStrokesTotal!==1?'s':'')+'</span>'
+              : '<span style="font-family:var(--ff-mono);font-size:10px;color:var(--text-muted)">scratch</span>') +
           '</div>' +
         '</td>';
 
