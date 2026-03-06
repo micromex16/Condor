@@ -529,6 +529,20 @@
   .round-tab { flex:1; padding:9px 0; text-align:center; font-family:var(--ff-display); font-size:12px; font-weight:700; letter-spacing:1.2px; text-transform:uppercase; color:var(--text-muted); background:none; border:none; cursor:pointer; border-bottom:2px solid transparent; transition:all .15s; }
   .round-tab:active { color:var(--neon); background:rgba(31,223,100,.05); }
 
+
+  /* ── STROKE INDICATORS ── */
+  .stroke-pill { display:inline-flex; align-items:center; gap:4px; background:rgba(240,180,41,.14);
+    border:1px solid rgba(240,180,41,.4); border-radius:5px; padding:3px 8px;
+    font-family:var(--ff-mono); font-size:11px; font-weight:700; color:var(--gold);
+    margin-top:5px; }
+  .stroke-pip { display:inline-block; width:6px; height:6px; border-radius:50%;
+    background:var(--gold); box-shadow:0 0 5px rgba(240,180,41,.6); flex-shrink:0; }
+  /* scorecard stroke dot — superscript dot above the score */
+  .sc-stroke-dot { display:inline-block; width:5px; height:5px; border-radius:50%;
+    background:var(--gold); vertical-align:super; margin-left:1px; flex-shrink:0;
+    box-shadow:0 0 4px rgba(240,180,41,.5); }
+  .sc-cell-wrap { display:inline-flex; align-items:flex-start; justify-content:center; gap:1px; }
+
 </style>
 </head>
 <body>
@@ -777,8 +791,9 @@
     </div>
     <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">
       <div class="hole-hdcp-badge" id="live-hdcp">HCP Index: 7</div>
-      <div style="display:flex;gap:6px">
+      <div style="display:flex;gap:6px;align-items:center">
         <button class="manual-press-btn" onclick="showManualPressMenu()" id="press-menu-btn" style="display:none">Press</button>
+        <button onclick="confirmAbandonRound()" style="background:rgba(255,255,255,.07);border:1px solid var(--border2);color:var(--text-muted);border-radius:6px;padding:5px 10px;font-family:var(--ff-display);font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;cursor:pointer" title="Back to setup">⚙ Setup</button>
       </div>
     </div>
   </div>
@@ -2033,16 +2048,24 @@ function renderScoreGrid() {
       ? '<div class="score-val" style="color:var(--border);font-family:\'DM Mono\',monospace;font-size:18px" id="score-val-'+pi+'">'+hole.par+'</div>'
       : '<div class="score-val '+scoreClass+'" id="score-val-'+pi+'">'+gross+'</div>';
 
-    var subLine = isBlank
-      ? '<div style="font-size:11px;color:var(--border)">CH '+state.playingHandicaps[pi]+' · '+hole.yards+'y · tap to score</div>'
-      : '<div style="font-size:11px;color:var(--text-dim)">CH '+state.playingHandicaps[pi]+' · '+hole.yards+'y · Net '+netLabel+' · '+(strokes>0?strokes+' stroke'+(strokes>1?'s':''):'No strokes')+'</div>';
+    // Build stroke pill — prominent gold dots + label
+    var strokePips = '';
+    for (var sd=0; sd<Math.min(strokes,3); sd++) strokePips += '<span class="stroke-pip"></span>';
+    var strokePill = strokes > 0
+      ? '<div class="stroke-pill">'+strokePips+' GET '+strokes+'</div>'
+      : '';
 
-    return '<div class="score-row" id="score-row-'+pi+'">' +
+    var subLine = isBlank
+      ? '<div style="font-size:11px;color:var(--text-muted);margin-top:2px">CH '+state.playingHandicaps[pi]+' · '+hole.yards+'y · tap to score</div>'
+      : '<div style="font-size:11px;color:var(--text-dim);margin-top:2px">CH '+state.playingHandicaps[pi]+' · '+hole.yards+'y · Net <strong style=\'color:var(--text)\'>'+netLabel+'</strong></div>';
+
+    var rowClass = 'score-row' + (isBlank ? '' : (diff < 0 ? ' winning' : diff > 1 ? ' losing' : ''));
+    return '<div class="'+rowClass+'" id="score-row-'+pi+'">' +
       '<div style="flex:1;min-width:0">' +
         '<div class="score-player">'+teeDot+p.name+teamBadge+'</div>' +
         subLine +
+        strokePill +
       '</div>' +
-      dots +
       '<div class="score-stepper">' +
         '<button class="step-btn" onclick="changeScore('+pi+',-1)">−</button>' +
         scoreDisplay +
@@ -2408,8 +2431,12 @@ function renderScorecard() {
       }
       var diff = net !== null ? net - hole.par : gross - hole.par;
       var cls = diff <= -2 ? 'eagle' : diff === -1 ? 'birdie' : diff === 1 ? 'bogey' : diff >= 2 ? 'double' : '';
+      var strokes = strokesOnHole(state.playingHandicaps[pi], hole.hcp);
+      var strokeDots = '';
+      for (var sd = 0; sd < Math.min(strokes, 2); sd++) strokeDots += '<span class="sc-stroke-dot"></span>';
       var inner = gross;
       if (cls) inner = '<span class="sc-circle '+cls+'">'+gross+'</span>';
+      if (strokes > 0) inner = '<span class="sc-cell-wrap">'+inner+strokeDots+'</span>';
       return '<td class="sc-score '+cls+'" style="text-align:center">'+inner+'</td>';
     });
   }
@@ -2441,11 +2468,13 @@ function renderScorecard() {
     }
     parRow += '<td style="text-align:center;font-weight:700;background:var(--green-dim)">'+parTotal+'</td></tr>';
 
-    // HCP row
+    // HCP row — highlight cells where player 0 gets a stroke
     var hcpRow = '<tr style="background:rgba(255,255,255,.02)">' +
       '<td style="font-size:9px;font-weight:700;letter-spacing:1px;color:var(--text-dim);padding-left:10px">HCP</td>';
     for (var i = start; i <= end; i++) {
-      hcpRow += '<td style="text-align:center;font-size:10px;color:var(--text-dim)">'+holes[i].hcp+'</td>';
+      var p0strokes = strokesOnHole(state.playingHandicaps[0], holes[i].hcp);
+      var hcpBg = p0strokes > 0 ? 'background:rgba(240,180,41,.07);' : '';
+      hcpRow += '<td style="text-align:center;font-size:10px;color:'+(p0strokes>0?'var(--gold)':'var(--text-dim)')+';'+hcpBg+'">'+holes[i].hcp+'</td>';
     }
     hcpRow += '<td></td></tr>';
 
@@ -3221,6 +3250,22 @@ ${betsHtml ? `<div class="section">
   a.download = `condor-scorecard-${state.course.name.replace(/\s+/g,'-').toLowerCase()}.html`;
   a.click();
   URL.revokeObjectURL(url);
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// ABANDON ROUND
+// ═══════════════════════════════════════════════════════════════════
+function confirmAbandonRound() {
+  if (confirm('Abandon this round and go back to setup?\nAll scores will be lost.')) {
+    // Reset state
+    state.currentHole = 1;
+    state.scores = [];
+    state.nassau = { front:{leader:-1,holesUp:0}, back:{leader:-1,holesUp:0}, match:{leader:-1,holesUp:0}, presses:[], pressOffered:{} };
+    state.skins = { carryover:0, results:[] };
+    state.sideGameResults = [];
+    state.customMatchups = [];
+    goTo('screen-course');
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════════
