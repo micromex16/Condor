@@ -540,6 +540,8 @@
   .sc-dot-row { display:flex; gap:3px; justify-content:center; }
   .sc-dot { width:5px; height:5px; border-radius:50%; background:var(--gold);
     box-shadow:0 0 4px rgba(240,180,41,.6); flex-shrink:0; }
+  .sc-dot-dim { width:5px; height:5px; border-radius:50%; background:rgba(240,180,41,.3);
+    flex-shrink:0; }
 
 </style>
 </head>
@@ -2412,41 +2414,45 @@ function renderScorecard() {
   var frontHasScore = new Array(n).fill(false);
   var backHasScore  = new Array(n).fill(false);
 
-  // Build score cells and accumulate totals in one pass
-  // Returns array of td strings per player for a given hole index
+  // Build score cells — dots show for every player on every hole
   function buildHoleCells(holeIdx) {
     var hole = holes[holeIdx];
     return state.players.map(function(_, pi) {
-      var gross = state.scores[pi] ? state.scores[pi][holeIdx] : null;
-      if (gross === null || gross === undefined) {
-        // Still show stroke dots on unscored holes
-        var blankStrokes = strokesOnHole(state.playingHandicaps[pi], hole.hcp);
-        var blankDots = '';
-        for (var bd = 0; bd < blankStrokes; bd++) blankDots += '<div class="sc-dot" style="opacity:.35"></div>';
-        var blankInner = blankStrokes > 0
-          ? '<div class="sc-cell-inner"><span style="color:var(--border);font-size:13px">·</span><div class="sc-dot-row">'+blankDots+'</div></div>'
-          : '<span style="color:var(--border);font-size:13px">·</span>';
-        return '<td style="text-align:center;padding:5px 3px">'+blankInner+'</td>';
+      var gross   = state.scores[pi] ? state.scores[pi][holeIdx] : null;
+      var scored  = gross !== null && gross !== undefined;
+      var strokes = strokesOnHole(state.playingHandicaps[pi], hole.hcp);
+
+      // Always build dots for this player on this hole
+      var dotHtml = '';
+      if (strokes > 0) {
+        var dotPips = '';
+        for (var sd = 0; sd < strokes; sd++) dotPips += '<div class="sc-dot'+(scored?'':' sc-dot-dim')+'"></div>';
+        dotHtml = '<div class="sc-dot-row">'+dotPips+'</div>';
       }
+
+      if (!scored) {
+        // Unscored — show dash + faint dots
+        var inner = strokes > 0
+          ? '<div class="sc-cell-inner"><span style="color:var(--border);font-size:11px">—</span>'+dotHtml+'</div>'
+          : '<span style="color:var(--border);font-size:11px">—</span>';
+        return '<td style="text-align:center;padding:4px 2px">'+inner+'</td>';
+      }
+
+      // Scored — accumulate totals
       if (holeIdx < 9) { frontGross[pi] += gross; frontHasScore[pi] = true; }
       else             { backGross[pi]  += gross; backHasScore[pi]  = true; }
-      var net  = getNet(pi, holeIdx);
+      var net = getNet(pi, holeIdx);
       if (net !== null) {
         if (holeIdx < 9) frontNet[pi] += net;
         else             backNet[pi]  += net;
       }
       var diff = net !== null ? net - hole.par : gross - hole.par;
-      var cls = diff <= -2 ? 'eagle' : diff === -1 ? 'birdie' : diff === 1 ? 'bogey' : diff >= 2 ? 'double' : '';
-      var strokes = strokesOnHole(state.playingHandicaps[pi], hole.hcp);
-      // Build dot row: one dot per stroke, shown below the score
-      var scDots = '';
-      for (var sd = 0; sd < strokes; sd++) scDots += '<div class="sc-dot"></div>';
-      var scoreNum = gross;
-      if (cls) scoreNum = '<span class="sc-circle '+cls+'">'+gross+'</span>';
+      var cls  = diff <= -2 ? 'eagle' : diff === -1 ? 'birdie' : diff === 1 ? 'bogey' : diff >= 2 ? 'double' : '';
+      var scoreNum = cls ? '<span class="sc-circle '+cls+'">'+gross+'</span>' : ''+gross;
       var inner = strokes > 0
-        ? '<div class="sc-cell-inner">'+scoreNum+'<div class="sc-dot-row">'+scDots+'</div></div>'
+        ? '<div class="sc-cell-inner">'+scoreNum+dotHtml+'</div>'
         : scoreNum;
-      return '<td class="sc-score '+cls+'" style="text-align:center;padding:5px 3px">'+inner+'</td>';
+      return '<td class="sc-score '+cls+'" style="text-align:center;padding:4px 2px">'+inner+'</td>';
     });
   }
 
@@ -2477,13 +2483,11 @@ function renderScorecard() {
     }
     parRow += '<td style="text-align:center;font-weight:700;background:var(--green-dim)">'+parTotal+'</td></tr>';
 
-    // HCP row — highlight cells where player 0 gets a stroke
+    // HCP index row
     var hcpRow = '<tr style="background:rgba(255,255,255,.02)">' +
-      '<td style="font-size:9px;font-weight:700;letter-spacing:1px;color:var(--text-dim);padding-left:10px">HCP</td>';
+      '<td style="font-size:9px;font-weight:700;letter-spacing:1px;color:var(--text-muted);padding-left:10px">HCP</td>';
     for (var i = start; i <= end; i++) {
-      var p0strokes = strokesOnHole(state.playingHandicaps[0], holes[i].hcp);
-      var hcpBg = p0strokes > 0 ? 'background:rgba(240,180,41,.07);' : '';
-      hcpRow += '<td style="text-align:center;font-size:10px;color:'+(p0strokes>0?'var(--gold)':'var(--text-dim)')+';'+hcpBg+'">'+holes[i].hcp+'</td>';
+      hcpRow += '<td style="text-align:center;font-size:10px;color:var(--text-muted)">'+holes[i].hcp+'</td>';
     }
     hcpRow += '<td></td></tr>';
 
@@ -2496,13 +2500,13 @@ function renderScorecard() {
       var netTot   = isBack ? backNet[pi]   : frontNet[pi];
       var hasScore = isBack ? backHasScore[pi] : frontHasScore[pi];
 
-      playerRowsHtml += '<tr style="border-top:1px solid rgba(208,224,214,.4)">' +
-        '<td style="padding:7px 6px 7px 10px;white-space:nowrap;background:rgba(255,255,255,.015)">' +
-          '<span style="display:inline-flex;align-items:center;gap:5px">' +
+      playerRowsHtml += '<tr style="border-top:1px solid var(--border)">' +
+        '<td style="padding:6px 6px 6px 10px;white-space:nowrap;background:rgba(255,255,255,.02)">' +
+          '<div style="display:flex;align-items:center;gap:5px">' +
             '<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:'+tee.color+';flex-shrink:0"></span>' +
-            '<span style="font-weight:700;font-size:12px">'+p.name.split(' ')[0]+'</span>' +
-            '<span style="font-size:9px;color:var(--text-dim)">CH'+state.playingHandicaps[pi]+'</span>' +
-          '</span>' +
+            '<span style="font-family:var(--ff-display);font-weight:700;font-size:13px;color:var(--text)">'+p.name.split(' ')[0]+'</span>' +
+          '</div>' +
+          '<div style="font-family:var(--ff-mono);font-size:10px;color:var(--gold);margin-top:2px;padding-left:13px">HCP '+state.playingHandicaps[pi]+'</div>' +
         '</td>';
 
       // Score cells for this side
