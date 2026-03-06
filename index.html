@@ -535,13 +535,13 @@
   .stroke-dots { display:flex; gap:4px; align-items:center; margin-top:5px; }
   .stroke-dot { width:7px; height:7px; border-radius:50%; background:var(--gold);
     box-shadow:0 0 6px rgba(240,180,41,.7); flex-shrink:0; }
-  /* Scorecard table: dots stacked below the score number */
-  .sc-cell-inner { display:flex; flex-direction:column; align-items:center; gap:2px; line-height:1; }
-  .sc-dot-row { display:flex; gap:3px; justify-content:center; }
-  .sc-dot { width:5px; height:5px; border-radius:50%; background:var(--gold);
-    box-shadow:0 0 4px rgba(240,180,41,.6); flex-shrink:0; }
-  .sc-dot-dim { width:5px; height:5px; border-radius:50%; background:rgba(240,180,41,.3);
-    flex-shrink:0; }
+  /* Scorecard table: dots below score number */
+  .sc-cell-inner { display:flex; flex-direction:column; align-items:center; gap:3px; line-height:1; }
+  .sc-dot-row { display:flex; gap:3px; justify-content:center; min-height:7px; }
+  .sc-dot { width:7px; height:7px; border-radius:50%; background:var(--gold);
+    box-shadow:0 0 6px rgba(240,180,41,.8); flex-shrink:0; }
+  .sc-dot-dim { width:7px; height:7px; border-radius:50%; background:rgba(240,180,41,.45);
+    box-shadow:0 0 4px rgba(240,180,41,.3); flex-shrink:0; }
 
 </style>
 </head>
@@ -2414,7 +2414,7 @@ function renderScorecard() {
   var frontHasScore = new Array(n).fill(false);
   var backHasScore  = new Array(n).fill(false);
 
-  // Build score cells — dots show for every player on every hole
+  // Build score cells — dots always show per player per hole
   function buildHoleCells(holeIdx) {
     var hole = holes[holeIdx];
     return state.players.map(function(_, pi) {
@@ -2422,20 +2422,21 @@ function renderScorecard() {
       var scored  = gross !== null && gross !== undefined;
       var strokes = strokesOnHole(state.playingHandicaps[pi], hole.hcp);
 
-      // Always build dots for this player on this hole
-      var dotHtml = '';
-      if (strokes > 0) {
-        var dotPips = '';
-        for (var sd = 0; sd < strokes; sd++) dotPips += '<div class="sc-dot'+(scored?'':' sc-dot-dim')+'"></div>';
-        dotHtml = '<div class="sc-dot-row">'+dotPips+'</div>';
+      // Build dot row — always render, dim if unscored
+      var dotPips = '';
+      for (var sd = 0; sd < strokes; sd++) {
+        dotPips += '<div class="'+(scored ? 'sc-dot' : 'sc-dot-dim')+'"></div>';
       }
+      // Always reserve dot row space so rows stay same height
+      var dotHtml = '<div class="sc-dot-row">'+dotPips+'</div>';
 
       if (!scored) {
-        // Unscored — show dash + faint dots
-        var inner = strokes > 0
-          ? '<div class="sc-cell-inner"><span style="color:var(--border);font-size:11px">—</span>'+dotHtml+'</div>'
-          : '<span style="color:var(--border);font-size:11px">—</span>';
-        return '<td style="text-align:center;padding:4px 2px">'+inner+'</td>';
+        return '<td style="text-align:center;padding:5px 2px">' +
+          '<div class="sc-cell-inner">' +
+            '<span style="color:var(--panel4);font-size:12px;font-family:var(--ff-mono)">—</span>' +
+            dotHtml +
+          '</div>' +
+        '</td>';
       }
 
       // Scored — accumulate totals
@@ -2448,11 +2449,13 @@ function renderScorecard() {
       }
       var diff = net !== null ? net - hole.par : gross - hole.par;
       var cls  = diff <= -2 ? 'eagle' : diff === -1 ? 'birdie' : diff === 1 ? 'bogey' : diff >= 2 ? 'double' : '';
-      var scoreNum = cls ? '<span class="sc-circle '+cls+'">'+gross+'</span>' : ''+gross;
-      var inner = strokes > 0
-        ? '<div class="sc-cell-inner">'+scoreNum+dotHtml+'</div>'
-        : scoreNum;
-      return '<td class="sc-score '+cls+'" style="text-align:center;padding:4px 2px">'+inner+'</td>';
+      var scoreNum = cls ? '<span class="sc-circle '+cls+'">'+gross+'</span>' : '<span style="font-family:var(--ff-mono)">'+gross+'</span>';
+      return '<td class="sc-score '+cls+'" style="text-align:center;padding:5px 2px">' +
+        '<div class="sc-cell-inner">' +
+          scoreNum +
+          dotHtml +
+        '</div>' +
+      '</td>';
     });
   }
 
@@ -2500,13 +2503,27 @@ function renderScorecard() {
       var netTot   = isBack ? backNet[pi]   : frontNet[pi];
       var hasScore = isBack ? backHasScore[pi] : frontHasScore[pi];
 
+      // Count total strokes this player gets across this side
+      var sideStrokesTotal = 0;
+      for (var si = start; si <= end; si++) {
+        sideStrokesTotal += strokesOnHole(state.playingHandicaps[pi], holes[si].hcp);
+      }
+
       playerRowsHtml += '<tr style="border-top:1px solid var(--border)">' +
         '<td style="padding:6px 6px 6px 10px;white-space:nowrap;background:rgba(255,255,255,.02)">' +
           '<div style="display:flex;align-items:center;gap:5px">' +
             '<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:'+tee.color+';flex-shrink:0"></span>' +
             '<span style="font-family:var(--ff-display);font-weight:700;font-size:13px;color:var(--text)">'+p.name.split(' ')[0]+'</span>' +
           '</div>' +
-          '<div style="font-family:var(--ff-mono);font-size:10px;color:var(--gold);margin-top:2px;padding-left:13px">HCP '+state.playingHandicaps[pi]+'</div>' +
+          '<div style="display:flex;align-items:center;gap:5px;margin-top:3px;padding-left:13px">' +
+            '<span style="font-family:var(--ff-mono);font-size:10px;color:var(--text-muted)">HCP '+state.playingHandicaps[pi]+'</span>' +
+            (sideStrokesTotal > 0
+              ? '<span style="display:flex;gap:2px;align-items:center">' +
+                  Array(Math.min(sideStrokesTotal,9)).fill('<div class="sc-dot" style="width:5px;height:5px"></div>').join('') +
+                  (sideStrokesTotal > 9 ? '<span style="font-family:var(--ff-mono);font-size:9px;color:var(--gold)">+'+(sideStrokesTotal-9)+'</span>' : '') +
+                '</span>'
+              : '') +
+          '</div>' +
         '</td>';
 
       // Score cells for this side
