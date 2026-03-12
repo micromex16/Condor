@@ -1688,7 +1688,9 @@ function getRunningMoney() {
 // COURSE SELECT SCREEN
 // ═══════════════════════════════════════════════════════════════════
 
-// ── COURSE SEARCH ───────────────────────────────────────────────────
+// ── COURSE SEARCH ──────────────────────────────────────────
+const SUPABASE_FUNCTION_URL = 'https://oixvlmgtzllsepzfhple.supabase.co/functions/v1/golf-course-search';
+
 function filterCourses(q) {
   const filtered = q
     ? COURSES.filter(c =>
@@ -1697,40 +1699,117 @@ function filterCourses(q) {
       )
     : COURSES;
   renderCourseList(filtered);
+
+  // Hit the API if 3+ characters typed
+  if (q && q.length >= 3) {
+    searchAPIcourses(q);
+  } else {
+    // Clear any previous API results
+    const apiSection = document.getElementById('api-course-results');
+    if (apiSection) apiSection.remove();
+  }
 }
 
-function renderCourseList(courses) {
-  const list = document.getElementById('course-list');
-  if (!courses.length) {
-    list.innerHTML = `<div style="text-align:center;padding:40px 20px;color:var(--text-dim)">No courses found</div>`;
-    return;
+async function searchAPIcourses(q) {
+  // Remove previous API results
+  const old = document.getElementById('api-course-results');
+  if (old) old.remove();
+
+  try {
+    const res = await fetch(SUPABASE_FUNCTION_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query: q })
+    });
+    const data = await res.json();
+    const courses = data.courses || [];
+    if (!courses.length) return;
+
+    // Filter out any that match hardcoded courses by name
+    const localNames = COURSES.map(c => c.name.toLowerCase());
+    const newCourses = courses.filter(c =>
+      !localNames.includes(c.club_name?.toLowerCase())
+    );
+    if (!newCourses.length) return;
+
+    // Build and append API results section
+    const list = document.getElementById('course-list');
+    const section = document.createElement('div');
+    section.id = 'api-course-results';
+    section.innerHTML = `
+      <div style="height:18px"></div>
+      <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold-rule);margin-bottom:10px;padding-left:2px">More Courses</div>
+      ${newCourses.slice(0, 10).map(c => `
+        <div onclick="selectAPIcourse('${c.id}')"
+          style="padding:14px 16px;background:var(--card-bg);border-radius:8px;margin-bottom:8px;cursor:pointer;border:1px solid var(--border)">
+          <div style="font-weight:600;font-size:15px">${c.club_name}</div>
+          <div style="font-size:12px;color:var(--text-dim);margin-top:2px">${c.city || ''}${c.state ? ', ' + c.state : ''}${c.country ? ' · ' + c.country : ''}</div>
+        </div>
+      `).join('')}
+    `;
+    list.after(section);
+
+  } catch (err) {
+    console.error('API search error:', err);
   }
-  const favIds = state.favoriteCourses;
-  const sorted = [...courses].sort((a,b) => a.name.localeCompare(b.name));
-  const favs = sorted.filter(c => favIds.includes(c.id));
-  const rest = sorted.filter(c => !favIds.includes(c.id));
-  let html = '';
-  if (favs.length) {
-    html += `<div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold-rule);margin-bottom:10px;padding-left:2px">Favorites</div>`;
-    html += favs.map(c => courseCard(c, true)).join('');
-    if (rest.length) html += `<div style="height:18px"></div>`;
-  }
-  if (rest.length) {
-    if (favs.length) {
-      html += `<div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--green-augusta);margin-bottom:10px;padding-left:2px">All Courses</div>`;
-    }
-    html += rest.map(c => courseCard(c, false)).join('');
-  }
-  list.innerHTML = html;
 }
 
-function selectCourse(id) {
-  state.course = COURSES.find(c => c.id === id);
-  const defaultIdx = Math.min(1, state.course.teeSets.length - 1);
-  state.players.forEach(p => p.teeIdx = defaultIdx);
-  calcPlayingHandicaps();
-  renderPlayerScreen();
-  goTo('screen-players');
+async function selectAPIcourse(courseId) {
+  try {
+    const res = await fetch(SUPABASE_FUNCTION_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query: '__id__', id: courseId })
+    });
+    const data = await res.json();
+    const c = data.course || data;
+    if (!c) return;
+
+    // Convert API course to your app's format
+    const teeSets = (c.tees || []).map(t => ({
+      label: t.tee_name || t.label || 'Tee',
+      color: '#9e9e9e',
+      rating: parseFloat(t.course_rating) || 72,
+      slope: parseInt(t.slope_rating) || 113,
+      par: parseInt(t.par_total) || 72,
+      yards: parseInt(t.total_yards) || 6000,
+      holes: Array.from({ length: 18 }, (_, i) => ({
+        par: 4,
+        yards: Math.round((parseInt(t.total_yards) || 6000) / 18),
+        hcp: i + 1
+      }))
+    }));
+
+    const apiCourse = {
+      id: 'api_' + courseId,
+      name: c.club_name || c.name || 'Unknown Course',
+      location: [c.city, c.state, c.country].filter(Boolean).join(', '),
+      emoji: '🏌️',
+      note: '',
+      teeSets: teeSets.length ? teeSets : [{
+        label: 'Default',
+        color: '#9e9e9e',
+        rating: 72,
+        slope: 113,
+        par: 72,
+        yards: 6000,
+        holes: Array.from({ length: 18 }, (_, i) => ({ par: 4, yards: 333, hcp: i + 1 }))
+      }]
+    };
+
+    // Add to COURSES temporarily and select it
+    const existing = COURSES.findIndex(c => c.id === apiCourse.id);
+    if (existing === -1) COURSES.push(apiCourse);
+    state.course = COURSES.find(c => c.id === apiCourse.id);
+    const defaultIdx = Math.min(1, state.course.teeSets.length - 1);
+    state.players.forEach(p => p.teeIdx = defaultIdx);
+    calcPlayingHandicaps();
+    renderPlayerScreen();
+    goTo('screen-players');
+
+  } catch (err) {
+    console.error('Error loading course:', err);
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════════
