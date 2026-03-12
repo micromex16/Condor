@@ -864,6 +864,58 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
   color: var(--score-bogey); margin-top: 10px;
   text-align: center; display: none;
 }
+   /* ── CLUBHOUSE SCREEN ── */
+.ch-lb-row {
+  display:grid; grid-template-columns:24px 1fr 60px;
+  padding:11px 14px; border-bottom:1px solid rgba(27,58,45,.05);
+  align-items:center;
+}
+.ch-lb-row:last-child { border-bottom:none; }
+.ch-lb-rank {
+  font-family:var(--serif); font-size:13px; font-weight:700;
+  color:var(--sand); 
+}
+.ch-lb-rank.top { color:var(--gold-rule); }
+.ch-lb-player { display:flex; align-items:center; gap:8px; }
+.ch-lb-av {
+  width:28px; height:28px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--serif); font-size:11px; font-weight:600;
+  color:var(--green-deep); flex-shrink:0;
+}
+.ch-lb-name {
+  font-family:var(--serif); font-size:15px; font-weight:600;
+  color:var(--ink);
+}
+.ch-lb-meta {
+  font-family:var(--sans); font-size:9px; color:#888;
+  letter-spacing:.5px; font-weight:500; margin-top:1px;
+}
+.ch-lb-val {
+  font-family:var(--serif); font-size:15px; font-weight:700;
+  text-align:right;
+}
+.ch-lb-val.pos { color:var(--green-augusta); }
+.ch-lb-val.neg { color:var(--score-bogey); }
+.ch-lb-val.even { color:var(--ink-muted); }
+.ch-member-row {
+  display:flex; align-items:center;
+  padding:12px 14px; border-bottom:1px solid var(--rule); gap:12px;
+}
+.ch-member-row:last-child { border-bottom:none; }
+.ch-member-av {
+  width:38px; height:38px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--serif); font-size:14px; font-weight:600;
+  color:var(--green-deep); flex-shrink:0;
+}
+.ch-member-name {
+  font-family:var(--serif); font-size:16px; font-weight:600; color:var(--ink);
+}
+.ch-member-meta {
+  font-family:var(--sans); font-size:10px; color:#888;
+  margin-top:2px; letter-spacing:.3px; font-weight:500;
+}
 </style>
 </head>
 <body>
@@ -975,7 +1027,62 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
 <!-- ════════════════════════════════════════════════
      SCREEN 2: PLAYERS & TEES
 ════════════════════════════════════════════════ -->
-<div class="screen hidden" id="screen-players">
+<!-- ════════════════════════════════════════════════
+     SCREEN: CLUBHOUSE
+════════════════════════════════════════════════ -->
+<div class="screen hidden" id="screen-clubhouse">
+  <div class="header" style="position:relative;">
+    <button class="back-btn" onclick="goTo('screen-course')">← Back</button>
+    <div class="header-title">The Clubhouse</div>
+  </div>
+
+  <!-- Profile strip -->
+  <div style="background:var(--green-deep);padding:24px 20px 28px;text-align:center;position:relative;border-bottom:1px solid rgba(196,164,86,.2);">
+    <div style="width:72px;height:72px;border-radius:50%;background:rgba(196,164,86,.15);border:2px solid rgba(196,164,86,.3);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-family:var(--serif);font-size:24px;font-weight:500;color:#d4c89a;" id="ch-avatar">?</div>
+    <div style="font-family:var(--serif);font-size:22px;font-weight:500;color:#f0ebe0;letter-spacing:-.2px;" id="ch-name">—</div>
+    <div style="display:inline-block;margin-top:8px;padding:3px 14px;border:1px solid rgba(196,164,86,.3);border-radius:20px;font-family:var(--sans);font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold-rule);" id="ch-hcp">HCP —</div>
+  </div>
+
+  <!-- Stats bar -->
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--cream-card);border-bottom:1px solid var(--rule);" id="ch-stats">
+    <div style="padding:14px 8px;text-align:center;border-right:1px solid var(--rule);">
+      <div style="font-family:var(--serif);font-size:22px;font-weight:500;color:var(--green-deep);" id="ch-rounds">—</div>
+      <div style="font-family:var(--sans);font-size:8px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--ink-muted);margin-top:3px;">Rounds</div>
+    </div>
+    <div style="padding:14px 8px;text-align:center;border-right:1px solid var(--rule);">
+      <div style="font-family:var(--serif);font-size:22px;font-weight:500;color:var(--green-deep);" id="ch-winrate">—</div>
+      <div style="font-family:var(--sans);font-size:8px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--ink-muted);margin-top:3px;">Win Rate</div>
+    </div>
+    <div style="padding:14px 8px;text-align:center;">
+      <div style="font-family:var(--serif);font-size:22px;font-weight:500;" id="ch-money">—</div>
+      <div style="font-family:var(--sans);font-size:8px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--ink-muted);margin-top:3px;">Net $</div>
+    </div>
+  </div>
+
+  <div class="body" style="padding:0;">
+
+    <!-- Leaderboard -->
+    <div style="font-family:var(--sans);font-size:9px;font-weight:700;letter-spacing:3.5px;text-transform:uppercase;color:var(--green-augusta);padding:16px 16px 8px;">Leaderboard</div>
+    <div style="margin:0 16px;border:1px solid var(--rule);border-radius:4px;overflow:hidden;background:var(--cream-card);">
+      <div style="display:grid;grid-template-columns:24px 1fr 60px;padding:8px 14px;border-bottom:1px solid var(--rule);background:var(--green-pale);">
+        <div style="font-family:var(--sans);font-size:8px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--green-augusta);opacity:.85;">#</div>
+        <div style="font-family:var(--sans);font-size:8px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--green-augusta);opacity:.85;">Member</div>
+        <div style="font-family:var(--sans);font-size:8px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--green-augusta);opacity:.85;text-align:right;">Net $</div>
+      </div>
+      <div id="ch-leaderboard">
+        <div style="padding:20px;text-align:center;font-family:var(--sans);font-size:12px;color:var(--ink-muted);">Loading…</div>
+      </div>
+    </div>
+
+    <!-- Members -->
+    <div style="font-family:var(--sans);font-size:9px;font-weight:700;letter-spacing:3.5px;text-transform:uppercase;color:var(--green-augusta);padding:16px 16px 8px;">Members</div>
+    <div style="margin:0 16px 16px;border:1px solid var(--rule);border-radius:4px;overflow:hidden;background:var(--cream-card);" id="ch-members">
+      <div style="padding:20px;text-align:center;font-family:var(--sans);font-size:12px;color:var(--ink-muted);">Loading…</div>
+    </div>
+
+  </div>
+</div>
+   <div class="screen hidden" id="screen-players">
   <div class="header">
     <button class="back-btn" onclick="goTo('screen-course')">← Back</button>
     <div class="header-title">Players & Tees</div>
@@ -2662,6 +2769,95 @@ async function initProfileAvatar() {
   }
 }
 loadCourses();
+      async function openClubhouse() {
+  goTo('screen-clubhouse');
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) return;
+  const userId = session.user.id;
+
+  // Load my profile
+  const { data: me } = await sb
+    .from('players')
+    .select('username, hdcp_index')
+    .eq('id', userId)
+    .single();
+
+  if (me) {
+    const initials = (me.username || '?').split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2);
+    document.getElementById('ch-avatar').textContent = initials;
+    document.getElementById('ch-name').textContent = me.username || '—';
+    document.getElementById('ch-hcp').textContent = me.hdcp_index != null ? 'HCP ' + me.hdcp_index : 'HCP —';
+  }
+
+  // Load my round stats
+  const { data: myRounds } = await sb
+    .from('round_players')
+    .select('finish_position, money_result')
+    .eq('player_id', userId);
+
+  if (myRounds && myRounds.length) {
+    const total = myRounds.length;
+    const wins = myRounds.filter(r => r.finish_position === 1).length;
+    const money = myRounds.reduce((s, r) => s + (r.money_result || 0), 0);
+    const winPct = Math.round((wins / total) * 100);
+    document.getElementById('ch-rounds').textContent = total;
+    document.getElementById('ch-winrate').textContent = winPct + '%';
+    const moneyEl = document.getElementById('ch-money');
+    moneyEl.textContent = (money >= 0 ? '+$' : '-$') + Math.abs(money);
+    moneyEl.style.color = money > 0 ? 'var(--green-augusta)' : money < 0 ? 'var(--score-bogey)' : 'var(--ink-muted)';
+  } else {
+    document.getElementById('ch-rounds').textContent = '0';
+    document.getElementById('ch-winrate').textContent = '—';
+    document.getElementById('ch-money').textContent = '$0';
+  }
+
+  // Load leaderboard
+  const { data: allRounds } = await sb
+    .from('round_players')
+    .select('player_id, finish_position, money_result, players(username, hdcp_index)');
+
+  const boardMap = {};
+  (allRounds || []).forEach(r => {
+    if (!r.player_id || !r.players) return;
+    if (!boardMap[r.player_id]) boardMap[r.player_id] = { name: r.players.username, hdcp: r.players.hdcp_index, money: 0, rounds: 0 };
+    boardMap[r.player_id].money += r.money_result || 0;
+    boardMap[r.player_id].rounds++;
+  });
+
+  const sorted = Object.values(boardMap).sort((a, b) => b.money - a.money);
+  const ranks = ['I','II','III','IV','V','VI','VII','VIII'];
+  const colors = ['#e8d5b0','#d4e8d0','#f0e8d8','#e8dde8','#d4d8e8','#e8d4d4'];
+
+  document.getElementById('ch-leaderboard').innerHTML = sorted.length ? sorted.map((p, i) => `
+    <div class="ch-lb-row">
+      <div class="ch-lb-rank ${i===0?'top':''}">${ranks[i]||i+1}</div>
+      <div class="ch-lb-player">
+        <div class="ch-lb-av" style="background:${colors[i%colors.length]}">${(p.name||'?').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2)}</div>
+        <div>
+          <div class="ch-lb-name">${p.name||'Unknown'}</div>
+          <div class="ch-lb-meta">HCP ${p.hdcp??'—'} · ${p.rounds} round${p.rounds!==1?'s':''}</div>
+        </div>
+      </div>
+      <div class="ch-lb-val ${p.money>0?'pos':p.money<0?'neg':'even'}">${p.money>=0?'+$':'-$'}${Math.abs(p.money)}</div>
+    </div>
+  `).join('') : '<div style="padding:20px;text-align:center;font-family:var(--sans);font-size:12px;color:var(--ink-muted);">No rounds played yet</div>';
+
+  // Load all members
+  const { data: members } = await sb
+    .from('players')
+    .select('id, username, hdcp_index')
+    .order('username');
+
+  document.getElementById('ch-members').innerHTML = (members||[]).map((m, i) => `
+    <div class="ch-member-row">
+      <div class="ch-member-av" style="background:${colors[i%colors.length]}">${(m.username||'?').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2)}</div>
+      <div style="flex:1">
+        <div class="ch-member-name">${m.username||'Unknown'}</div>
+        <div class="ch-member-meta">HCP ${m.hdcp_index??'—'}${m.id===userId?' · You':''}</div>
+      </div>
+    </div>
+  `).join('');
+}
 function dismissWelcome() {
   const el = document.getElementById('welcome-overlay');
   if (el) { el.style.animation = 'fadeOut .2s ease forwards'; setTimeout(() => el.remove(), 200); }
@@ -5732,7 +5928,8 @@ loadCourses();
       </div>
     </div>
     <button class="psc-btn" id="ps-save-btn" onclick="saveProfileSheet()">Save Changes</button>
-    <button onclick="closeProfileSheet()" style="width:100%;margin-top:10px;padding:12px;background:transparent;border:1px solid var(--rule);border-radius:3px;font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--ink-muted);cursor:pointer;">Cancel</button>
+    <button onclick="closeProfileSheet();openClubhouse();" style="width:100%;margin-top:10px;padding:12px;background:var(--green-deep);border:none;border-radius:3px;font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#d4c89a;cursor:pointer;">View Clubhouse</button>
+     <button onclick="closeProfileSheet()" style="width:100%;margin-top:10px;padding:12px;background:transparent;border:1px solid var(--rule);border-radius:3px;font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--ink-muted);cursor:pointer;">Cancel</button>
     <button onclick="signOut().then(()=>window.location.replace('login.html'))" style="width:100%;margin-top:10px;padding:12px;background:transparent;border:none;font-family:var(--sans);font-size:11px;color:var(--ink-muted);cursor:pointer;letter-spacing:1px;">Sign Out</button>
   </div>
 </div>
