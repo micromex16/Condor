@@ -1717,61 +1717,6 @@ function selectCourse(id) {
   goTo('screen-players');
 }
 async function searchAPIcourses(q) {
-  // Remove previous API results
-  const old = document.getElementById('api-course-results');
-  if (old) old.remove();
-
-  try {
-    const res = await fetch(SUPABASE_FUNCTION_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ query: q })
-    });
-    const data = await res.json();
-    const courses = data.courses || [];
-    if (!courses.length) return;
-
-    // Filter out any that match hardcoded courses by name
-    const localNames = COURSES.map(c => c.name.toLowerCase());
-    const newCourses = courses.filter(c =>
-      !localNames.includes(c.club_name?.toLowerCase())
-    );
-    if (!newCourses.length) return;
-
-    // Build and append API results section
-    const list = document.getElementById('course-list');
-    const section = document.createElement('div');
-    section.id = 'api-course-results';
-    section.innerHTML = `
-      <div style="height:18px"></div>
-      <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold-rule);margin-bottom:10px;padding-left:2px">More Courses</div>
-     ${newCourses.slice(0, 10).map(c => {
-  const displayName = (c.course_name && c.course_name !== c.club_name)
-    ? c.club_name + ' — ' + c.course_name
-    : c.club_name;
-  const location = [c.city, c.state].filter(Boolean).join(', ');
-  const tempCourse = {
-    id: c.id,
-    name: displayName,
-    location: location,
-    emoji: '🏌️',
-    note: c.country || '',
-    teeSets: [{ label: 'Tap to load', color: '#9e9e9e', rating: null, slope: null, par: null, yards: null, holes: [] }]
-  };
- const card = courseCard(tempCourse, false);
-return `<div onclick="selectAPIcourse('${c.id}')" style="cursor:pointer">` +
-  card.replace(`onclick="selectCourse('${c.id}')"`, 'onclick="void(0)"') +
-  `</div>`;
-}).join('')}
-    `;
-    list.after(section);
-
-  } catch (err) {
-    console.error('API search error:', err);
-  }
-}
-
-async function searchAPIcourses(q) {
   const old = document.getElementById('api-course-results');
   if (old) old.remove();
 
