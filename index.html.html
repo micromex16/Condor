@@ -1771,63 +1771,92 @@ return `<div onclick="selectAPIcourse('${c.id}')" style="cursor:pointer">` +
   }
 }
 
-async function selectAPIcourse(courseId) {
+async function searchAPIcourses(q) {
+  const old = document.getElementById('api-course-results');
+  if (old) old.remove();
+
   try {
     const res = await fetch(SUPABASE_FUNCTION_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id: courseId })
+      body: JSON.stringify({ query: q })
     });
     const data = await res.json();
-    const c = data.course || data;
-    if (!c) return;
+    const courses = data.courses || [];
+    if (!courses.length) return;
 
-    const maleTees = (c.tees?.male || []);
-    const femaleTees = (c.tees?.female || []);
-    const allTees = [...maleTees, ...femaleTees];
+    const localNames = COURSES.map(c => c.name.toLowerCase());
+    const newCourses = courses.filter(c =>
+      !localNames.includes(c.club_name?.toLowerCase())
+    );
+    if (!newCourses.length) return;
 
-    const teeSets = allTees.map(t => ({
-      label: t.tee_name || 'Tee',
-      color: '#9e9e9e',
-      rating: parseFloat(t.course_rating) || 72,
-      slope: parseInt(t.slope_rating) || 113,
-      par: parseInt(t.par_total) || 72,
-      yards: parseInt(t.total_yards) || 6000,
-      holes: (t.holes || []).map(h => ({
-        par: h.par,
-        yards: h.yardage,
-        hcp: h.handicap
-      }))
-    }));
+    // Show loading placeholder
+    const list = document.getElementById('course-list');
+    const section = document.createElement('div');
+    section.id = 'api-course-results';
+    section.innerHTML = `
+      <div style="height:18px"></div>
+      <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold-rule);margin-bottom:10px;padding-left:2px">More Courses</div>
+      <div style="text-align:center;padding:20px;color:var(--text-dim);font-size:13px">Loading course details...</div>
+    `;
+    list.after(section);
 
-    const apiCourse = {
-      id: 'api_' + courseId,
-      name: c.club_name || c.course_name || 'Unknown Course',
-      location: [c.location?.city, c.location?.state, c.location?.country].filter(Boolean).join(', '),
-      emoji: '🏌️',
-      note: '',
-      teeSets: teeSets.length ? teeSets : [{
-        label: 'Default',
-        color: '#9e9e9e',
-        rating: 72,
-        slope: 113,
-        par: 72,
-        yards: 6000,
-        holes: Array.from({ length: 18 }, (_, i) => ({ par: 4, yards: 333, hcp: i + 1 }))
-      }]
-    };
+    // Fetch full details for each course
+    const detailPromises = newCourses.slice(0, 8).map(c =>
+      fetch(SUPABASE_FUNCTION_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: c.id })
+      }).then(r => r.json()).catch(() => null)
+    );
 
-    const existing = COURSES.findIndex(c => c.id === apiCourse.id);
-    if (existing === -1) COURSES.push(apiCourse);
-    state.course = COURSES.find(c => c.id === apiCourse.id);
-    const defaultIdx = Math.min(1, state.course.teeSets.length - 1);
-    state.players.forEach(p => p.teeIdx = defaultIdx);
-    calcPlayingHandicaps();
-    renderPlayerScreen();
-    goTo('screen-players');
+    const details = await Promise.all(detailPromises);
+
+    let cardsHtml = '';
+    details.forEach((detail, i) => {
+      if (!detail) return;
+      const c = detail.course || detail;
+      const src = newCourses[i];
+      const displayName = (src.course_name && src.course_name !== src.club_name)
+        ? src.club_name + ' — ' + src.course_name
+        : src.club_name;
+      const location = [c.location?.city || src.city, c.location?.state || src.state].filter(Boolean).join(', ');
+
+      // Get tips tee (first male tee)
+      const tipTee = (c.tees?.male || [])[0] || (c.tees?.female || [])[0];
+
+      const tempCourse = {
+        id: src.id,
+        name: displayName,
+        location: location,
+        emoji: '🏌️',
+        note: '',
+        teeSets: tipTee ? [{
+          label: tipTee.tee_name,
+          color: '#9e9e9e',
+          rating: tipTee.course_rating,
+          slope: tipTee.slope_rating,
+          par: tipTee.par_total,
+          yards: tipTee.total_yards,
+          holes: []
+        }] : [{ label: 'Tap to load', color: '#9e9e9e', rating: null, slope: null, par: null, yards: null, holes: [] }]
+      };
+
+      const card = courseCard(tempCourse, false);
+      cardsHtml += `<div onclick="selectAPIcourse('${src.id}')" style="cursor:pointer">` +
+        card.replace(`onclick="selectCourse('${src.id}')"`, 'onclick="void(0)"') +
+        `</div>`;
+    });
+
+    section.innerHTML = `
+      <div style="height:18px"></div>
+      <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold-rule);margin-bottom:10px;padding-left:2px">More Courses</div>
+      ${cardsHtml}
+    `;
 
   } catch (err) {
-    console.error('Error loading course:', err);
+    console.error('API search error:', err);
   }
 }
 function renderCourseList(courses) {
