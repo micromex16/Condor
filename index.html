@@ -2681,9 +2681,8 @@ function goMidRoundToPlayers(overlay) {
   const backBtn = document.querySelector('#screen-players .back-btn');
   if (backBtn) { backBtn.textContent = '← Round'; backBtn.onclick = () => { calcPlayingHandicaps(); goTo('screen-round'); }; }
 }
-
 // Welcome modal dismiss
-      async function submitProfile() {
+async function submitProfile() {
   const username = document.getElementById('psc-username').value.trim();
   const handicap = document.getElementById('psc-handicap').value.trim();
   const btn      = document.getElementById('psc-submit-btn');
