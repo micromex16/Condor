@@ -1759,10 +1759,9 @@ async function searchAPIcourses(q) {
     teeSets: [{ label: 'Loading...', color: '#9e9e9e', rating: 0, slope: 0, par: 0, yards: 0, holes: [] }]
   };
  const card = courseCard(tempCourse, false);
-return card.replace(
-  `onclick="selectCourse('${c.id}')"`,
-  `onclick="selectAPIcourse('${c.id}')"`
-);
+return `<div onclick="selectAPIcourse('${c.id}')" style="cursor:pointer">` +
+  card.replace(`onclick="selectCourse('${c.id}')"`, 'onclick="void(0)"') +
+  `</div>`;
 }).join('')}
     `;
     list.after(section);
