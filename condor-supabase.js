@@ -72,7 +72,7 @@ async function updateMyProfile({ username, hdcp_index }) {
 }
 
 sb.auth.onAuthStateChange((event, session) => {
-  if (event === 'SIGNED_IN')  onUserSignedIn(session.user);
+  if (event === 'SIGNED_IN' && session?.user)  onUserSignedIn(session.user);
   if (event === 'SIGNED_OUT') onUserSignedOut();
 });
 
