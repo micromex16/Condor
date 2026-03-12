@@ -1687,7 +1687,23 @@ function getRunningMoney() {
 // ═══════════════════════════════════════════════════════════════════
 // ── COURSE SEARCH ──────────────────────────────────────────
 const SUPABASE_FUNCTION_URL = 'https://oixvlmgtzllsepzfhple.supabase.co/functions/v1/golf-course-search';
-
+let courseSearchTimer = null;
+function debounceCourseSearch(q) {
+  clearTimeout(courseSearchTimer);
+  const filtered = q
+    ? COURSES.filter(c =>
+        c.name.toLowerCase().includes(q.toLowerCase()) ||
+        c.location.toLowerCase().includes(q.toLowerCase())
+      )
+    : COURSES;
+  renderCourseList(filtered);
+  if (q && q.length >= 3) {
+    courseSearchTimer = setTimeout(() => searchAPIcourses(q), 600);
+  } else {
+    const apiSection = document.getElementById('api-course-results');
+    if (apiSection) apiSection.remove();
+  }
+}
 function filterCourses(q) {
   const filtered = q
     ? COURSES.filter(c =>
