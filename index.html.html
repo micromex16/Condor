@@ -1826,7 +1826,12 @@ function renderCourseList(courses) {
   }
   if (rest.length) {
     if (favs.length) {
-      html += `<div style="font-size:10px;font-weight:700;letter-spacing:2px;t
+      html += `<div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--green-augusta);margin-bottom:10px;padding-left:2px">All Courses</div>`;
+    }
+    html += rest.map(c => courseCard(c, false)).join('');
+  }
+  list.innerHTML = html;
+}
 // ═══════════════════════════════════════════════════════════════════
 // PLAYER SETUP SCREEN — per-player tees
 // ═══════════════════════════════════════════════════════════════════
