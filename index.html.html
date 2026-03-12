@@ -1769,6 +1769,7 @@ async function selectAPIcourse(courseId) {
     });
     const data = await res.json();
     const c = data.course || data;
+console.log('API course data:', JSON.stringify(data));
     if (!c) return;
 
     // Convert API course to your app's format
