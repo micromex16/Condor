@@ -1546,17 +1546,19 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
   const { data: { session } } = await sb.auth.getSession();
   if (!session) { window.location.replace('login.html'); return; }
 
-  // Check if user has set up their profile yet
-  const { data: player } = await sb
+  // Check if user already has a profile row with a username set
+  const { data: player, error } = await sb
     .from('players')
     .select('username, hdcp_index')
     .eq('id', session.user.id)
-    .single();
+    .maybeSingle();
 
-  // Show profile setup if username is missing
-  if (!player || !player.username) {
+  // Only show setup modal if no row exists OR username is blank
+  if (!error && (!player || !player.username)) {
     document.getElementById('profile-setup-overlay').style.display = 'flex';
   }
+})();
+</script>
 })();
 </script>
    <script>
