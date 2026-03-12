@@ -862,7 +862,7 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
       <div style="font-family:var(--sans);font-size:10px;font-weight:500;letter-spacing:3.5px;color:var(--ink-muted);text-transform:uppercase;margin-bottom:8px">Select Your Course</div>
     </div>
     <div class="form-group">
-      <input class="form-input" type="text" id="course-search" placeholder="Search courses…" oninput="filterCourses(this.value)">
+      <input class="form-input" type="text" id="course-search" placeholder="Search courses…" oninput="debounceCourseSearch(this.value)">
     </div>
     <div id="course-list"></div>
   </div>
