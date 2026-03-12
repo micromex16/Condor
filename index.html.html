@@ -1758,10 +1758,11 @@ async function searchAPIcourses(q) {
     note: '',
     teeSets: [{ label: 'Loading...', color: '#9e9e9e', rating: 0, slope: 0, par: 0, yards: 0, holes: [] }]
   };
-  return courseCard(tempCourse, false).replace(
-    `onclick="selectCourse(\\'${c.id}\\')\"`,
-    `onclick="selectAPIcourse('${c.id}')"`
-  );
+ const card = courseCard(tempCourse, false);
+return card.replace(
+  `onclick="selectCourse('${c.id}')"`,
+  `onclick="selectAPIcourse('${c.id}')"`
+);
 }).join('')}
     `;
     list.after(section);
