@@ -2812,7 +2812,10 @@ async function initProfileAvatar() {
   }
 }
 loadCourses();
-      async function openClubhouse() {
+initProfileAvatar();
+}
+
+async function openClubhouse() {
   goTo('screen-clubhouse');
   const { data: { session } } = await sb.auth.getSession();
   if (!session) return;
