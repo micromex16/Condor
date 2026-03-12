@@ -1758,7 +1758,7 @@ async function searchAPIcourses(q) {
     );
 
     const details = await Promise.all(detailPromises);
-
+console.log('details fetched:', details);
     let cardsHtml = '';
     details.forEach((detail, i) => {
       if (!detail) return;
