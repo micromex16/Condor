@@ -1808,7 +1808,25 @@ async function selectAPIcourse(courseId) {
     console.error('Error loading course:', err);
   }
 }
-
+function renderCourseList(courses) {
+  const list = document.getElementById('course-list');
+  if (!courses.length) {
+    list.innerHTML = `<div style="text-align:center;padding:40px 20px;color:var(--text-dim)">No courses found</div>`;
+    return;
+  }
+  const favIds = state.favoriteCourses;
+  const sorted = [...courses].sort((a,b) => a.name.localeCompare(b.name));
+  const favs = sorted.filter(c => favIds.includes(c.id));
+  const rest = sorted.filter(c => !favIds.includes(c.id));
+  let html = '';
+  if (favs.length) {
+    html += `<div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold-rule);margin-bottom:10px;padding-left:2px">Favorites</div>`;
+    html += favs.map(c => courseCard(c, true)).join('');
+    if (rest.length) html += `<div style="height:18px"></div>`;
+  }
+  if (rest.length) {
+    if (favs.length) {
+      html += `<div style="font-size:10px;font-weight:700;letter-spacing:2px;t
 // ═══════════════════════════════════════════════════════════════════
 // PLAYER SETUP SCREEN — per-player tees
 // ═══════════════════════════════════════════════════════════════════
