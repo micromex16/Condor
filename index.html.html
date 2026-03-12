@@ -1706,7 +1706,16 @@ function filterCourses(q) {
     if (apiSection) apiSection.remove();
   }
 }
-
+function selectCourse(id) {
+  const course = COURSES.find(c => c.id === id);
+  if (!course) return;
+  state.course = course;
+  const defaultIdx = Math.min(1, state.course.teeSets.length - 1);
+  state.players.forEach(p => p.teeIdx = defaultIdx);
+  calcPlayingHandicaps();
+  renderPlayerScreen();
+  goTo('screen-players');
+}
 async function searchAPIcourses(q) {
   // Remove previous API results
   const old = document.getElementById('api-course-results');
