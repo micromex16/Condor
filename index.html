@@ -2703,12 +2703,12 @@ function goMidRoundToPlayers(overlay) {
     if (!session) { window.location.replace('login.html'); return; }
 
     const { error } = await sb
-      .from('players')
-      .update({
-        username:   username,
-        hdcp_index: handicap ? parseFloat(handicap) : null,
-      })
-      .eq('id', session.user.id);
+  .from('players')
+  .upsert({
+    id:         session.user.id,
+    username:   username,
+    hdcp_index: handicap ? parseFloat(handicap) : null,
+  }, { onConflict: 'id' })
 
     if (error) throw error;
 
