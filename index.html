@@ -468,6 +468,130 @@ body::before {
   font-size:10px; font-weight:500; cursor:pointer; transition:all .12s;
   letter-spacing:1.5px; text-transform:uppercase; }
 
+/* ══════════════════════════════════════════
+   COMPACT ROUND HEADER (v2)
+══════════════════════════════════════════ */
+.hole-header-compact {
+  display:flex; align-items:center; gap:0;
+  background:var(--green-deep); padding:0 4px;
+  border-bottom:1px solid rgba(196,164,86,.25);
+  flex-shrink:0; height:48px; box-sizing:border-box;
+}
+.hole-nav-arrow {
+  background:none; border:none; color:rgba(212,200,154,.5);
+  font-size:28px; padding:4px 10px; cursor:pointer; font-family:var(--sans);
+  line-height:1; -webkit-tap-highlight-color:transparent;
+}
+.hole-nav-arrow:active { color:#d4c89a; }
+.hole-nav-arrow:disabled { opacity:.2; }
+.hole-header-center {
+  display:flex; align-items:baseline; gap:8px; flex:1; cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+.hole-header-hole {
+  font-family:var(--serif); font-size:28px; font-weight:400;
+  color:#d4c89a; line-height:1;
+}
+.hole-header-sep { color:rgba(212,200,154,.15); font-size:20px; }
+.hole-header-meta { display:flex; flex-direction:column; gap:1px; }
+.hole-header-par {
+  font-family:var(--sans); font-size:11px; color:rgba(212,200,154,.6);
+  letter-spacing:1px; text-transform:uppercase; font-weight:500;
+}
+.hole-header-yards {
+  font-family:var(--sans); font-size:10px; color:rgba(212,200,154,.35);
+}
+.hole-header-hcp {
+  font-family:var(--sans); font-size:9px; color:rgba(212,200,154,.35);
+  letter-spacing:1px; text-transform:uppercase;
+}
+.hole-header-right { display:flex; align-items:center; gap:6px; }
+.hole-header-gear {
+  background:none; border:none; color:rgba(212,200,154,.3);
+  font-size:16px; padding:4px 6px; cursor:pointer;
+}
+.hole-header-gear:active { color:rgba(212,200,154,.7); }
+
+/* Progress bar (replaces hole dots) */
+.hole-progress-bar { display:flex; height:3px; flex-shrink:0; }
+.hole-progress-seg { flex:1; cursor:pointer; transition:background .2s; }
+.hole-progress-seg.good { background:var(--green-augusta); }
+.hole-progress-seg.par { background:var(--parchment); }
+.hole-progress-seg.bad { background:var(--score-bogey); }
+.hole-progress-seg.current { background:var(--gold-bright); }
+.hole-progress-seg.future { background:rgba(0,0,0,.06); }
+
+/* Hole dots drawer (expandable) */
+.hole-dots-drawer { background:var(--cream-warm); border-bottom:1px solid var(--rule); }
+.hole-dots-drawer .hole-dots { background:transparent; border-bottom:none; }
+
+/* Press alert inline */
+.press-alert-inline {
+  background:var(--gold-faint); border:1px solid rgba(138,109,47,.2);
+  border-radius:8px; padding:8px 12px; margin-bottom:8px;
+  display:flex; align-items:center; gap:8px;
+}
+
+/* Inline standings micro-pills */
+.standings-inline {
+  display:flex; gap:6px; padding:10px 0 4px; overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+}
+.standings-inline::-webkit-scrollbar { display:none; }
+.standings-inline:empty { padding:0; }
+.standing-micro {
+  display:flex; align-items:center; gap:4px;
+  padding:4px 10px; border-radius:20px;
+  font-family:var(--sans); font-size:10px; font-weight:600;
+  letter-spacing:.5px; white-space:nowrap; flex-shrink:0;
+  border:1px solid var(--rule); background:var(--cream-card);
+}
+.standing-micro.winning { border-color:rgba(46,97,71,.3); background:var(--green-pale); color:var(--green-augusta); }
+.standing-micro.losing { border-color:rgba(122,58,40,.2); background:#fdf6f2; color:var(--score-bogey); }
+.standing-micro.even { color:var(--ink-muted); }
+
+/* Details drawer */
+.details-drawer-toggle {
+  display:flex; align-items:center; justify-content:center;
+  padding:8px; cursor:pointer; gap:6px;
+  font-family:var(--sans); font-size:9px; font-weight:700;
+  letter-spacing:2px; text-transform:uppercase; color:var(--ink-muted);
+  border-top:1px solid var(--rule); margin-top:8px;
+  -webkit-tap-highlight-color:transparent;
+}
+.details-drawer-toggle .chevron {
+  transition:transform .25s; font-size:8px; line-height:1;
+}
+.details-drawer-toggle.open .chevron { transform:rotate(180deg); }
+.details-drawer-body {
+  max-height:0; overflow:hidden; transition:max-height .3s ease;
+}
+.details-drawer-body.open { max-height:1200px; }
+
+/* Bottom nav for round */
+.bottom-nav-round {
+  flex-shrink:0; padding:8px 12px calc(env(safe-area-inset-bottom, 8px) + 8px);
+  background:var(--cream-card); border-top:1px solid var(--rule);
+  display:flex; align-items:center; gap:8px;
+}
+.btn-next-hole {
+  flex:1; padding:14px; background:var(--green-deep);
+  border:none; border-radius:10px; color:#d4c89a;
+  font-family:var(--sans); font-size:13px; font-weight:700;
+  letter-spacing:1.5px; text-transform:uppercase; cursor:pointer;
+  transition:transform .1s;
+}
+.btn-next-hole:active { transform:scale(.97); }
+.bottom-action-btn {
+  display:flex; flex-direction:column; align-items:center; gap:2px;
+  background:none; border:none; cursor:pointer; padding:8px 12px;
+  -webkit-tap-highlight-color:transparent;
+}
+.bottom-action-label {
+  font-family:var(--sans); font-size:9px; font-weight:700;
+  letter-spacing:1.5px; text-transform:uppercase; color:var(--ink-muted);
+}
+
 /* ── SIDE BET MODAL ── */
 .sidebet-type-grid { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:18px; }
 .sidebet-card { flex:1 1 calc(50% - 4px); min-width:140px; background:var(--cream-card);
@@ -1423,17 +1547,104 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
   font-family:var(--sans); font-size:10px; color:#888;
   margin-top:2px; letter-spacing:.3px; font-weight:500;
 }
-/* ── CLUBHOUSE TABS ── */
-.ch-tab {
-  flex:1; text-align:center; padding:10px 0 8px;
-  font-family:var(--sans); font-size:10px; font-weight:700;
-  letter-spacing:2px; text-transform:uppercase;
-  color:var(--ink-muted); cursor:pointer;
-  border-bottom:2px solid transparent; margin-bottom:-2px;
-  transition:color .2s, border-color .2s;
+/* ── CLUBHOUSE REDESIGN ── */
+.ch-header-avatar {
+  position:absolute; right:16px; top:50%; transform:translateY(-50%);
+  width:32px; height:32px; border-radius:50%;
+  background:rgba(196,164,86,.15); border:2px solid var(--gold-rule);
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--serif); font-size:13px; font-weight:600;
+  color:var(--gold); cursor:pointer; overflow:hidden;
+  background-size:cover; background-position:center;
 }
-.ch-tab.active {
-  color:var(--gold-rule); border-bottom-color:var(--gold-rule);
+.ch-teeoff-card {
+  margin:16px 16px 12px; padding:20px 24px;
+  background:linear-gradient(135deg, #1C3B2A 0%, #264d38 100%);
+  border-radius:12px; cursor:pointer;
+  border:1px solid rgba(196,164,86,.2);
+}
+.ch-teeoff-label {
+  font-family:var(--sans); font-size:10px; font-weight:700;
+  letter-spacing:3px; text-transform:uppercase;
+  color:rgba(196,164,86,.7); margin-bottom:6px;
+}
+.ch-teeoff-btn {
+  font-family:var(--serif); font-size:26px; font-weight:600;
+  color:var(--gold); letter-spacing:-.3px;
+}
+.ch-section {
+  margin:0 16px 10px; border-radius:10px;
+  border:1px solid var(--rule); background:var(--cream-card);
+  overflow:hidden;
+}
+.ch-section-header {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:12px 14px; cursor:pointer;
+  -webkit-tap-highlight-color:rgba(0,0,0,.05);
+}
+.ch-section-title {
+  font-family:var(--sans); font-size:10px; font-weight:700;
+  letter-spacing:2.5px; text-transform:uppercase;
+  color:var(--green-augusta);
+}
+.ch-section-chevron {
+  font-size:8px; color:var(--ink-muted);
+  transition:transform .25s ease;
+}
+.ch-section:not(.open) .ch-section-chevron {
+  transform:rotate(-90deg);
+}
+.ch-section-body {
+  max-height:0; overflow:hidden;
+  transition:max-height .3s ease;
+}
+.ch-section.open .ch-section-body {
+  max-height:1200px;
+}
+/* Match card rows */
+.ch-match-row {
+  display:flex; align-items:center; gap:10px;
+  padding:10px 14px; border-top:1px solid var(--rule);
+}
+.ch-match-icon { font-size:16px; flex-shrink:0; }
+.ch-match-info { flex:1; min-width:0; }
+.ch-match-winner {
+  font-family:var(--serif); font-size:14px; font-weight:600;
+  color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.ch-match-detail {
+  font-family:var(--sans); font-size:10px; color:var(--ink-muted);
+  margin-top:2px; letter-spacing:.3px;
+}
+.ch-match-money {
+  font-family:var(--sans); font-size:12px; font-weight:700;
+  flex-shrink:0;
+}
+/* Leaderboard self-row highlight */
+.ch-lb-row.self {
+  background:rgba(196,164,86,.08);
+  border-left:3px solid var(--gold);
+}
+.ch-lb-row.self .ch-lb-rank { padding-left:11px; }
+/* Trophy badges */
+.ch-trophy-grid {
+  display:flex; flex-wrap:wrap; gap:10px;
+  padding:12px 14px;
+}
+.ch-trophy-badge {
+  flex:1; min-width:100px; text-align:center;
+  padding:14px 8px; border-radius:10px;
+  background:var(--cream-bg); border:1px solid var(--rule);
+}
+.ch-trophy-icon { font-size:24px; margin-bottom:4px; }
+.ch-trophy-label {
+  font-family:var(--sans); font-size:8px; font-weight:700;
+  letter-spacing:1.5px; text-transform:uppercase;
+  color:var(--ink-muted); margin-bottom:4px;
+}
+.ch-trophy-holder {
+  font-family:var(--serif); font-size:13px; font-weight:600;
+  color:var(--green-deep);
 }
 
 /* ── GROUPS ── */
@@ -1612,28 +1823,9 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
   padding:3px 8px; border-radius:10px;
   border:1px solid var(--rule); color:#555;
 }
-/* ── CLUBHOUSE STATS BAR ── */
-.ch-stats-bar {
-  display:grid; grid-template-columns:1fr 1fr 1fr;
-  background:var(--cream-card); border-bottom:1px solid var(--rule);
-}
-.ch-stat-cell {
-  padding:var(--space-lg) var(--space-sm); text-align:center;
-  border-right:1px solid var(--rule);
-}
-.ch-stat-cell:last-child { border-right:none; }
-.ch-stat-value {
-  font-family:var(--serif); font-size:var(--text-xl,22px); font-weight:500;
-  color:var(--green-deep);
-}
-.ch-stat-label {
-  font-family:var(--sans); font-size:8px; font-weight:700;
-  letter-spacing:2px; text-transform:uppercase;
-  color:var(--ink-muted); margin-top:3px;
-}
+/* stats bar removed — replaced by inline leaderboard + trophies */
 /* ── CLUBHOUSE LEADERBOARD EXPAND ── */
-#ch-leaderboard .ch-lb-row:nth-child(n+6) { display:none; }
-#ch-leaderboard.expanded .ch-lb-row:nth-child(n+6) { display:grid; }
+/* leaderboard expand removed — all rows visible in accordion */
 /* ── CLUBHOUSE MEMBERS COLLAPSE ── */
 .ch-members-open { max-height:600px !important; }
 .ch-members-open + #ch-members-chevron, #ch-members-wrap.ch-members-open ~ #ch-members-chevron { transform:rotate(180deg); }
@@ -1889,89 +2081,81 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
   <div class="header" style="position:relative;">
     <button class="hamburger-btn" onclick="openNavDrawer()"><span></span><span></span><span></span></button>
     <div class="header-title">The Clubhouse</div>
+    <div class="ch-header-avatar" id="ch-mini-avatar" onclick="openLocker()">?</div>
   </div>
 
-  <!-- Profile strip -->
-  <div style="background:var(--green-deep);padding:24px 20px 28px;text-align:center;position:relative;border-bottom:1px solid rgba(196,164,86,.2);">
-    <div style="width:72px;height:72px;border-radius:50%;background:rgba(196,164,86,.15);border:2px solid rgba(196,164,86,.3);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-family:var(--serif);font-size:24px;font-weight:500;color:#d4c89a;" id="ch-avatar">?</div>
-    <div style="font-family:var(--serif);font-size:22px;font-weight:500;color:#f0ebe0;letter-spacing:-.2px;" id="ch-name">—</div>
-    <div style="display:inline-block;margin-top:8px;padding:3px 14px;border:1px solid rgba(196,164,86,.3);border-radius:20px;font-family:var(--sans);font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold-rule);" id="ch-hcp">HCP —</div>
-  </div>
+  <div class="body" style="padding:0;padding-bottom:20px;">
 
-  <!-- Stats bar -->
-  <div class="ch-stats-bar" id="ch-stats">
-    <div class="ch-stat-cell">
-      <div class="ch-stat-value" id="ch-rounds">—</div>
-      <div class="ch-stat-label" id="ch-rounds-label">Rounds</div>
+    <!-- Tee Off CTA Card -->
+    <div class="ch-teeoff-card" onclick="goTo('screen-course')">
+      <div class="ch-teeoff-label">Ready?</div>
+      <div class="ch-teeoff-btn">Tee Off &rarr;</div>
     </div>
-    <div class="ch-stat-cell">
-      <div class="ch-stat-value" id="ch-winrate">—</div>
-      <div class="ch-stat-label" id="ch-winrate-label">Win Rate</div>
-    </div>
-    <div class="ch-stat-cell">
-      <div class="ch-stat-value" id="ch-money">—</div>
-      <div class="ch-stat-label" id="ch-money-label">Net $</div>
-    </div>
-  </div>
 
-  <div class="body" style="padding:0;">
-
-    <!-- Leaderboard -->
-    <div class="section-label" style="padding:var(--space-lg) var(--space-lg) var(--space-sm)">Leaderboard</div>
-    <div style="margin:0 16px;border:1px solid var(--rule);border-radius:10px;overflow:hidden;background:var(--cream-card);">
-      <div style="display:grid;grid-template-columns:24px 1fr 60px;padding:8px 14px;border-bottom:1px solid var(--rule);background:var(--green-pale);">
-        <div style="font-family:var(--sans);font-size:8px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--green-augusta);opacity:.85;">#</div>
-        <div style="font-family:var(--sans);font-size:8px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--green-augusta);opacity:.85;">Member</div>
-        <div style="font-family:var(--sans);font-size:8px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--green-augusta);opacity:.85;text-align:right;">Net $</div>
+    <!-- Recent Matches -->
+    <div class="ch-section open" id="ch-sec-matches">
+      <div class="ch-section-header" onclick="toggleChSection('matches')">
+        <span class="ch-section-title">Recent Matches</span>
+        <span class="ch-section-chevron">&#9660;</span>
       </div>
-      <div id="ch-leaderboard">
-        <div style="padding:20px;text-align:center;font-family:var(--sans);font-size:12px;color:var(--ink-muted);">Loading…</div>
-      </div>
-    </div>
-    <div id="ch-lb-expand" style="display:none;text-align:center;padding:var(--space-sm) var(--space-lg)">
-      <button onclick="document.getElementById('ch-leaderboard').classList.toggle('expanded');this.textContent=this.textContent==='See All'?'Collapse':'See All'" style="background:none;border:1px solid var(--rule);border-radius:var(--radius-sm);padding:6px 16px;font-family:var(--sans);font-size:10px;font-weight:600;letter-spacing:var(--tracking-normal);text-transform:uppercase;color:var(--ink-muted);cursor:pointer">See All</button>
-    </div>
-
-    <!-- Tab Bar -->
-    <div style="display:flex;margin:var(--space-lg) 16px var(--space-sm);border-bottom:2px solid var(--rule);">
-      <div class="ch-tab active" id="ch-tab-members" onclick="switchClubhouseTab('members')">Members</div>
-      <div class="ch-tab" id="ch-tab-feed" onclick="switchClubhouseTab('feed')">Recent Rounds</div>
-      <div class="ch-tab" id="ch-tab-groups" onclick="switchClubhouseTab('groups')">Groups</div>
-    </div>
-
-    <!-- Members Panel -->
-    <div id="ch-panel-members">
-      <div style="margin:0 16px 16px;border:1px solid var(--rule);border-radius:10px;overflow:hidden;background:var(--cream-card);" id="ch-members">
-        <div style="padding:20px;text-align:center;font-family:var(--sans);font-size:12px;color:var(--ink-muted);">Loading…</div>
+      <div class="ch-section-body" id="ch-matches-body">
+        <div style="padding:16px;text-align:center;font-family:var(--sans);font-size:12px;color:var(--ink-muted);">Loading&hellip;</div>
       </div>
     </div>
 
-    <!-- Recent Rounds Feed Panel -->
-    <div id="ch-panel-feed" style="display:none">
-      <div style="margin:0 16px 16px;" id="ch-feed">
-        <div style="padding:20px;text-align:center;font-family:var(--sans);font-size:12px;color:var(--ink-muted);">Loading…</div>
+    <!-- Order of Merit -->
+    <div class="ch-section open" id="ch-sec-merit">
+      <div class="ch-section-header" onclick="toggleChSection('merit')">
+        <span class="ch-section-title">Order of Merit</span>
+        <span class="ch-section-chevron">&#9660;</span>
+      </div>
+      <div class="ch-section-body" id="ch-merit-body">
+        <div id="ch-leaderboard">
+          <div style="padding:16px;text-align:center;font-family:var(--sans);font-size:12px;color:var(--ink-muted);">Loading&hellip;</div>
+        </div>
       </div>
     </div>
 
-    <!-- Groups Panel -->
-    <div id="ch-panel-groups" style="display:none">
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:0 16px 10px;">
-        <div style="font-family:var(--sans);font-size:9px;font-weight:700;letter-spacing:3.5px;text-transform:uppercase;color:var(--green-augusta)">My Groups</div>
-        <button class="btn btn-sm" onclick="openCreateGroupModal()" style="font-size:11px;padding:6px 12px;background:var(--green-deep);color:#fff;border:none;border-radius:8px;cursor:pointer">+ New Group</button>
+    <!-- Trophy Case -->
+    <div class="ch-section" id="ch-sec-trophies">
+      <div class="ch-section-header" onclick="toggleChSection('trophies')">
+        <span class="ch-section-title">Trophy Case</span>
+        <span class="ch-section-chevron">&#9660;</span>
       </div>
-      <div style="margin:0 16px 16px;border:1px solid var(--rule);border-radius:10px;overflow:hidden;background:var(--cream-card);" id="ch-groups-list">
-        <div style="padding:20px;text-align:center;font-family:var(--sans);font-size:12px;color:var(--ink-muted);">Loading…</div>
+      <div class="ch-section-body" id="ch-trophies-body">
+        <div style="padding:16px;text-align:center;font-family:var(--sans);font-size:12px;color:var(--ink-muted);">Loading&hellip;</div>
       </div>
     </div>
 
-    <!-- My Locker CTA -->
-    <div style="padding:var(--space-lg) var(--space-lg) var(--space-sm)">
-      <button class="btn btn-secondary btn-sm" onclick="openLocker()" style="width:100%">My Locker — Round History</button>
+    <!-- My Groups -->
+    <div class="ch-section" id="ch-sec-groups">
+      <div class="ch-section-header" onclick="toggleChSection('groups')">
+        <span class="ch-section-title">My Groups</span>
+        <span class="ch-section-chevron">&#9660;</span>
+      </div>
+      <div class="ch-section-body" id="ch-groups-body">
+        <div style="padding:0 16px 12px;text-align:right;">
+          <button class="btn btn-sm" onclick="openCreateGroupModal()" style="font-size:11px;padding:6px 12px;background:var(--green-deep);color:#fff;border:none;border-radius:8px;cursor:pointer">+ New Group</button>
+        </div>
+        <div id="ch-groups-list" style="margin:0 16px 12px;border:1px solid var(--rule);border-radius:10px;overflow:hidden;background:var(--cream-card);">
+          <div style="padding:16px;text-align:center;font-family:var(--sans);font-size:12px;color:var(--ink-muted);">Loading&hellip;</div>
+        </div>
+      </div>
     </div>
 
-  </div>
-  <div class="bottom-nav">
-    <button class="btn btn-gold" onclick="goTo('screen-course')">Tee Off →</button>
+    <!-- Members -->
+    <div class="ch-section" id="ch-sec-members">
+      <div class="ch-section-header" onclick="toggleChSection('members')">
+        <span class="ch-section-title">Members</span>
+        <span class="ch-section-chevron">&#9660;</span>
+      </div>
+      <div class="ch-section-body" id="ch-members-body">
+        <div id="ch-members" style="margin:0 16px 12px;border:1px solid var(--rule);border-radius:10px;overflow:hidden;background:var(--cream-card);">
+          <div style="padding:16px;text-align:center;font-family:var(--sans);font-size:12px;color:var(--ink-muted);">Loading&hellip;</div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -2589,80 +2773,92 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
 ════════════════════════════════════════════════ -->
 <div class="screen hidden" id="screen-round">
 
-  <div class="hole-banner">
-    <div style="display:flex;align-items:center;gap:14px;width:100%">
-      <div>
-        <div class="hole-label">Hole</div>
-        <div class="hole-num" id="live-hole-num">1</div>
-      </div>
-      <div class="hole-info">
-        <div class="hole-label">Par</div>
-        <div class="hole-par" id="live-par">4</div>
-        <div class="hole-yards" id="live-yards">410 yds</div>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:7px;align-items:flex-end">
-        <div class="hole-hdcp-badge" id="live-hdcp">HCP 7</div>
-        <div style="display:flex;gap:6px;align-items:center">
-          <button class="manual-press-btn" onclick="showManualPressMenu()" id="press-menu-btn" style="display:none">PRESS</button>
-          <button onclick="midRoundSetup()" style="background:transparent;border:1px solid rgba(212,200,154,.18);color:rgba(212,200,154,.5);border-radius:8px;padding:5px 10px;font-family:var(--sans);font-size:10px;font-weight:500;letter-spacing:1px;text-transform:uppercase;cursor:pointer">SETUP</button>
-        </div>
+  <!-- Compact hole header -->
+  <div class="hole-header-compact">
+    <button id="prev-btn" class="hole-nav-arrow" onclick="prevHole()">&#8249;</button>
+    <div class="hole-header-center" onclick="toggleHoleDots()">
+      <div class="hole-header-hole" id="live-hole-num">1</div>
+      <div class="hole-header-sep">|</div>
+      <div class="hole-header-meta">
+        <span class="hole-header-par">Par <span id="live-par">4</span></span>
+        <span class="hole-header-yards" id="live-yards">410y</span>
       </div>
     </div>
-    <div class="hole-dots" id="hole-dots" style="padding:6px 0 2px;background:transparent;border-bottom:none;"></div>
+    <div class="hole-header-right">
+      <span class="hole-header-hcp" id="live-hdcp">HCP 7</span>
+      <button class="manual-press-btn" onclick="showManualPressMenu()" id="press-menu-btn" style="display:none">PRESS</button>
+      <button onclick="midRoundSetup()" class="hole-header-gear">&#9881;</button>
+    </div>
+    <button id="next-btn-top" class="hole-nav-arrow" onclick="nextHole()">&#8250;</button>
   </div>
 
-  <div class="round-tab-bar">
-    <button class="round-tab" id="rtab-board" onclick="openScorecard('screen-round');switchScTab('board')">Board</button>
-    <button class="round-tab" id="rtab-bets" onclick="openScorecard('screen-round');switchScTab('bets')">Bets</button>
-    <button class="round-tab" id="rtab-scores" onclick="openScorecard('screen-round');switchScTab('scores')">Scorecard</button>
+  <!-- Progress bar -->
+  <div class="hole-progress-bar" id="hole-progress-bar"></div>
+
+  <!-- Expandable hole dots (hidden by default) -->
+  <div class="hole-dots-drawer" id="hole-dots-drawer" style="display:none">
+    <div class="hole-dots" id="hole-dots"></div>
   </div>
 
-  <div class="body" style="padding:14px">
+  <div class="body" style="padding:10px 14px 14px">
 
-    <div style="font-family:var(--sans);font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--ink-dim);margin-bottom:10px">Scores — Hole <span id="score-hole-label">1</span></div>
+    <!-- Press alert (inline, above scores) -->
+    <div class="press-alert-inline" id="press-alert" style="display:none">
+      <div style="flex:1;display:flex;align-items:center;gap:8px">
+        <span style="font-family:var(--serif);font-weight:600;color:var(--gold);font-style:italic;font-size:13px">Press</span>
+        <span class="press-alert-text" id="press-alert-text" style="font-family:var(--sans);font-size:12px;color:var(--ink)">Press available</span>
+      </div>
+      <button class="press-btn" onclick="acceptPress()" style="padding:5px 12px;font-size:11px">Press</button>
+      <button class="press-btn" onclick="declinePress()" style="background:var(--ink-muted);margin-left:4px;padding:5px 10px;font-size:11px">Skip</button>
+    </div>
+
+    <!-- Score grid (primary content) -->
     <div class="score-grid" id="score-grid"></div>
 
-    <div class="press-alert" id="press-alert" style="display:none">
-      <div class="press-alert-icon" style="font-family:var(--serif);font-size:16px;font-weight:600;color:var(--gold);font-style:italic">Press</div>
-      <div style="flex:1">
-        <div class="press-alert-text" id="press-alert-text">Press available</div>
-        <div class="press-alert-sub" id="press-alert-sub"></div>
-      </div>
-      <button class="press-btn" onclick="acceptPress()">Press</button>
-      <button class="press-btn" onclick="declinePress()" style="background:var(--ink-muted);margin-left:6px">Skip</button>
+    <!-- Inline standings micro-pills -->
+    <div class="standings-inline" id="standings-strip"></div>
+
+    <!-- Collapsible details drawer -->
+    <div class="details-drawer-toggle" id="details-drawer-toggle" onclick="toggleDetailsDrawer()">
+      <span>Details</span>
+      <span class="chevron">&#9660;</span>
     </div>
+    <div class="details-drawer-body" id="details-drawer-body">
 
-    <div class="standings-strip" id="standings-strip"></div>
+      <div id="side-games-section" style="display:none">
+        <div style="font-family:var(--sans);font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--ink-dim);margin-bottom:10px;padding-top:8px">Side Games — Hole <span id="sg-hole-label">1</span></div>
+        <div class="card" style="padding:12px 16px">
+          <div id="side-games-grid"></div>
+        </div>
+      </div>
 
-    <div id="side-games-section" style="display:none">
-      <div style="height:16px"></div>
-      <div style="font-family:var(--sans);font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--ink-dim);margin-bottom:10px">Side Games — Hole <span id="sg-hole-label">1</span></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin:12px 0 8px">
+        <div style="font-family:var(--sans);font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--ink-dim)">Running Money</div>
+        <button onclick="addHoleSideWager()" style="font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);background:none;border:1px solid rgba(181,154,99,0.3);border-radius:8px;padding:4px 10px;cursor:pointer">+ Side Bet</button>
+      </div>
       <div class="card" style="padding:12px 16px">
-        <div id="side-games-grid"></div>
+        <div id="running-money"></div>
       </div>
-    </div>
 
-    <div style="height:16px"></div>
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-      <div style="font-family:var(--sans);font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--ink-dim)">Running Money</div>
-      <button onclick="addHoleSideWager()" style="font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);background:none;border:1px solid rgba(181,154,99,0.3);border-radius:8px;padding:4px 10px;cursor:pointer">+ Side Bet</button>
-    </div>
-    <div class="card" style="padding:12px 16px">
-      <div id="running-money"></div>
-    </div>
+      <div class="hole-overview" id="hole-overview" style="margin-top:12px">
+        <div class="hole-overview-title">Hole Notes</div>
+        <div class="hole-overview-desc" id="hole-overview-desc">Loading…</div>
+        <div class="hole-overview-stats" id="hole-overview-stats"></div>
+      </div>
 
-    <div class="hole-overview" id="hole-overview">
-      <div class="hole-overview-title">Hole Notes</div>
-      <div class="hole-overview-desc" id="hole-overview-desc">Loading…</div>
-      <div class="hole-overview-stats" id="hole-overview-stats"></div>
     </div>
 
   </div>
 
-  <div class="bottom-nav" id="round-bottom-nav">
-    <button id="prev-btn" class="btn btn-secondary" style="flex:1" onclick="prevHole()">&#8592; Prev</button>
-    <button onclick="endRoundEarly()" style="background:none;border:none;font-family:var(--sans);font-size:10px;color:var(--ink-muted);letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;padding:8px">End</button>
-    <button id="next-btn" class="btn btn-primary" style="flex:1" onclick="nextHole()">Next &#8594;</button>
+  <!-- Bottom nav: Card / Next Hole / End -->
+  <div class="bottom-nav-round" id="round-bottom-nav">
+    <button class="bottom-action-btn" onclick="openScorecard('screen-round');switchScTab('board')">
+      <span class="bottom-action-label">Card</span>
+    </button>
+    <button class="btn-next-hole" id="next-btn" onclick="nextHole()">Next Hole &#8594;</button>
+    <button class="bottom-action-btn" onclick="endRoundEarly()">
+      <span class="bottom-action-label">End</span>
+    </button>
   </div>
 </div>
 
@@ -2985,7 +3181,7 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
 <script>
 (async () => {
   const { data: { session } } = await sb.auth.getSession();
-  if (!session) { window.location.replace('login.html'); return; }
+  if (!session) { console.warn('DEV: no session'); /* window.location.replace('login.html'); return; */ }
 
   // Check if user has set up their profile yet
   // Use maybeSingle() instead of single() so we get null instead of 406 when no row exists
@@ -5573,8 +5769,12 @@ async function openClubhouse() {
   const { data: { session } } = await sb.auth.getSession();
   if (!session) return;
   const userId = session.user.id;
+  window._chUserId = userId;
 
-  // Load my profile
+  // Reset section loaded flags
+  window._chLoaded = { matches: false, merit: false, trophies: false, groups: false, members: false };
+
+  // Load my profile → mini avatar
   const { data: me } = await sb
     .from('players')
     .select('username, hdcp_index, avatar_url')
@@ -5582,139 +5782,202 @@ async function openClubhouse() {
     .maybeSingle();
 
   if (me) {
-    const chAv = document.getElementById('ch-avatar');
+    var miniAv = document.getElementById('ch-mini-avatar');
     if (me.avatar_url) {
-      chAv.textContent = '';
-      chAv.style.backgroundImage = `url(${me.avatar_url})`;
-      chAv.style.backgroundSize = 'cover';
-      chAv.style.backgroundPosition = 'center';
+      miniAv.textContent = '';
+      miniAv.style.backgroundImage = 'url(' + me.avatar_url + ')';
     } else {
-      const initials = (me.username || '?').split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2);
-      chAv.textContent = initials;
-      chAv.style.backgroundImage = '';
+      var initials = (me.username || '?').split(' ').map(function(w){ return w[0]; }).join('').toUpperCase().slice(0,2);
+      miniAv.textContent = initials;
+      miniAv.style.backgroundImage = '';
     }
-    document.getElementById('ch-name').textContent = me.username || '—';
-    document.getElementById('ch-hcp').textContent = me.hdcp_index != null ? 'HCP ' + me.hdcp_index : 'HCP —';
   }
 
-  // Load my round stats (Task 4.1)
-  const { data: myRounds } = await sb
-    .from('round_players')
-    .select('finish_position, money_result, gross_score, to_par')
-    .eq('player_id', userId);
-
-  if (myRounds && myRounds.length) {
-    const total = myRounds.length;
-    const wins = myRounds.filter(r => r.finish_position === 1).length;
-    const money = myRounds.reduce((s, r) => s + (r.money_result || 0), 0);
-    const winPct = total > 0 ? Math.round((wins / total) * 100) : 0;
-
-    // Scoring average (rounds with gross_score recorded)
-    const scoredRounds = myRounds.filter(r => r.gross_score > 0);
-    const scoringAvg = scoredRounds.length
-      ? (scoredRounds.reduce((s, r) => s + r.gross_score, 0) / scoredRounds.length).toFixed(1)
-      : null;
-
-    // Best round by to_par
-    const bestRound = scoredRounds.length
-      ? scoredRounds.reduce((best, r) => (r.to_par < best.to_par ? r : best), scoredRounds[0])
-      : null;
-
-    document.getElementById('ch-rounds').textContent = total;
-    // Show scoring avg instead of win rate if no betting data; show win rate if bets exist
-    const hasBets = myRounds.some(r => r.money_result !== 0 && r.money_result != null);
-    if (hasBets) {
-      document.getElementById('ch-winrate').textContent = winPct + '%';
-      document.getElementById('ch-winrate-label').textContent = 'Win Rate';
-    } else if (scoringAvg) {
-      document.getElementById('ch-winrate').textContent = scoringAvg;
-      document.getElementById('ch-winrate-label').textContent = 'Avg Score';
-    } else {
-      document.getElementById('ch-winrate').textContent = '—';
-      document.getElementById('ch-winrate-label').textContent = 'Win Rate';
-    }
-    const moneyEl = document.getElementById('ch-money');
-    if (hasBets) {
-      moneyEl.textContent = (money >= 0 ? '+$' : '-$') + Math.abs(money);
-      moneyEl.style.color = money > 0 ? 'var(--green-augusta)' : money < 0 ? 'var(--score-bogey)' : 'var(--ink-muted)';
-      document.getElementById('ch-money-label').textContent = 'Net $';
-    } else if (bestRound) {
-      const diff = bestRound.to_par;
-      moneyEl.textContent = diff === 0 ? 'E' : (diff > 0 ? '+' + diff : '' + diff);
-      moneyEl.style.color = diff < 0 ? 'var(--green-augusta)' : diff > 0 ? 'var(--score-bogey)' : 'var(--ink-muted)';
-      document.getElementById('ch-money-label').textContent = 'Best Round';
-    } else {
-      moneyEl.textContent = '—';
-      document.getElementById('ch-money-label').textContent = 'Net $';
-    }
-  } else {
-    document.getElementById('ch-rounds').textContent = '0';
-    document.getElementById('ch-winrate').textContent = '—';
-    document.getElementById('ch-money').textContent = '—';
-  }
-
-  // Load leaderboard
+  // Load leaderboard data (used for merit + trophies)
   const { data: allRounds } = await sb
     .from('round_players')
-    .select('player_id, finish_position, money_result, players(username, hdcp_index, avatar_url)');
+    .select('player_id, finish_position, money_result, gross_score, to_par, eagles, birdies, players(username, hdcp_index, avatar_url)');
 
-  const boardMap = {};
-  (allRounds || []).forEach(r => {
+  var boardMap = {};
+  (allRounds || []).forEach(function(r) {
     if (!r.player_id || !r.players) return;
-    if (!boardMap[r.player_id]) boardMap[r.player_id] = { id: r.player_id, name: r.players.username, hdcp: r.players.hdcp_index, avatar_url: r.players.avatar_url, money: 0, rounds: 0 };
+    if (!boardMap[r.player_id]) boardMap[r.player_id] = { id: r.player_id, name: r.players.username, hdcp: r.players.hdcp_index, avatar_url: r.players.avatar_url, money: 0, rounds: 0, wins: 0, eagles: 0, totalToPar: 0, scoredRounds: 0 };
     boardMap[r.player_id].money += r.money_result || 0;
     boardMap[r.player_id].rounds++;
+    if (r.finish_position === 1) boardMap[r.player_id].wins++;
+    boardMap[r.player_id].eagles += r.eagles || 0;
+    if (r.gross_score > 0) {
+      boardMap[r.player_id].totalToPar += r.to_par || 0;
+      boardMap[r.player_id].scoredRounds++;
+    }
   });
+  window._chBoardMap = boardMap;
 
-  const sorted = Object.values(boardMap).sort((a, b) => b.money - a.money);
-  const ranks = ['I','II','III','IV','V','VI','VII','VIII'];
-  const colors = ['#e8d5b0','#d4e8d0','#f0e8d8','#e8dde8','#d4d8e8','#e8d4d4'];
+  // Render sections that are open by default
+  loadChMatches();
+  loadChMerit();
+}
 
-  document.getElementById('ch-leaderboard').innerHTML = sorted.length ? sorted.map((p, i) => {
-    const initials = (p.name||'?').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
-    let avStyle = `background:${colors[i%colors.length]}`;
-    let avContent = initials;
+function toggleChSection(section) {
+  var sec = document.getElementById('ch-sec-' + section);
+  if (!sec) return;
+  var wasOpen = sec.classList.contains('open');
+  sec.classList.toggle('open');
+  // Lazy-load on first expand
+  if (!wasOpen && window._chLoaded && !window._chLoaded[section]) {
+    if (section === 'trophies') loadChTrophies();
+    if (section === 'groups') loadChGroups();
+    if (section === 'members') loadChMembers();
+  }
+}
+
+async function loadChMatches() {
+  window._chLoaded.matches = true;
+  var body = document.getElementById('ch-matches-body');
+  var { data: rows } = await sb
+    .from('rounds')
+    .select('id, course_name, played_at, full_state, round_players(player_id, money_result, finish_position, players(username))')
+    .order('played_at', { ascending: false })
+    .limit(8);
+
+  if (!rows || !rows.length) {
+    body.innerHTML = '<div style="padding:16px;text-align:center;font-family:var(--sans);font-size:12px;color:var(--ink-muted);">No matches yet</div>';
+    return;
+  }
+
+  body.innerHTML = rows.map(function(rd) {
+    var course = rd.course_name || 'Unknown';
+    var date = rd.played_at ? new Date(rd.played_at).toLocaleDateString('en-US', { month:'short', day:'numeric' }) : '';
+    var rps = rd.round_players || [];
+    // Find winner
+    var winner = rps.find(function(rp) { return rp.finish_position === 1; });
+    var winnerName = winner && winner.players ? winner.players.username : null;
+    // Money spread
+    var moneyArr = rps.filter(function(rp) { return rp.money_result; }).sort(function(a,b) { return (b.money_result||0) - (a.money_result||0); });
+    var margin = moneyArr.length >= 2 ? '+$' + Math.abs((moneyArr[0].money_result||0) - (moneyArr[moneyArr.length-1].money_result||0)) : '';
+    var icon = winnerName ? '\uD83C\uDFC6' : '\uD83E\uDD1D';
+    var title = winnerName ? winnerName + ' wins' : 'Push';
+
+    return '<div class="ch-match-row">' +
+      '<div class="ch-match-icon">' + icon + '</div>' +
+      '<div class="ch-match-info">' +
+        '<div class="ch-match-winner">' + title + '</div>' +
+        '<div class="ch-match-detail">' + course + (date ? ' \u00B7 ' + date : '') + '</div>' +
+      '</div>' +
+      (margin ? '<div class="ch-match-money" style="color:var(--green-augusta)">' + margin + '</div>' : '') +
+    '</div>';
+  }).join('');
+}
+
+function loadChMerit() {
+  window._chLoaded.merit = true;
+  var boardMap = window._chBoardMap || {};
+  var userId = window._chUserId;
+  var sorted = Object.values(boardMap).sort(function(a, b) { return b.money - a.money; });
+  var ranks = ['I','II','III','IV','V','VI','VII','VIII'];
+  var colors = ['#e8d5b0','#d4e8d0','#f0e8d8','#e8dde8','#d4d8e8','#e8d4d4'];
+
+  document.getElementById('ch-leaderboard').innerHTML = sorted.length ? sorted.map(function(p, i) {
+    var initials = (p.name||'?').split(' ').map(function(w){ return w[0]; }).join('').toUpperCase().slice(0,2);
+    var avStyle = 'background:' + colors[i%colors.length];
+    var avContent = initials;
     if (p.avatar_url) {
-      avStyle = `background-image:url(${p.avatar_url});background-size:cover;background-position:center`;
+      avStyle = 'background-image:url(' + p.avatar_url + ');background-size:cover;background-position:center';
       avContent = '';
     }
-    return `
-    <div class="ch-lb-row" onclick="openMemberProfile('${p.id}')" style="cursor:pointer">
-      <div class="ch-lb-rank ${i===0?'top':''}">${ranks[i]||i+1}</div>
-      <div class="ch-lb-player">
-        <div class="ch-lb-av" style="${avStyle}">${avContent}</div>
-        <div>
-          <div class="ch-lb-name">${p.name||'Unknown'}</div>
-          <div class="ch-lb-meta">HCP ${p.hdcp??'—'} · ${p.rounds} round${p.rounds!==1?'s':''}</div>
-        </div>
-      </div>
-      <div class="ch-lb-val ${p.money>0?'pos':p.money<0?'neg':'even'}">${p.money>=0?'+$':'-$'}${Math.abs(p.money)}</div>
-    </div>`;
+    var selfClass = p.id === userId ? ' self' : '';
+    return '<div class="ch-lb-row' + selfClass + '" onclick="openMemberProfile(\'' + p.id + '\')" style="cursor:pointer">' +
+      '<div class="ch-lb-rank ' + (i===0?'top':'') + '">' + (ranks[i]||i+1) + '</div>' +
+      '<div class="ch-lb-player">' +
+        '<div class="ch-lb-av" style="' + avStyle + '">' + avContent + '</div>' +
+        '<div>' +
+          '<div class="ch-lb-name">' + (p.name||'Unknown') + '</div>' +
+          '<div class="ch-lb-meta">HCP ' + (p.hdcp!=null?p.hdcp:'\u2014') + ' \u00B7 ' + p.rounds + ' round' + (p.rounds!==1?'s':'') + (p.id===userId?' \u00B7 You':'') + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="ch-lb-val ' + (p.money>0?'pos':p.money<0?'neg':'even') + '">' + (p.money>=0?'+$':'-$') + Math.abs(p.money) + '</div>' +
+    '</div>';
   }).join('') : '<div style="padding:20px;text-align:center;font-family:var(--sans);font-size:12px;color:var(--ink-muted);">No rounds played yet</div>';
+}
 
-  // Load all members
-  const { data: members } = await sb
+function loadChTrophies() {
+  window._chLoaded.trophies = true;
+  var boardMap = window._chBoardMap || {};
+  var players = Object.values(boardMap);
+  if (!players.length) {
+    document.getElementById('ch-trophies-body').innerHTML = '<div style="padding:16px;text-align:center;font-family:var(--sans);font-size:12px;color:var(--ink-muted);">Play some rounds first</div>';
+    return;
+  }
+
+  var trophies = [];
+  // Money Leader
+  var moneyLeader = players.reduce(function(a, b) { return a.money > b.money ? a : b; });
+  if (moneyLeader.money > 0) trophies.push({ icon: '\uD83D\uDCB0', label: 'Money Leader', holder: moneyLeader.name, sub: '+$' + moneyLeader.money });
+  // Most Rounds
+  var mostRounds = players.reduce(function(a, b) { return a.rounds > b.rounds ? a : b; });
+  trophies.push({ icon: '\u26F3', label: 'Most Rounds', holder: mostRounds.name, sub: mostRounds.rounds + ' rounds' });
+  // Low Scorer (best avg to-par)
+  var scored = players.filter(function(p) { return p.scoredRounds >= 2; });
+  if (scored.length) {
+    var lowScorer = scored.reduce(function(a, b) { return (a.totalToPar/a.scoredRounds) < (b.totalToPar/b.scoredRounds) ? a : b; });
+    var avg = (lowScorer.totalToPar / lowScorer.scoredRounds).toFixed(1);
+    trophies.push({ icon: '\uD83C\uDFAF', label: 'Low Scorer', holder: lowScorer.name, sub: (avg > 0 ? '+' : '') + avg + ' avg' });
+  }
+  // Eagle King
+  var eaglePlayers = players.filter(function(p) { return p.eagles > 0; });
+  if (eaglePlayers.length) {
+    var eagleKing = eaglePlayers.reduce(function(a, b) { return a.eagles > b.eagles ? a : b; });
+    trophies.push({ icon: '\uD83E\uDD85', label: 'Eagle King', holder: eagleKing.name, sub: eagleKing.eagles + ' eagle' + (eagleKing.eagles!==1?'s':'') });
+  }
+  // Most Wins
+  var winPlayers = players.filter(function(p) { return p.wins > 0; });
+  if (winPlayers.length) {
+    var topWinner = winPlayers.reduce(function(a, b) { return a.wins > b.wins ? a : b; });
+    trophies.push({ icon: '\uD83C\uDFC6', label: 'Most Wins', holder: topWinner.name, sub: topWinner.wins + ' win' + (topWinner.wins!==1?'s':'') });
+  }
+
+  document.getElementById('ch-trophies-body').innerHTML = '<div class="ch-trophy-grid">' +
+    trophies.map(function(t) {
+      return '<div class="ch-trophy-badge">' +
+        '<div class="ch-trophy-icon">' + t.icon + '</div>' +
+        '<div class="ch-trophy-label">' + t.label + '</div>' +
+        '<div class="ch-trophy-holder">' + t.holder + '</div>' +
+        '<div style="font-family:var(--sans);font-size:9px;color:var(--ink-muted);margin-top:2px">' + t.sub + '</div>' +
+      '</div>';
+    }).join('') +
+  '</div>';
+}
+
+async function loadChGroups() {
+  window._chLoaded.groups = true;
+  loadMyGroups();
+}
+
+async function loadChMembers() {
+  window._chLoaded.members = true;
+  var userId = window._chUserId;
+  var colors = ['#e8d5b0','#d4e8d0','#f0e8d8','#e8dde8','#d4d8e8','#e8d4d4'];
+  var { data: members } = await sb
     .from('players')
     .select('id, username, hdcp_index, avatar_url, home_course, city, preferred_game, bio')
     .order('username');
 
-  document.getElementById('ch-members').innerHTML = (members||[]).map((m, i) => {
-    const initials = (m.username||'?').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
-    let avStyle = `background:${colors[i%colors.length]}`;
-    let avContent = initials;
+  document.getElementById('ch-members').innerHTML = (members||[]).map(function(m, i) {
+    var initials = (m.username||'?').split(' ').map(function(w){ return w[0]; }).join('').toUpperCase().slice(0,2);
+    var avStyle = 'background:' + colors[i%colors.length];
+    var avContent = initials;
     if (m.avatar_url) {
-      avStyle = `background-image:url(${m.avatar_url});background-size:cover;background-position:center`;
+      avStyle = 'background-image:url(' + m.avatar_url + ');background-size:cover;background-position:center';
       avContent = '';
     }
-    return `
-    <div class="ch-member-row" onclick="openMemberProfile('${m.id}')" style="cursor:pointer">
-      <div class="ch-member-av" style="${avStyle}">${avContent}</div>
-      <div style="flex:1">
-        <div class="ch-member-name">${m.username||'Unknown'}</div>
-        <div class="ch-member-meta">HCP ${m.hdcp_index??'—'}${m.id===userId?' · You':''}</div>
-      </div>
-      <div style="color:#C6A46A;font-size:18px;padding-right:4px">›</div>
-    </div>`;
+    return '<div class="ch-member-row" onclick="openMemberProfile(\'' + m.id + '\')" style="cursor:pointer">' +
+      '<div class="ch-member-av" style="' + avStyle + '">' + avContent + '</div>' +
+      '<div style="flex:1">' +
+        '<div class="ch-member-name">' + (m.username||'Unknown') + '</div>' +
+        '<div class="ch-member-meta">HCP ' + (m.hdcp_index!=null?m.hdcp_index:'\u2014') + (m.id===userId?' \u00B7 You':'') + '</div>' +
+      '</div>' +
+      '<div style="color:#C6A46A;font-size:18px;padding-right:4px">\u203A</div>' +
+    '</div>';
   }).join('');
 }
 
@@ -5875,16 +6138,7 @@ function viewMemberRoundScorecard(idx) {
   renderScorecard();
 }
 
-function switchClubhouseTab(tab) {
-  document.getElementById('ch-tab-members').classList.toggle('active', tab === 'members');
-  document.getElementById('ch-tab-feed').classList.toggle('active', tab === 'feed');
-  document.getElementById('ch-tab-groups').classList.toggle('active', tab === 'groups');
-  document.getElementById('ch-panel-members').style.display = tab === 'members' ? '' : 'none';
-  document.getElementById('ch-panel-feed').style.display = tab === 'feed' ? '' : 'none';
-  document.getElementById('ch-panel-groups').style.display = tab === 'groups' ? '' : 'none';
-  if (tab === 'feed') loadRecentRoundsFeed();
-  if (tab === 'groups') loadMyGroups();
-}
+// switchClubhouseTab removed — replaced by toggleChSection accordion pattern
 
 async function loadRecentRoundsFeed() {
   const feedEl = document.getElementById('ch-feed');
@@ -6745,11 +6999,12 @@ function renderRound() {
 
   document.getElementById('live-hole-num').textContent = h;
   document.getElementById('live-par').textContent = hole.par;
-  document.getElementById('live-hdcp').textContent = 'HCP Index: ' + hole.hcp;
-  document.getElementById('score-hole-label').textContent = h;
-  document.getElementById('sg-hole-label').textContent = h;
+  document.getElementById('live-hdcp').textContent = 'HCP ' + hole.hcp;
+  var sgLabel = document.getElementById('sg-hole-label');
+  if (sgLabel) sgLabel.textContent = h;
   document.getElementById('prev-btn').disabled = h <= 1;
-  document.getElementById('next-btn').textContent = h >= (state.holesStart + state.holesCount) ? 'Finish Round →' : 'Next Hole →';
+  var nextBtn = document.getElementById('next-btn');
+  if (nextBtn) nextBtn.textContent = h >= (state.holesStart + state.holesCount) ? 'Finish Round \u2192' : 'Next Hole \u2192';
 
   // Yardage: show all unique tees in play
   const teesInPlay = [...new Set(state.players.map((_, pi) => state.players[pi].teeIdx))];
@@ -6779,6 +7034,7 @@ function renderRound() {
   updateNassauState();
   renderStandingsStrip();
   renderHoleDots();
+  renderHoleProgress();
   renderScoreGrid();
   renderSideGames();
   renderRunningMoney();
@@ -6803,20 +7059,12 @@ function renderStandingsStrip() {
       var isEven = item.s.leader < 0;
       var lname = !isEven ? getEntityFullLabel(item.s.leader) : null;
       var cls = isEven ? 'even' : 'winning';
-      var valText = isEven ? 'EVEN' : lname + ' +' + item.s.holesUp;
-      pills.push('<div class="standing-pill '+cls+'">' +
-        '<div class="standing-label">'+item.label+' Nassau</div>' +
-        '<div class="standing-value '+(isEven?'even':'up')+'" style="font-size:'+(isEven?'19':'16')+'px">'+valText+'</div>' +
-        '<div class="standing-sub">$'+item.stake+'</div>' +
-        '</div>');
+      var valText = isEven ? 'Even' : lname + ' +' + item.s.holesUp;
+      pills.push('<div class="standing-micro '+cls+'">'+item.label+': '+valText+'</div>');
     });
 
     state.nassau.presses.filter(function(p){return !p.resolved && !p.declined;}).forEach(function(p, i) {
-      pills.push('<div class="standing-pill" style="border-color:rgba(196,164,86,.4)">' +
-        '<div class="standing-label" style="color:var(--gold)">PRESS '+(i+1)+'</div>' +
-        '<div class="standing-value" style="font-size:15px;color:var(--gold)">'+(p.leader<0?'EVEN':'+'+p.holesUp)+'</div>' +
-        '<div class="standing-sub">$'+p.stake+'</div>' +
-        '</div>');
+      pills.push('<div class="standing-micro" style="border-color:rgba(196,164,86,.4);color:var(--gold)">Press '+(i+1)+': '+(p.leader<0?'Even':'+'+p.holesUp)+'</div>');
     });
   }
 
@@ -6836,20 +7084,14 @@ function renderStandingsStrip() {
       var mpLeaderName = mpDiff > 0 ? state.players[0].name.split(' ')[0] : mpDiff < 0 ? state.players[1].name.split(' ')[0] : null;
       var mpUp = Math.abs(mpDiff);
       var mpCls = mpIsEven ? 'even' : 'winning';
-      // Dormie: leading by exactly as many holes as remain
       var mpIsDormie = !mpIsEven && mpUp === mpRemain && mpRemain > 0;
-      // Won X&Y: leading by more holes than remain
       var mpIsClosed = !mpIsEven && mpUp > mpRemain;
       var mpValText;
-      if (mpIsEven) { mpValText = 'ALL SQUARE'; }
+      if (mpIsEven) { mpValText = 'AS'; }
       else if (mpIsClosed) { mpValText = mpLeaderName + ' ' + mpUp + '&' + mpRemain; }
-      else if (mpIsDormie) { mpValText = mpLeaderName + ' DORMIE'; }
+      else if (mpIsDormie) { mpValText = mpLeaderName + ' Dormie'; }
       else { mpValText = mpLeaderName + ' ' + mpUp + ' UP'; }
-      pills.push('<div class="standing-pill '+mpCls+'">' +
-        '<div class="standing-label">Match Play</div>' +
-        '<div class="standing-value '+(mpIsEven?'even':'up')+'" style="font-size:'+(mpIsEven?'16':'15')+'px">'+mpValText+'</div>' +
-        '<div class="standing-sub">$'+mpStake+'</div>' +
-        '</div>');
+      pills.push('<div class="standing-micro '+mpCls+'">Match: '+mpValText+'</div>');
     }
   }
 
@@ -6873,45 +7115,30 @@ function renderStandingsStrip() {
       var spLeaderIdx = spIsEven ? -1 : spTotals.indexOf(spMin);
       var spLeaderName = spLeaderIdx >= 0 ? state.players[spLeaderIdx].name.split(' ')[0] : null;
       var spBy = spIsEven ? 0 : spTotals.sort(function(a,b){return a-b;})[1] - spMin;
-      var spValText = spIsEven ? 'TIED' : spLeaderName + ' −' + spBy;
-      pills.push('<div class="standing-pill '+(spIsEven?'even':'winning')+'">' +
-        '<div class="standing-label">Stroke Play</div>' +
-        '<div class="standing-value '+(spIsEven?'even':'up')+'" style="font-size:16px">'+spValText+'</div>' +
-        '<div class="standing-sub">$'+spStake+'</div>' +
-        '</div>');
+      var spValText = spIsEven ? 'Tied' : spLeaderName + ' −' + spBy;
+      pills.push('<div class="standing-micro '+(spIsEven?'even':'winning')+'">Stroke: '+spValText+'</div>');
     }
   }
 
   if (state.games.skins) {
     var pot = state.skins.carryover + (parseFloat(state.stakes.skins)||0);
-    pills.push('<div class="standing-pill"><div class="standing-label">Skins Pot</div>' +
-      '<div class="standing-value" style="font-size:18px;color:var(--gold)">$'+pot+'</div>' +
-      '<div class="standing-sub">current</div></div>');
+    pills.push('<div class="standing-micro" style="color:var(--gold);border-color:rgba(196,164,86,.3)">Skins: $'+pot+'</div>');
   }
 
   if (state.games.wolf) {
     var ws2 = getWolfStripStatus(state.currentHole);
     var wolfIdx2 = getWolfIdx(state.currentHole);
-    var wolfPillLabel = state.players[wolfIdx2].name.split(' ')[0] + ' · Wolf';
-    var wolfPillVal = ws2 ? ws2.team0 + ' v ' + ws2.team1 : 'Deciding…';
-    var wolfPillSub = ws2 ? '$' + ws2.betValue + ' · ' + ws2.decLabel : '$' + state.wolf.holeValue;
-    pills.push('<div class="standing-pill">' +
-      '<div class="standing-label" style="color:var(--gold)">🐺 ' + wolfPillLabel + '</div>' +
-      '<div class="standing-value" style="font-size:13px;color:var(--ink)">' + wolfPillVal + '</div>' +
-      '<div class="standing-sub">' + wolfPillSub + '</div></div>');
+    var wolfName = state.players[wolfIdx2].name.split(' ')[0];
+    var wolfVal = ws2 ? ws2.decLabel : 'Deciding';
+    pills.push('<div class="standing-micro" style="color:var(--gold);border-color:rgba(196,164,86,.3)">\uD83D\uDC3A '+wolfName+': '+wolfVal+'</div>');
   }
 
-  // Running money pills
+  // Running money micro-pills
   var money = getRunningMoney();
   money.forEach(function(m, i) {
     var sign = m > 0 ? '+' : '';
     var cls  = m > 0 ? 'winning' : m < 0 ? 'losing' : 'even';
-    var col  = m > 0 ? 'var(--neon)' : m < 0 ? 'var(--red)' : 'var(--text-dim)';
-    pills.push('<div class="standing-pill '+cls+'">' +
-      '<div class="standing-label">'+state.players[i].name.split(' ')[0]+'</div>' +
-      '<div class="standing-value" style="font-size:17px;color:'+col+'">'+sign+'$'+Math.abs(m).toFixed(0)+'</div>' +
-      '<div class="standing-sub">running</div>' +
-      '</div>');
+    pills.push('<div class="standing-micro '+cls+'">'+state.players[i].name.split(' ')[0]+': '+sign+'$'+Math.abs(m).toFixed(0)+'</div>');
   });
 
   strip.innerHTML = pills.join('');
@@ -6935,6 +7162,40 @@ function renderHoleDots() {
     }
     return '<div class="hole-dot '+cls+'" onclick="jumpToHole('+hNum+')">'+hNum+'</div>';
   }).join('');
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// HOLE PROGRESS BAR (thin color bar)
+// ═══════════════════════════════════════════════════════════════════
+function renderHoleProgress() {
+  var bar = document.getElementById('hole-progress-bar');
+  if (!bar) return;
+  var primaryTee = getPlayerTee(0);
+  bar.innerHTML = primaryTee.holes.map(function(hole, i) {
+    var hNum = i + 1;
+    var cls = 'future';
+    if (hNum === state.currentHole) { cls = 'current'; }
+    else if (hNum < state.currentHole) {
+      var net = getNet(0, i);
+      var diff = net !== null ? net - hole.par : 0;
+      cls = diff < 0 ? 'good' : diff > 0 ? 'bad' : 'par';
+    }
+    return '<div class="hole-progress-seg '+cls+'" onclick="jumpToHole('+hNum+')"></div>';
+  }).join('');
+}
+
+function toggleHoleDots() {
+  var drawer = document.getElementById('hole-dots-drawer');
+  if (!drawer) return;
+  drawer.style.display = drawer.style.display === 'none' ? '' : 'none';
+}
+
+function toggleDetailsDrawer() {
+  var body = document.getElementById('details-drawer-body');
+  var toggle = document.getElementById('details-drawer-toggle');
+  if (!body || !toggle) return;
+  body.classList.toggle('open');
+  toggle.classList.toggle('open');
 }
 
 // ═══════════════════════════════════════════════════════════════════
