@@ -339,3 +339,143 @@ async function removeFriend(friendRowId) {
   const { error } = await sb.from('friends').delete().eq('id', friendRowId);
   if (error) throw error;
 }
+
+
+// ─────────────────────────────────────────────────────────────────
+// GROUPS
+// ─────────────────────────────────────────────────────────────────
+
+async function createGroup(name, description, emoji) {
+  const user = await getCurrentUser();
+  if (!user) throw new Error('Not logged in');
+  const { data: group, error } = await sb
+    .from('groups')
+    .insert({ name, description: description || null, emoji: emoji || '⛳', created_by: user.id })
+    .select()
+    .single();
+  if (error) throw error;
+  // Add creator as owner
+  const { error: memErr } = await sb
+    .from('group_members')
+    .insert({ group_id: group.id, player_id: user.id, role: 'owner' });
+  if (memErr) throw memErr;
+  return group;
+}
+
+async function getMyGroups() {
+  const user = await getCurrentUser();
+  if (!user) return [];
+  const { data, error } = await sb
+    .from('group_members')
+    .select(`
+      group_id, role,
+      groups ( id, name, description, emoji, created_by, created_at )
+    `)
+    .eq('player_id', user.id);
+  if (error) throw error;
+  // Flatten and return
+  return data.map(row => ({
+    id: row.groups.id,
+    name: row.groups.name,
+    description: row.groups.description,
+    emoji: row.groups.emoji,
+    created_by: row.groups.created_by,
+    created_at: row.groups.created_at,
+    role: row.role
+  }));
+}
+
+async function getGroupDetail(groupId) {
+  const { data: group, error: gErr } = await sb
+    .from('groups')
+    .select('*')
+    .eq('id', groupId)
+    .single();
+  if (gErr) throw gErr;
+  const { data: members, error: mErr } = await sb
+    .from('group_members')
+    .select(`
+      id, role, joined_at,
+      players:player_id ( id, username, avatar_url, hdcp_index )
+    `)
+    .eq('group_id', groupId)
+    .order('joined_at', { ascending: true });
+  if (mErr) throw mErr;
+  return {
+    ...group,
+    members: members.map(m => ({
+      membershipId: m.id,
+      role: m.role,
+      joinedAt: m.joined_at,
+      id: m.players.id,
+      username: m.players.username,
+      avatar_url: m.players.avatar_url,
+      hdcp_index: m.players.hdcp_index
+    }))
+  };
+}
+
+async function addGroupMember(groupId, playerId) {
+  const { data, error } = await sb
+    .from('group_members')
+    .insert({ group_id: groupId, player_id: playerId, role: 'member' })
+    .select()
+    .single();
+  if (error) throw error;
+  return data;
+}
+
+async function removeGroupMember(groupId, playerId) {
+  const { error } = await sb
+    .from('group_members')
+    .delete()
+    .eq('group_id', groupId)
+    .eq('player_id', playerId);
+  if (error) throw error;
+}
+
+async function getGroupMessages(groupId, limit = 50) {
+  const { data, error } = await sb
+    .from('group_messages')
+    .select(`
+      id, content, message_type, created_at,
+      players:player_id ( id, username, avatar_url )
+    `)
+    .eq('group_id', groupId)
+    .order('created_at', { ascending: true })
+    .limit(limit);
+  if (error) throw error;
+  return data;
+}
+
+async function sendGroupMessage(groupId, content, messageType = 'chat') {
+  const user = await getCurrentUser();
+  if (!user) throw new Error('Not logged in');
+  const { data, error } = await sb
+    .from('group_messages')
+    .insert({ group_id: groupId, player_id: user.id, content, message_type: messageType })
+    .select(`
+      id, content, message_type, created_at,
+      players:player_id ( id, username, avatar_url )
+    `)
+    .single();
+  if (error) throw error;
+  return data;
+}
+
+async function deleteGroup(groupId) {
+  const { error } = await sb.from('groups').delete().eq('id', groupId);
+  if (error) throw error;
+}
+
+async function getGroupH2H(player1Id, player2Id) {
+  const [p1, p2] = [player1Id, player2Id].sort();
+  const { data, error } = await sb
+    .from('v_head_to_head')
+    .select('*')
+    .eq('p1_id', p1)
+    .eq('p2_id', p2)
+    .single();
+  if (error && error.code !== 'PGRST116') throw error;
+  return data || { rounds_together: 0, p1_wins: 0, p2_wins: 0, ties: 0, p1_id: p1, p2_id: p2 };
+}
