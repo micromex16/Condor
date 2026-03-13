@@ -2110,10 +2110,13 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
 </div>
 
 <!-- Create Group Modal -->
-<div id="create-group-overlay" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.45);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);">
-  <div style="position:absolute;bottom:0;left:0;right:0;max-height:88vh;background:var(--cream-bg);border-radius:16px 16px 0 0;overflow-y:auto;padding:20px 16px calc(env(safe-area-inset-bottom, 0px) + 24px);">
-    <div class="modal-handle"></div>
-    <div style="font-family:var(--serif);font-size:22px;font-weight:700;color:var(--ink);text-align:center;margin-bottom:20px;">Create Group</div>
+<div id="create-group-overlay" style="display:none;position:fixed;inset:0;z-index:9999;background:var(--cream-bg);">
+  <div style="position:absolute;inset:0;overflow-y:auto;padding:60px 16px calc(env(safe-area-inset-bottom, 0px) + 24px) 16px;">
+    <div style="max-width:420px;margin:0 auto;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+      <div style="font-family:var(--serif);font-size:22px;font-weight:700;color:var(--ink);">Create Group</div>
+      <button onclick="closeCreateGroupModal()" style="background:none;border:none;font-size:24px;color:var(--ink-muted);cursor:pointer;padding:4px;">&times;</button>
+    </div>
 
     <!-- Group Name -->
     <div style="margin-bottom:16px;">
@@ -2157,59 +2160,71 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
       <button class="btn btn-secondary" onclick="closeCreateGroupModal()" style="flex:1;padding:14px;font-size:13px;">Cancel</button>
       <button class="btn btn-gold" onclick="submitCreateGroup()" style="flex:1;padding:14px;font-size:13px;">Create Group</button>
     </div>
+    </div>
   </div>
 </div>
 
 <!-- Add Member Overlay -->
-<div id="add-member-overlay" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.45);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);">
-  <div style="position:absolute;bottom:0;left:0;right:0;max-height:70vh;background:var(--cream-bg);border-radius:16px 16px 0 0;overflow-y:auto;padding:20px 16px 32px;">
-    <div class="modal-handle"></div>
-    <div style="font-family:var(--serif);font-size:18px;font-weight:600;color:var(--ink);text-align:center;margin-bottom:12px;">Add Member</div>
+<div id="add-member-overlay" style="display:none;position:fixed;inset:0;z-index:9999;background:var(--cream-bg);">
+  <div style="position:absolute;inset:0;overflow-y:auto;padding:60px 16px calc(env(safe-area-inset-bottom, 0px) + 24px) 16px;">
+    <div style="max-width:420px;margin:0 auto;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+      <div style="font-family:var(--serif);font-size:22px;font-weight:700;color:var(--ink);">Add Member</div>
+      <button onclick="closeAddMemberSheet()" style="background:none;border:none;font-size:24px;color:var(--ink-muted);cursor:pointer;padding:4px;">&times;</button>
+    </div>
     <input id="am-search" type="text" placeholder="Search friends…" autocomplete="off"
       oninput="filterAddMemberList(this.value)"
       style="width:100%;padding:10px 12px;border:1px solid var(--rule);border-radius:8px;font-family:var(--sans);font-size:14px;background:var(--cream-card);box-sizing:border-box;margin-bottom:10px;">
-    <div id="am-friends-list" style="max-height:250px;overflow-y:auto;">
+    <div id="am-friends-list" style="overflow-y:auto;">
       <div style="padding:16px;text-align:center;font-family:var(--sans);font-size:12px;color:var(--ink-muted)">Loading…</div>
     </div>
-    <button class="btn btn-secondary" onclick="closeAddMemberSheet()" style="width:100%;margin-top:12px;">Close</button>
+    </div>
   </div>
 </div>
 
 <!-- Group Settings Overlay -->
-<div id="group-settings-overlay" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.45);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);">
-  <div style="position:absolute;bottom:0;left:0;right:0;max-height:70vh;background:var(--cream-bg);border-radius:16px 16px 0 0;overflow-y:auto;padding:20px 16px 32px;">
-    <div class="modal-handle"></div>
-    <div style="font-family:var(--serif);font-size:18px;font-weight:600;color:var(--ink);text-align:center;margin-bottom:16px;">Group Settings</div>
-    <div style="margin-bottom:12px;">
-      <label style="font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-muted);display:block;margin-bottom:4px;">Name</label>
-      <input id="gs-name" type="text" style="width:100%;padding:10px 12px;border:1px solid var(--rule);border-radius:8px;font-family:var(--sans);font-size:14px;background:var(--cream-card);box-sizing:border-box;">
-    </div>
-    <div style="margin-bottom:12px;">
-      <label style="font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-muted);display:block;margin-bottom:4px;">Emoji</label>
-      <input id="gs-emoji" type="text" maxlength="2" style="width:60px;padding:10px 12px;border:1px solid var(--rule);border-radius:8px;font-size:20px;text-align:center;background:var(--cream-card);">
+<div id="group-settings-overlay" style="display:none;position:fixed;inset:0;z-index:9999;background:var(--cream-bg);">
+  <div style="position:absolute;inset:0;overflow-y:auto;padding:60px 16px calc(env(safe-area-inset-bottom, 0px) + 24px) 16px;">
+    <div style="max-width:420px;margin:0 auto;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+      <div style="font-family:var(--serif);font-size:22px;font-weight:700;color:var(--ink);">Group Settings</div>
+      <button onclick="closeGroupSettingsSheet()" style="background:none;border:none;font-size:24px;color:var(--ink-muted);cursor:pointer;padding:4px;">&times;</button>
     </div>
     <div style="margin-bottom:16px;">
-      <label style="font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-muted);display:block;margin-bottom:4px;">Description</label>
-      <input id="gs-desc" type="text" style="width:100%;padding:10px 12px;border:1px solid var(--rule);border-radius:8px;font-family:var(--sans);font-size:14px;background:var(--cream-card);box-sizing:border-box;">
+      <label style="font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-muted);display:block;margin-bottom:6px;">Name</label>
+      <input id="gs-name" type="text" style="width:100%;padding:12px 14px;border:1px solid var(--rule);border-radius:10px;font-family:var(--sans);font-size:15px;background:var(--cream-card);box-sizing:border-box;color:var(--ink);">
     </div>
-    <button class="btn btn-gold" onclick="saveGroupSettings()" style="width:100%;margin-bottom:10px;">Save Changes</button>
-    <button class="btn btn-secondary" onclick="leaveCurrentGroup()" style="width:100%;margin-bottom:10px;color:#8B2020;border-color:#8B2020;">Leave Group</button>
+    <div style="margin-bottom:16px;">
+      <label style="font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-muted);display:block;margin-bottom:6px;">Emoji</label>
+      <input id="gs-emoji" type="text" maxlength="2" style="width:60px;padding:12px 14px;border:1px solid var(--rule);border-radius:10px;font-size:20px;text-align:center;background:var(--cream-card);">
+    </div>
+    <div style="margin-bottom:24px;">
+      <label style="font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-muted);display:block;margin-bottom:6px;">Description</label>
+      <input id="gs-desc" type="text" style="width:100%;padding:12px 14px;border:1px solid var(--rule);border-radius:10px;font-family:var(--sans);font-size:15px;background:var(--cream-card);box-sizing:border-box;color:var(--ink);">
+    </div>
+    <button class="btn btn-gold" onclick="saveGroupSettings()" style="width:100%;margin-bottom:12px;padding:14px;font-size:13px;">Save Changes</button>
+    <div style="border-top:1px solid var(--rule);margin:20px 0 16px;"></div>
+    <div style="font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#8B2020;margin-bottom:12px;">Danger Zone</div>
+    <button class="btn btn-secondary" onclick="leaveCurrentGroup()" style="width:100%;margin-bottom:10px;color:#8B2020;border-color:#8B2020;padding:14px;font-size:13px;">Leave Group</button>
     <div id="gs-delete-wrap" style="display:none;">
-      <button class="btn" onclick="deleteCurrentGroup()" style="width:100%;background:#8B2020;color:#fff;border:none;">Delete Group</button>
+      <button class="btn" onclick="deleteCurrentGroup()" style="width:100%;background:#8B2020;color:#fff;border:none;padding:14px;font-size:13px;border-radius:10px;">Delete Group</button>
     </div>
-    <button class="btn btn-secondary" onclick="closeGroupSettingsSheet()" style="width:100%;margin-top:6px;">Cancel</button>
+    </div>
   </div>
 </div>
 
 <!-- Add to Group Picker (from member profile) -->
-<div id="add-to-group-overlay" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.45);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);">
-  <div style="position:absolute;bottom:0;left:0;right:0;max-height:60vh;background:var(--cream-bg);border-radius:16px 16px 0 0;overflow-y:auto;padding:20px 16px 32px;">
-    <div class="modal-handle"></div>
-    <div style="font-family:var(--serif);font-size:18px;font-weight:600;color:var(--ink);text-align:center;margin-bottom:12px;">Add to Group</div>
-    <div id="atg-groups-list" style="max-height:250px;overflow-y:auto;">
+<div id="add-to-group-overlay" style="display:none;position:fixed;inset:0;z-index:9999;background:var(--cream-bg);">
+  <div style="position:absolute;inset:0;overflow-y:auto;padding:60px 16px calc(env(safe-area-inset-bottom, 0px) + 24px) 16px;">
+    <div style="max-width:420px;margin:0 auto;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+      <div style="font-family:var(--serif);font-size:22px;font-weight:700;color:var(--ink);">Add to Group</div>
+      <button onclick="closeAddToGroupPicker()" style="background:none;border:none;font-size:24px;color:var(--ink-muted);cursor:pointer;padding:4px;">&times;</button>
+    </div>
+    <div id="atg-groups-list">
       <div style="padding:16px;text-align:center;font-family:var(--sans);font-size:12px;color:var(--ink-muted)">Loading groups…</div>
     </div>
-    <button class="btn btn-secondary" onclick="closeAddToGroupPicker()" style="width:100%;margin-top:12px;">Cancel</button>
+    </div>
   </div>
 </div>
 
@@ -2978,7 +2993,7 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
 <script>
 (async () => {
   const { data: { session } } = await sb.auth.getSession();
-  if (!session) { window.location.replace('login.html'); return; }
+  if (!session) { console.warn('DEV: no session'); }
 
   // Check if user has set up their profile yet
   // Use maybeSingle() instead of single() so we get null instead of 406 when no row exists
