@@ -2110,120 +2110,114 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
 </div>
 
 <!-- Create Group Modal -->
-<div id="create-group-overlay" style="display:none;position:fixed;inset:0;z-index:9999;background:var(--cream-bg);">
-  <div style="position:absolute;inset:0;overflow-y:auto;padding:60px 16px calc(env(safe-area-inset-bottom, 0px) + 24px) 16px;">
-    <div style="max-width:420px;margin:0 auto;">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
-      <div style="font-family:var(--serif);font-size:22px;font-weight:700;color:var(--ink);">Create Group</div>
-      <button onclick="closeCreateGroupModal()" style="background:none;border:none;font-size:24px;color:var(--ink-muted);cursor:pointer;padding:4px;">&times;</button>
-    </div>
+<div id="create-group-overlay" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:10000;background:#F5F2EA;overflow-y:auto;-webkit-overflow-scrolling:touch;">
+  <!-- Dark header bar -->
+  <div style="background:#1C3B2A;padding:calc(env(safe-area-inset-top, 44px) + 12px) 16px 14px;display:flex;align-items:center;justify-content:space-between;">
+    <button onclick="closeCreateGroupModal()" style="background:none;border:none;font-family:var(--sans);font-size:14px;color:#E8E3D5;cursor:pointer;padding:4px 0;">Cancel</button>
+    <div style="font-family:var(--sans);font-size:13px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:#E8E3D5;">New Group</div>
+    <button onclick="submitCreateGroup()" style="background:none;border:none;font-family:var(--sans);font-size:14px;font-weight:700;color:#C6A46A;cursor:pointer;padding:4px 0;">Create</button>
+  </div>
 
+  <!-- Selected emoji preview -->
+  <div style="text-align:center;padding:24px 0 8px;">
+    <div id="cg-emoji-preview" style="width:72px;height:72px;border-radius:20px;background:#fff;border:2px solid #E2D9C8;display:inline-flex;align-items:center;justify-content:center;font-size:36px;">⛳</div>
+  </div>
+
+  <div style="padding:0 20px 40px;">
     <!-- Group Name -->
-    <div style="margin-bottom:16px;">
+    <div style="margin-bottom:20px;">
       <label style="font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-muted);display:block;margin-bottom:6px;">Group Name</label>
-      <input id="cg-name" type="text" placeholder="e.g. Sunday Group, The Boys" style="width:100%;padding:12px 14px;border:1px solid var(--rule);border-radius:10px;font-family:var(--sans);font-size:15px;background:var(--cream-card);box-sizing:border-box;color:var(--ink);">
+      <input id="cg-name" type="text" placeholder="e.g. Sunday Group, The Boys" style="width:100%;padding:14px;border:1px solid #E2D9C8;border-radius:12px;font-family:var(--sans);font-size:16px;background:#fff;box-sizing:border-box;color:#1a1a1a;">
     </div>
 
     <!-- Emoji Picker -->
-    <div style="margin-bottom:16px;">
-      <label style="font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-muted);display:block;margin-bottom:6px;">Icon</label>
+    <div style="margin-bottom:20px;">
+      <label style="font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-muted);display:block;margin-bottom:8px;">Choose Icon</label>
       <input id="cg-emoji" type="hidden" value="⛳">
-      <div id="cg-emoji-grid" style="display:flex;flex-wrap:wrap;gap:8px;">
-        <button type="button" onclick="pickGroupEmoji(this,'⛳')" class="cg-emoji-opt" style="width:44px;height:44px;border-radius:12px;border:2px solid var(--gold-rule);background:rgba(196,164,86,.12);font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;">⛳</button>
-        <button type="button" onclick="pickGroupEmoji(this,'🏌️')" class="cg-emoji-opt" style="width:44px;height:44px;border-radius:12px;border:2px solid transparent;background:var(--cream-card);font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;">🏌️</button>
-        <button type="button" onclick="pickGroupEmoji(this,'🔥')" class="cg-emoji-opt" style="width:44px;height:44px;border-radius:12px;border:2px solid transparent;background:var(--cream-card);font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;">🔥</button>
-        <button type="button" onclick="pickGroupEmoji(this,'🏆')" class="cg-emoji-opt" style="width:44px;height:44px;border-radius:12px;border:2px solid transparent;background:var(--cream-card);font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;">🏆</button>
-        <button type="button" onclick="pickGroupEmoji(this,'💰')" class="cg-emoji-opt" style="width:44px;height:44px;border-radius:12px;border:2px solid transparent;background:var(--cream-card);font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;">💰</button>
-        <button type="button" onclick="pickGroupEmoji(this,'🍺')" class="cg-emoji-opt" style="width:44px;height:44px;border-radius:12px;border:2px solid transparent;background:var(--cream-card);font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;">🍺</button>
-        <button type="button" onclick="pickGroupEmoji(this,'⚔️')" class="cg-emoji-opt" style="width:44px;height:44px;border-radius:12px;border:2px solid transparent;background:var(--cream-card);font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;">⚔️</button>
-        <button type="button" onclick="pickGroupEmoji(this,'🦅')" class="cg-emoji-opt" style="width:44px;height:44px;border-radius:12px;border:2px solid transparent;background:var(--cream-card);font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;">🦅</button>
+      <div id="cg-emoji-grid" style="display:flex;flex-wrap:wrap;gap:10px;">
+        <button type="button" onclick="pickGroupEmoji(this,'⛳')" class="cg-emoji-opt" style="width:48px;height:48px;border-radius:14px;border:2px solid #C6A46A;background:rgba(196,164,86,.12);font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;">⛳</button>
+        <button type="button" onclick="pickGroupEmoji(this,'🏌️')" class="cg-emoji-opt" style="width:48px;height:48px;border-radius:14px;border:2px solid transparent;background:#fff;font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;">🏌️</button>
+        <button type="button" onclick="pickGroupEmoji(this,'🔥')" class="cg-emoji-opt" style="width:48px;height:48px;border-radius:14px;border:2px solid transparent;background:#fff;font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;">🔥</button>
+        <button type="button" onclick="pickGroupEmoji(this,'🏆')" class="cg-emoji-opt" style="width:48px;height:48px;border-radius:14px;border:2px solid transparent;background:#fff;font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;">🏆</button>
+        <button type="button" onclick="pickGroupEmoji(this,'💰')" class="cg-emoji-opt" style="width:48px;height:48px;border-radius:14px;border:2px solid transparent;background:#fff;font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;">💰</button>
+        <button type="button" onclick="pickGroupEmoji(this,'🍺')" class="cg-emoji-opt" style="width:48px;height:48px;border-radius:14px;border:2px solid transparent;background:#fff;font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;">🍺</button>
+        <button type="button" onclick="pickGroupEmoji(this,'⚔️')" class="cg-emoji-opt" style="width:48px;height:48px;border-radius:14px;border:2px solid transparent;background:#fff;font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;">⚔️</button>
+        <button type="button" onclick="pickGroupEmoji(this,'🦅')" class="cg-emoji-opt" style="width:48px;height:48px;border-radius:14px;border:2px solid transparent;background:#fff;font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;">🦅</button>
       </div>
     </div>
 
     <!-- Description -->
-    <div style="margin-bottom:16px;">
-      <label style="font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-muted);display:block;margin-bottom:6px;">Description <span style="font-weight:400;letter-spacing:0;text-transform:none;color:var(--ink-dim)">(optional)</span></label>
-      <input id="cg-desc" type="text" placeholder="Weekend warriors, Saturday skins, etc." style="width:100%;padding:12px 14px;border:1px solid var(--rule);border-radius:10px;font-family:var(--sans);font-size:15px;background:var(--cream-card);box-sizing:border-box;color:var(--ink);">
+    <div style="margin-bottom:24px;">
+      <label style="font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-muted);display:block;margin-bottom:6px;">Description <span style="font-weight:400;letter-spacing:0;text-transform:none;color:#999">(optional)</span></label>
+      <input id="cg-desc" type="text" placeholder="Weekend warriors, Saturday skins, etc." style="width:100%;padding:14px;border:1px solid #E2D9C8;border-radius:12px;font-family:var(--sans);font-size:16px;background:#fff;box-sizing:border-box;color:#1a1a1a;">
     </div>
 
     <!-- Add Friends -->
-    <div style="margin-bottom:16px;">
-      <label style="font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-muted);display:block;margin-bottom:6px;">Add Friends</label>
-      <div id="cg-friends-list" style="max-height:220px;overflow-y:auto;border:1px solid var(--rule);border-radius:10px;background:var(--cream-card);">
-        <div style="padding:16px;text-align:center;font-family:var(--sans);font-size:12px;color:var(--ink-muted)">Loading friends…</div>
+    <div style="margin-bottom:24px;">
+      <label style="font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-muted);display:block;margin-bottom:8px;">Add Friends</label>
+      <div id="cg-friends-list" style="max-height:280px;overflow-y:auto;border:1px solid #E2D9C8;border-radius:12px;background:#fff;">
+        <div style="padding:20px;text-align:center;font-family:var(--sans);font-size:13px;color:#999">Loading friends...</div>
       </div>
-      <div style="font-family:var(--sans);font-size:11px;color:var(--ink-dim);margin-top:6px;">You can also add members after creating the group.</div>
-    </div>
-
-    <!-- Buttons -->
-    <div style="display:flex;gap:10px;margin-top:8px;">
-      <button class="btn btn-secondary" onclick="closeCreateGroupModal()" style="flex:1;padding:14px;font-size:13px;">Cancel</button>
-      <button class="btn btn-gold" onclick="submitCreateGroup()" style="flex:1;padding:14px;font-size:13px;">Create Group</button>
-    </div>
+      <div style="font-family:var(--sans);font-size:12px;color:#999;margin-top:8px;">You can also add members after creating the group.</div>
     </div>
   </div>
 </div>
 
 <!-- Add Member Overlay -->
-<div id="add-member-overlay" style="display:none;position:fixed;inset:0;z-index:9999;background:var(--cream-bg);">
-  <div style="position:absolute;inset:0;overflow-y:auto;padding:60px 16px calc(env(safe-area-inset-bottom, 0px) + 24px) 16px;">
-    <div style="max-width:420px;margin:0 auto;">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
-      <div style="font-family:var(--serif);font-size:22px;font-weight:700;color:var(--ink);">Add Member</div>
-      <button onclick="closeAddMemberSheet()" style="background:none;border:none;font-size:24px;color:var(--ink-muted);cursor:pointer;padding:4px;">&times;</button>
-    </div>
-    <input id="am-search" type="text" placeholder="Search friends…" autocomplete="off"
+<div id="add-member-overlay" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:10000;background:#F5F2EA;overflow-y:auto;-webkit-overflow-scrolling:touch;">
+  <div style="background:#1C3B2A;padding:calc(env(safe-area-inset-top, 44px) + 12px) 16px 14px;display:flex;align-items:center;justify-content:space-between;">
+    <button onclick="closeAddMemberSheet()" style="background:none;border:none;font-family:var(--sans);font-size:14px;color:#E8E3D5;cursor:pointer;padding:4px 0;">Cancel</button>
+    <div style="font-family:var(--sans);font-size:13px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:#E8E3D5;">Add Member</div>
+    <div style="width:50px;"></div>
+  </div>
+  <div style="padding:16px 20px;">
+    <input id="am-search" type="text" placeholder="Search friends..." autocomplete="off"
       oninput="filterAddMemberList(this.value)"
-      style="width:100%;padding:10px 12px;border:1px solid var(--rule);border-radius:8px;font-family:var(--sans);font-size:14px;background:var(--cream-card);box-sizing:border-box;margin-bottom:10px;">
-    <div id="am-friends-list" style="overflow-y:auto;">
-      <div style="padding:16px;text-align:center;font-family:var(--sans);font-size:12px;color:var(--ink-muted)">Loading…</div>
-    </div>
+      style="width:100%;padding:14px;border:1px solid #E2D9C8;border-radius:12px;font-family:var(--sans);font-size:16px;background:#fff;box-sizing:border-box;margin-bottom:12px;color:#1a1a1a;">
+    <div id="am-friends-list">
+      <div style="padding:20px;text-align:center;font-family:var(--sans);font-size:13px;color:#999">Loading...</div>
     </div>
   </div>
 </div>
 
 <!-- Group Settings Overlay -->
-<div id="group-settings-overlay" style="display:none;position:fixed;inset:0;z-index:9999;background:var(--cream-bg);">
-  <div style="position:absolute;inset:0;overflow-y:auto;padding:60px 16px calc(env(safe-area-inset-bottom, 0px) + 24px) 16px;">
-    <div style="max-width:420px;margin:0 auto;">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
-      <div style="font-family:var(--serif);font-size:22px;font-weight:700;color:var(--ink);">Group Settings</div>
-      <button onclick="closeGroupSettingsSheet()" style="background:none;border:none;font-size:24px;color:var(--ink-muted);cursor:pointer;padding:4px;">&times;</button>
-    </div>
-    <div style="margin-bottom:16px;">
+<div id="group-settings-overlay" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:10000;background:#F5F2EA;overflow-y:auto;-webkit-overflow-scrolling:touch;">
+  <div style="background:#1C3B2A;padding:calc(env(safe-area-inset-top, 44px) + 12px) 16px 14px;display:flex;align-items:center;justify-content:space-between;">
+    <button onclick="closeGroupSettingsSheet()" style="background:none;border:none;font-family:var(--sans);font-size:14px;color:#E8E3D5;cursor:pointer;padding:4px 0;">Cancel</button>
+    <div style="font-family:var(--sans);font-size:13px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:#E8E3D5;">Settings</div>
+    <button onclick="saveGroupSettings()" style="background:none;border:none;font-family:var(--sans);font-size:14px;font-weight:700;color:#C6A46A;cursor:pointer;padding:4px 0;">Save</button>
+  </div>
+  <div style="padding:24px 20px 40px;">
+    <div style="margin-bottom:20px;">
       <label style="font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-muted);display:block;margin-bottom:6px;">Name</label>
-      <input id="gs-name" type="text" style="width:100%;padding:12px 14px;border:1px solid var(--rule);border-radius:10px;font-family:var(--sans);font-size:15px;background:var(--cream-card);box-sizing:border-box;color:var(--ink);">
+      <input id="gs-name" type="text" style="width:100%;padding:14px;border:1px solid #E2D9C8;border-radius:12px;font-family:var(--sans);font-size:16px;background:#fff;box-sizing:border-box;color:#1a1a1a;">
     </div>
-    <div style="margin-bottom:16px;">
+    <div style="margin-bottom:20px;">
       <label style="font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-muted);display:block;margin-bottom:6px;">Emoji</label>
-      <input id="gs-emoji" type="text" maxlength="2" style="width:60px;padding:12px 14px;border:1px solid var(--rule);border-radius:10px;font-size:20px;text-align:center;background:var(--cream-card);">
+      <input id="gs-emoji" type="text" maxlength="2" style="width:60px;padding:14px;border:1px solid #E2D9C8;border-radius:12px;font-size:22px;text-align:center;background:#fff;">
     </div>
-    <div style="margin-bottom:24px;">
+    <div style="margin-bottom:28px;">
       <label style="font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-muted);display:block;margin-bottom:6px;">Description</label>
-      <input id="gs-desc" type="text" style="width:100%;padding:12px 14px;border:1px solid var(--rule);border-radius:10px;font-family:var(--sans);font-size:15px;background:var(--cream-card);box-sizing:border-box;color:var(--ink);">
+      <input id="gs-desc" type="text" style="width:100%;padding:14px;border:1px solid #E2D9C8;border-radius:12px;font-family:var(--sans);font-size:16px;background:#fff;box-sizing:border-box;color:#1a1a1a;">
     </div>
-    <button class="btn btn-gold" onclick="saveGroupSettings()" style="width:100%;margin-bottom:12px;padding:14px;font-size:13px;">Save Changes</button>
-    <div style="border-top:1px solid var(--rule);margin:20px 0 16px;"></div>
-    <div style="font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#8B2020;margin-bottom:12px;">Danger Zone</div>
-    <button class="btn btn-secondary" onclick="leaveCurrentGroup()" style="width:100%;margin-bottom:10px;color:#8B2020;border-color:#8B2020;padding:14px;font-size:13px;">Leave Group</button>
+    <div style="border-top:1px solid #E2D9C8;margin:0 0 20px;"></div>
+    <button class="btn btn-secondary" onclick="leaveCurrentGroup()" style="width:100%;margin-bottom:12px;color:#8B2020;border-color:#8B2020;padding:14px;font-size:13px;">Leave Group</button>
     <div id="gs-delete-wrap" style="display:none;">
-      <button class="btn" onclick="deleteCurrentGroup()" style="width:100%;background:#8B2020;color:#fff;border:none;padding:14px;font-size:13px;border-radius:10px;">Delete Group</button>
-    </div>
+      <button class="btn" onclick="deleteCurrentGroup()" style="width:100%;background:#8B2020;color:#fff;border:none;padding:14px;font-size:13px;border-radius:12px;">Delete Group</button>
     </div>
   </div>
 </div>
 
 <!-- Add to Group Picker (from member profile) -->
-<div id="add-to-group-overlay" style="display:none;position:fixed;inset:0;z-index:9999;background:var(--cream-bg);">
-  <div style="position:absolute;inset:0;overflow-y:auto;padding:60px 16px calc(env(safe-area-inset-bottom, 0px) + 24px) 16px;">
-    <div style="max-width:420px;margin:0 auto;">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
-      <div style="font-family:var(--serif);font-size:22px;font-weight:700;color:var(--ink);">Add to Group</div>
-      <button onclick="closeAddToGroupPicker()" style="background:none;border:none;font-size:24px;color:var(--ink-muted);cursor:pointer;padding:4px;">&times;</button>
-    </div>
+<div id="add-to-group-overlay" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:10000;background:#F5F2EA;overflow-y:auto;-webkit-overflow-scrolling:touch;">
+  <div style="background:#1C3B2A;padding:calc(env(safe-area-inset-top, 44px) + 12px) 16px 14px;display:flex;align-items:center;justify-content:space-between;">
+    <button onclick="closeAddToGroupPicker()" style="background:none;border:none;font-family:var(--sans);font-size:14px;color:#E8E3D5;cursor:pointer;padding:4px 0;">Cancel</button>
+    <div style="font-family:var(--sans);font-size:13px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:#E8E3D5;">Add to Group</div>
+    <div style="width:50px;"></div>
+  </div>
+  <div style="padding:16px 20px;">
     <div id="atg-groups-list">
-      <div style="padding:16px;text-align:center;font-family:var(--sans);font-size:12px;color:var(--ink-muted)">Loading groups…</div>
-    </div>
+      <div style="padding:20px;text-align:center;font-family:var(--sans);font-size:13px;color:#999">Loading groups...</div>
     </div>
   </div>
 </div>
@@ -5970,11 +5964,13 @@ function escHtml(s) {
 
 function pickGroupEmoji(btn, emoji) {
   document.getElementById('cg-emoji').value = emoji;
+  var preview = document.getElementById('cg-emoji-preview');
+  if (preview) preview.textContent = emoji;
   document.querySelectorAll('.cg-emoji-opt').forEach(function(b) {
     b.style.borderColor = 'transparent';
-    b.style.background = 'var(--cream-card)';
+    b.style.background = '#fff';
   });
-  btn.style.borderColor = 'var(--gold-rule)';
+  btn.style.borderColor = '#C6A46A';
   btn.style.background = 'rgba(196,164,86,.12)';
 }
 
