@@ -392,40 +392,125 @@ body::before {
 /* ══════════════════════════════════════════
    SCORE ENTRY — The heart of it
 ══════════════════════════════════════════ */
+/* ── PREMIUM SCORECARD STRIPS ── */
 .score-grid { display:flex; flex-direction:column; gap:10px; }
 .score-row {
-  background:var(--cream-card); border:1px solid var(--rule); border-radius:10px;
-  padding:12px 14px; display:flex; align-items:center; gap:12px;
-  transition:border-color .15s;
-  border-left:3px solid transparent;
+  position:relative;
+  background:linear-gradient(172deg, #FAF8F2 0%, #F5F2EA 35%, #EFE9DB 100%);
+  border:1px solid rgba(196,164,106,.22);
+  border-radius:12px;
+  overflow:hidden;
+  display:flex; align-items:stretch;
+  box-shadow:
+    0 1px 0 0 rgba(255,255,248,.65) inset,
+    0 4px 14px -3px rgba(28,59,42,.08),
+    0 1px 4px -1px rgba(0,0,0,.04);
+  transition:box-shadow .15s, border-color .15s;
 }
-.score-row.has-score { border-left-color:var(--green-pine); }
-.score-player { flex:1; min-width:0; }
-.score-player-name { font-family:var(--serif); font-size:16px; font-weight:600;
-  color:var(--ink); letter-spacing:.1px; }
-.score-player-sub { font-size:11px; color:var(--ink-muted); margin-top:2px; letter-spacing:.3px; }
+/* Foil-stamp top edge */
+.score-row::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:2px; z-index:2;
+  background:linear-gradient(90deg, transparent 2%, #1C3B2A 15%, #2a5a3f 50%, #1C3B2A 85%, transparent 98%);
+  opacity:.5; transition:opacity .15s;
+}
+.score-row.has-score::before { opacity:1; }
+/* Inner border highlight */
+.score-row::after {
+  content:''; position:absolute; inset:1px; border-radius:11px;
+  border:1px solid rgba(255,255,248,.45);
+  pointer-events:none;
+}
 
-/* Stepper — club-style +/- */
-.score-stepper { display:flex; align-items:center; }
-.step-btn { width:34px; height:38px; border:1px solid var(--rule);
-  background:var(--parchment); color:var(--ink-mid); font-size:20px; font-weight:400;
-  cursor:pointer; display:flex; align-items:center; justify-content:center;
-  line-height:1; transition:all .1s; font-family:var(--sans); }
-.step-btn:first-child { border-radius:8px 0 0 8px; border-right:none; }
-.step-btn:last-child  { border-radius:0 8px 8px 0; border-left:none; }
-.step-btn:active { background:var(--green-pale); color:var(--green-deep); border-color:rgba(46,97,71,.3); }
-.score-val { width:46px; height:38px; background:var(--cream-warm);
-  border-top:1px solid var(--rule); border-bottom:1px solid var(--rule);
+/* ── PADDLES ── */
+.score-paddle {
   display:flex; align-items:center; justify-content:center;
-  font-family:var(--serif); font-size:22px; font-weight:500; color:var(--ink); }
-/* Score coloring — traditional golf */
-.score-val.birdie { color:var(--score-birdie); background:var(--green-pale); }
-.score-val.eagle  { color:var(--score-eagle); background:var(--gold-faint); font-weight:600; }
-.score-val.bogey  { color:var(--score-bogey); background:#fdf0ec; }
-.score-val.double { color:var(--score-double); background:#fbe8e2; }
-.score-val.blank  { color:var(--ink-faint); font-size:14px; }
+  width:54px; min-height:60px;
+  background:transparent; border:none; cursor:pointer;
+  color:var(--ink-muted); font-size:24px;
+  font-family:var(--sans); font-weight:300;
+  transition:background .1s, color .1s;
+  -webkit-tap-highlight-color:transparent;
+  position:relative; z-index:1;
+}
+.paddle-minus { border-right:1px solid rgba(196,164,86,.15); }
+.paddle-plus  { border-left:1px solid rgba(196,164,86,.15); }
+.paddle-minus:active { background:#fdf0ec; color:var(--score-bogey); }
+.paddle-plus:active  { background:var(--green-pale); color:var(--green-deep); }
+.paddle-icon {
+  display:flex; align-items:center; justify-content:center;
+  width:32px; height:32px; border-radius:50%;
+  border:1px solid var(--rule);
+  background:rgba(255,255,248,.6);
+  font-size:20px; line-height:1;
+}
 
-/* Handicap dots — like real scorecard pips */
+/* ── CENTER ── */
+.score-center {
+  flex:1; min-width:0;
+  display:flex; align-items:center; gap:12px;
+  padding:12px 10px;
+}
+
+/* ── HERO SCORE ── */
+.score-hero { display:flex; flex-direction:column; align-items:center; min-width:52px; }
+.score-hero-val {
+  font-family:var(--serif); font-size:36px; font-weight:600;
+  line-height:1; color:var(--ink);
+  transition:transform .18s ease;
+}
+.score-hero-label {
+  font-family:var(--sans); font-size:8px; font-weight:600;
+  letter-spacing:2.5px; text-transform:uppercase;
+  color:var(--ink-faint); margin-top:2px;
+}
+/* Score coloring */
+.score-hero-val.birdie { color:var(--score-birdie); }
+.score-hero-val.eagle  { color:var(--score-eagle); font-weight:700; }
+.score-hero-val.bogey  { color:var(--score-bogey); }
+.score-hero-val.double { color:var(--score-double); }
+.score-hero-val.at-par { color:var(--green-deep); }
+/* Pop animation */
+.score-hero-val.pop { animation:pop .18s ease; }
+
+/* ── PLAYER INFO ── */
+.score-info { flex:1; min-width:0; }
+.score-player-line { display:flex; align-items:center; gap:4px; flex-wrap:wrap; }
+.score-player-name {
+  font-family:var(--serif); font-size:15px; font-weight:600;
+  color:var(--ink); letter-spacing:.1px;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.score-meta {
+  font-family:var(--sans); font-size:11px; color:var(--ink-muted);
+  margin-top:2px; letter-spacing:.3px;
+}
+
+/* ── POPS BADGE ── */
+.score-pops-badge {
+  display:inline-flex; align-items:center; gap:3px;
+  font-family:var(--sans); font-size:10px; font-weight:600;
+  color:var(--gold); letter-spacing:.3px; margin-left:6px;
+  padding:1px 6px; border-radius:8px;
+  background:rgba(196,164,86,.1); border:1px solid rgba(196,164,86,.2);
+}
+.score-pops-pip {
+  width:5px; height:5px; border-radius:50%; background:var(--gold);
+}
+
+/* ── INLINE MONEY ── */
+.score-money {
+  font-family:var(--sans); font-size:12px; font-weight:600;
+  margin-top:3px; letter-spacing:.3px;
+}
+.score-money.positive { color:var(--score-birdie); }
+.score-money.negative { color:var(--score-bogey); }
+.score-money.neutral  { color:var(--ink-faint); }
+.score-money.leader {
+  color:var(--score-eagle); font-weight:700;
+  text-shadow:0 0 8px rgba(196,164,86,.3);
+}
+
+/* Handicap dots (legacy compat) */
 .score-hdcp-dots { display:flex; gap:2px; margin-top:4px; }
 .hdcp-dot { width:5px; height:5px; border-radius:50%; background:var(--gold-rule); }
 
@@ -7206,20 +7291,32 @@ function renderScoreGrid() {
   var grid = document.getElementById('score-grid');
   var TCOLORS = ['var(--neon)', '#1565c0', '#7b1fa2', '#e65100'];
 
+  // Get running money for inline display
+  var money = [];
+  try { money = getRunningMoney(); } catch(e) { money = state.players.map(function(){ return 0; }); }
+  var maxMoney = Math.max.apply(null, money);
+
   grid.innerHTML = state.players.map(function(p, pi) {
     var playerTee  = getPlayerTee(pi);
     var hole       = playerTee.holes[h - 1];
     var rawScore   = state.scores[pi] ? state.scores[pi][h-1] : null;
-    var isBlank    = rawScore === null || rawScore === undefined;
-    var gross      = isBlank ? hole.par : rawScore;
+
+    // Auto-fill par when score is blank (default to par)
+    if (rawScore === null || rawScore === undefined) {
+      if (!state.scores[pi]) state.scores[pi] = new Array(18).fill(null);
+      state.scores[pi][h-1] = hole.par;
+      rawScore = hole.par;
+    }
+
+    var gross      = rawScore;
     var strokes    = strokesOnHole(state.playingHandicaps[pi], hole.hcp);
     var net        = gross - strokes;
     var diff       = net - hole.par;
-    var scoreClass = isBlank ? '' : (diff <= -2 ? 'eagle' : diff === -1 ? 'birdie' : diff === 1 ? 'bogey' : diff >= 2 ? 'double' : '');
-    var dots = '';
-    for (var s=0; s<strokes; s++) dots += '<div class="hdcp-dot"></div>';
-    if (strokes > 0) dots = '<div class="score-hdcp-dots">'+dots+'</div>';
-    var netLabel = isBlank ? '—' : (diff === 0 ? 'E' : (diff > 0 ? '+' : '') + diff);
+    var scoreClass = diff <= -2 ? 'eagle' : diff === -1 ? 'birdie' : diff === 1 ? 'bogey' : diff >= 2 ? 'double' : 'at-par';
+    var netLabel   = diff === 0 ? 'E' : (diff > 0 ? '+' : '') + diff;
+
+    // Hero label: show score relation
+    var heroLabel = diff === 0 ? 'PAR' : diff < 0 ? (diff <= -2 ? 'EAGLE' : 'BIRDIE') : (diff >= 2 ? 'DBL+' : 'BOGEY');
 
     // Tee color dot
     var teeDot = '<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:'+playerTee.color+';margin-right:4px;flex-shrink:0;vertical-align:middle"></span>';
@@ -7235,35 +7332,47 @@ function renderScoreGrid() {
       }
     }
 
-    // Score display: blank = dimmed par value
-    var scoreDisplay = isBlank
-      ? '<div class="score-val" style="color:var(--border);font-family:\'DM Mono\',monospace;font-size:18px" id="score-val-'+pi+'">'+hole.par+'</div>'
-      : '<div class="score-val '+scoreClass+'" id="score-val-'+pi+'">'+gross+'</div>';
-
-    // Build stroke dots row — one gold dot per stroke
-    var strokeDotsHtml = '';
+    // Pops badge — clear indicator of handicap strokes
+    var popsBadge = '';
     if (strokes > 0) {
-      var pipHtml = '';
-      for (var sd=0; sd<strokes; sd++) pipHtml += '<div class="stroke-dot"></div>';
-      strokeDotsHtml = '<div class="stroke-dots">'+pipHtml+'<span style="font-family:var(--ff-mono);font-size:10px;color:var(--gold);font-weight:700;margin-left:2px">+'+strokes+' stroke'+(strokes>1?'s':'')+'</span></div>';
+      var pips = '';
+      for (var pp=0; pp<strokes; pp++) pips += '<span class="score-pops-pip"></span>';
+      popsBadge = '<span class="score-pops-badge">' + pips + strokes + (strokes===1?' pop':' pops') + '</span>';
     }
 
-    var subLine = isBlank
-      ? '<div style="font-size:11px;color:var(--text-muted);margin-top:2px">'+hole.yards+'y · '+( strokes>0 ? strokes+' stroke'+(strokes>1?'s':'')+' this hole' : 'no strokes this hole' )+'</div>'
-      : '<div style="font-size:11px;color:var(--text-dim);margin-top:2px">'+hole.yards+'y · Net <strong style=\'color:var(--text)\'>'+netLabel+'</strong>'+(strokes>0?' · <span style="color:var(--gold)">-'+strokes+' stroke'+(strokes>1?'s':'')+'</span>':'')+'</div>';
+    // Sub-line: yards + net
+    var subLine = '<div class="score-meta">' + hole.yards + 'y \u00B7 Net <strong style="color:var(--ink)">' + netLabel + '</strong>' +
+      (strokes > 0 ? ' \u00B7 <span style="color:var(--gold)">\u2212' + strokes + '</span>' : '') + '</div>';
 
-    var rowClass = 'score-row' + (isBlank ? '' : (diff < 0 ? ' winning' : diff > 1 ? ' losing' : ''));
-    return '<div class="'+rowClass+'" id="score-row-'+pi+'">' +
-      '<div style="flex:1;min-width:0">' +
-        '<div class="score-player">'+teeDot+p.name+teamBadge+'</div>' +
-        subLine +
-        strokeDotsHtml +
+    // Money badge
+    var amt = money[pi] || 0;
+    var moneyClass = 'score-money';
+    if (amt > 0 && amt === maxMoney && maxMoney > 0) moneyClass += ' leader';
+    else if (amt > 0) moneyClass += ' positive';
+    else if (amt < 0) moneyClass += ' negative';
+    else moneyClass += ' neutral';
+    var moneySign = amt > 0 ? '+' : amt < 0 ? '\u2212' : '';
+    var moneyHtml = '<div class="' + moneyClass + '">' + moneySign + '$' + Math.abs(amt) + '</div>';
+
+    var rowClass = 'score-row has-score';
+    return '<div class="' + rowClass + '" id="score-row-' + pi + '">' +
+      '<button class="score-paddle paddle-minus" onclick="changeScore(' + pi + ',-1)">' +
+        '<span class="paddle-icon">\u2212</span>' +
+      '</button>' +
+      '<div class="score-center">' +
+        '<div class="score-hero">' +
+          '<div class="score-hero-val ' + scoreClass + '" id="score-val-' + pi + '">' + gross + '</div>' +
+          '<div class="score-hero-label">' + heroLabel + '</div>' +
+        '</div>' +
+        '<div class="score-info">' +
+          '<div class="score-player-line">' + teeDot + '<span class="score-player-name">' + p.name + '</span>' + teamBadge + popsBadge + '</div>' +
+          subLine +
+          moneyHtml +
+        '</div>' +
       '</div>' +
-      '<div class="score-stepper">' +
-        '<button class="step-btn" onclick="changeScore('+pi+',-1)">−</button>' +
-        scoreDisplay +
-        '<button class="step-btn" onclick="changeScore('+pi+',1)">+</button>' +
-      '</div>' +
+      '<button class="score-paddle paddle-plus" onclick="changeScore(' + pi + ',1)">' +
+        '<span class="paddle-icon">+</span>' +
+      '</button>' +
     '</div>';
   }).join('');
 }
