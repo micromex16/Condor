@@ -2111,30 +2111,51 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
 
 <!-- Create Group Modal -->
 <div id="create-group-overlay" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.45);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);">
-  <div style="position:absolute;bottom:0;left:0;right:0;max-height:85vh;background:var(--cream-bg);border-radius:16px 16px 0 0;overflow-y:auto;padding:20px 16px 32px;">
+  <div style="position:absolute;bottom:0;left:0;right:0;max-height:88vh;background:var(--cream-bg);border-radius:16px 16px 0 0;overflow-y:auto;padding:20px 16px calc(env(safe-area-inset-bottom, 0px) + 24px);">
     <div class="modal-handle"></div>
-    <div style="font-family:var(--serif);font-size:20px;font-weight:600;color:var(--ink);text-align:center;margin-bottom:16px;">Create Group</div>
-    <div style="margin-bottom:12px;">
-      <label style="font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-muted);display:block;margin-bottom:4px;">Group Name</label>
-      <input id="cg-name" type="text" placeholder="Sunday Group" style="width:100%;padding:10px 12px;border:1px solid var(--rule);border-radius:8px;font-family:var(--sans);font-size:14px;background:var(--cream-card);box-sizing:border-box;">
+    <div style="font-family:var(--serif);font-size:22px;font-weight:700;color:var(--ink);text-align:center;margin-bottom:20px;">Create Group</div>
+
+    <!-- Group Name -->
+    <div style="margin-bottom:16px;">
+      <label style="font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-muted);display:block;margin-bottom:6px;">Group Name</label>
+      <input id="cg-name" type="text" placeholder="e.g. Sunday Group, The Boys" style="width:100%;padding:12px 14px;border:1px solid var(--rule);border-radius:10px;font-family:var(--sans);font-size:15px;background:var(--cream-card);box-sizing:border-box;color:var(--ink);">
     </div>
-    <div style="margin-bottom:12px;">
-      <label style="font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-muted);display:block;margin-bottom:4px;">Emoji</label>
-      <input id="cg-emoji" type="text" value="⛳" maxlength="2" style="width:60px;padding:10px 12px;border:1px solid var(--rule);border-radius:8px;font-size:20px;text-align:center;background:var(--cream-card);">
-    </div>
-    <div style="margin-bottom:12px;">
-      <label style="font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-muted);display:block;margin-bottom:4px;">Description (optional)</label>
-      <input id="cg-desc" type="text" placeholder="Weekend warriors" style="width:100%;padding:10px 12px;border:1px solid var(--rule);border-radius:8px;font-family:var(--sans);font-size:14px;background:var(--cream-card);box-sizing:border-box;">
-    </div>
-    <div style="margin-bottom:12px;">
-      <label style="font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-muted);display:block;margin-bottom:8px;">Add Friends</label>
-      <div id="cg-friends-list" style="max-height:200px;overflow-y:auto;border:1px solid var(--rule);border-radius:8px;background:var(--cream-card);">
-        <div style="padding:16px;text-align:center;font-family:var(--sans);font-size:12px;color:var(--ink-muted)">Loading friends…</div>
+
+    <!-- Emoji Picker -->
+    <div style="margin-bottom:16px;">
+      <label style="font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-muted);display:block;margin-bottom:6px;">Icon</label>
+      <input id="cg-emoji" type="hidden" value="⛳">
+      <div id="cg-emoji-grid" style="display:flex;flex-wrap:wrap;gap:8px;">
+        <button type="button" onclick="pickGroupEmoji(this,'⛳')" class="cg-emoji-opt" style="width:44px;height:44px;border-radius:12px;border:2px solid var(--gold-rule);background:rgba(196,164,86,.12);font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;">⛳</button>
+        <button type="button" onclick="pickGroupEmoji(this,'🏌️')" class="cg-emoji-opt" style="width:44px;height:44px;border-radius:12px;border:2px solid transparent;background:var(--cream-card);font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;">🏌️</button>
+        <button type="button" onclick="pickGroupEmoji(this,'🔥')" class="cg-emoji-opt" style="width:44px;height:44px;border-radius:12px;border:2px solid transparent;background:var(--cream-card);font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;">🔥</button>
+        <button type="button" onclick="pickGroupEmoji(this,'🏆')" class="cg-emoji-opt" style="width:44px;height:44px;border-radius:12px;border:2px solid transparent;background:var(--cream-card);font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;">🏆</button>
+        <button type="button" onclick="pickGroupEmoji(this,'💰')" class="cg-emoji-opt" style="width:44px;height:44px;border-radius:12px;border:2px solid transparent;background:var(--cream-card);font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;">💰</button>
+        <button type="button" onclick="pickGroupEmoji(this,'🍺')" class="cg-emoji-opt" style="width:44px;height:44px;border-radius:12px;border:2px solid transparent;background:var(--cream-card);font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;">🍺</button>
+        <button type="button" onclick="pickGroupEmoji(this,'⚔️')" class="cg-emoji-opt" style="width:44px;height:44px;border-radius:12px;border:2px solid transparent;background:var(--cream-card);font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;">⚔️</button>
+        <button type="button" onclick="pickGroupEmoji(this,'🦅')" class="cg-emoji-opt" style="width:44px;height:44px;border-radius:12px;border:2px solid transparent;background:var(--cream-card);font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;">🦅</button>
       </div>
     </div>
-    <div style="display:flex;gap:10px;margin-top:16px;">
-      <button class="btn btn-secondary" onclick="closeCreateGroupModal()" style="flex:1">Cancel</button>
-      <button class="btn btn-gold" onclick="submitCreateGroup()" style="flex:1">Create</button>
+
+    <!-- Description -->
+    <div style="margin-bottom:16px;">
+      <label style="font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-muted);display:block;margin-bottom:6px;">Description <span style="font-weight:400;letter-spacing:0;text-transform:none;color:var(--ink-dim)">(optional)</span></label>
+      <input id="cg-desc" type="text" placeholder="Weekend warriors, Saturday skins, etc." style="width:100%;padding:12px 14px;border:1px solid var(--rule);border-radius:10px;font-family:var(--sans);font-size:15px;background:var(--cream-card);box-sizing:border-box;color:var(--ink);">
+    </div>
+
+    <!-- Add Friends -->
+    <div style="margin-bottom:16px;">
+      <label style="font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-muted);display:block;margin-bottom:6px;">Add Friends</label>
+      <div id="cg-friends-list" style="max-height:220px;overflow-y:auto;border:1px solid var(--rule);border-radius:10px;background:var(--cream-card);">
+        <div style="padding:16px;text-align:center;font-family:var(--sans);font-size:12px;color:var(--ink-muted)">Loading friends…</div>
+      </div>
+      <div style="font-family:var(--sans);font-size:11px;color:var(--ink-dim);margin-top:6px;">You can also add members after creating the group.</div>
+    </div>
+
+    <!-- Buttons -->
+    <div style="display:flex;gap:10px;margin-top:8px;">
+      <button class="btn btn-secondary" onclick="closeCreateGroupModal()" style="flex:1;padding:14px;font-size:13px;">Cancel</button>
+      <button class="btn btn-gold" onclick="submitCreateGroup()" style="flex:1;padding:14px;font-size:13px;">Create Group</button>
     </div>
   </div>
 </div>
@@ -5932,6 +5953,16 @@ function escHtml(s) {
   return d.innerHTML;
 }
 
+function pickGroupEmoji(btn, emoji) {
+  document.getElementById('cg-emoji').value = emoji;
+  document.querySelectorAll('.cg-emoji-opt').forEach(function(b) {
+    b.style.borderColor = 'transparent';
+    b.style.background = 'var(--cream-card)';
+  });
+  btn.style.borderColor = 'var(--gold-rule)';
+  btn.style.background = 'rgba(196,164,86,.12)';
+}
+
 async function loadMyGroups() {
   var el = document.getElementById('ch-groups-list');
   el.innerHTML = '<div style="padding:20px;text-align:center;font-family:var(--sans);font-size:12px;color:var(--ink-muted);">Loading…</div>';
@@ -5963,25 +5994,43 @@ async function openCreateGroupModal() {
   document.getElementById('cg-emoji').value = '⛳';
   document.getElementById('cg-desc').value = '';
   _cgSelectedFriends.clear();
+  // Reset emoji picker
+  document.querySelectorAll('.cg-emoji-opt').forEach(function(b, i) {
+    b.style.borderColor = i === 0 ? 'var(--gold-rule)' : 'transparent';
+    b.style.background = i === 0 ? 'rgba(196,164,86,.12)' : 'var(--cream-card)';
+  });
   var listEl = document.getElementById('cg-friends-list');
   listEl.innerHTML = '<div style="padding:16px;text-align:center;font-family:var(--sans);font-size:12px;color:var(--ink-muted)">Loading friends…</div>';
   try {
     var friends = await getMyFriends();
     if (!friends || friends.length === 0) {
-      listEl.innerHTML = '<div style="padding:16px;text-align:center;font-family:var(--sans);font-size:12px;color:var(--ink-muted)">No friends yet. Add friends first!</div>';
+      listEl.innerHTML = '<div style="padding:24px 16px;text-align:center;">' +
+        '<div style="font-size:28px;margin-bottom:8px">👥</div>' +
+        '<div style="font-family:var(--sans);font-size:13px;color:var(--ink-muted)">No friends added yet</div>' +
+        '<div style="font-family:var(--sans);font-size:11px;color:var(--ink-dim);margin-top:4px">Add friends from the Members tab first, or create the group now and add them later.</div>' +
+      '</div>';
       return;
     }
     listEl.innerHTML = friends.map(function(f) {
       var initials = (f.username||'?').split(' ').map(function(w){return w[0];}).join('').toUpperCase().slice(0,2);
-      return '<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--rule);cursor:pointer" onclick="toggleCgFriend(\'' + f.id + '\',this)">' +
-        '<div style="width:8px;height:8px;border-radius:50%;border:2px solid var(--rule);flex-shrink:0" data-check="' + f.id + '"></div>' +
-        '<div style="width:32px;height:32px;border-radius:50%;background:rgba(196,164,86,.12);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:12px;color:var(--gold);flex-shrink:0">' + initials + '</div>' +
-        '<div style="flex:1;font-family:var(--sans);font-size:14px;color:var(--ink)">' + escHtml(f.username||'Unknown') + '</div>' +
-        (f.hdcp_index != null ? '<div style="font-family:var(--sans);font-size:11px;color:var(--ink-muted)">' + f.hdcp_index + '</div>' : '') +
+      var avHtml;
+      if (f.avatar_url) {
+        avHtml = '<div style="width:36px;height:36px;border-radius:50%;background-image:url(' + f.avatar_url + ');background-size:cover;background-position:center;flex-shrink:0"></div>';
+      } else {
+        avHtml = '<div style="width:36px;height:36px;border-radius:50%;background:rgba(196,164,86,.12);border:1.5px solid rgba(196,164,86,.25);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:13px;color:var(--gold);flex-shrink:0">' + initials + '</div>';
+      }
+      return '<div style="display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--rule);cursor:pointer;-webkit-tap-highlight-color:rgba(0,0,0,.05)" onclick="toggleCgFriend(\'' + f.id + '\',this)">' +
+        '<div data-check="' + f.id + '" style="width:22px;height:22px;border-radius:6px;border:2px solid var(--rule);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff;transition:all .15s"></div>' +
+        avHtml +
+        '<div style="flex:1;min-width:0">' +
+          '<div style="font-family:var(--sans);font-size:14px;font-weight:500;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + escHtml(f.username||'Unknown') + '</div>' +
+          (f.hdcp_index != null ? '<div style="font-family:var(--sans);font-size:11px;color:var(--ink-muted)">HCP ' + f.hdcp_index + '</div>' : '') +
+        '</div>' +
       '</div>';
     }).join('');
   } catch(e) {
     listEl.innerHTML = '<div style="padding:16px;text-align:center;font-family:var(--sans);font-size:12px;color:#8B2020">Error loading friends</div>';
+    console.error('openCreateGroupModal friends error:', e);
   }
 }
 
@@ -5995,10 +6044,12 @@ function toggleCgFriend(id, row) {
   } else {
     _cgSelectedFriends.add(id);
   }
-  var dot = row.querySelector('[data-check="' + id + '"]');
-  if (dot) {
-    dot.style.background = _cgSelectedFriends.has(id) ? 'var(--green-deep)' : '';
-    dot.style.borderColor = _cgSelectedFriends.has(id) ? 'var(--green-deep)' : 'var(--rule)';
+  var check = row.querySelector('[data-check="' + id + '"]');
+  if (check) {
+    var sel = _cgSelectedFriends.has(id);
+    check.style.background = sel ? 'var(--green-deep)' : '';
+    check.style.borderColor = sel ? 'var(--green-deep)' : 'var(--rule)';
+    check.innerHTML = sel ? '&#10003;' : '';
   }
 }
 
@@ -6354,35 +6405,48 @@ function showAddToGroupPicker(playerId) {
   listEl.innerHTML = '<div style="padding:16px;text-align:center;font-family:var(--sans);font-size:12px;color:var(--ink-muted)">Loading groups…</div>';
   getMyGroups().then(function(groups) {
     if (!groups || groups.length === 0) {
-      listEl.innerHTML = '<div style="padding:20px;text-align:center;font-family:var(--sans);font-size:13px;color:var(--ink-muted)">No groups. Create one first!</div>';
+      listEl.innerHTML = '<div style="padding:24px 16px;text-align:center;">' +
+        '<div style="font-size:28px;margin-bottom:8px">⛳</div>' +
+        '<div style="font-family:var(--sans);font-size:13px;color:var(--ink-muted)">No groups yet</div>' +
+        '<div style="font-family:var(--sans);font-size:11px;color:var(--ink-dim);margin-top:4px">Create a group from the Clubhouse first.</div>' +
+      '</div>';
       return;
     }
-    listEl.innerHTML = groups.map(function(g) {
-      return '<div style="display:flex;align-items:center;gap:10px;padding:12px;border-bottom:1px solid var(--rule);cursor:pointer" onclick="addPlayerToGroupFromPicker(\'' + g.id + '\',this)">' +
-        '<div style="font-size:20px">' + escHtml(g.emoji||'⛳') + '</div>' +
-        '<div style="flex:1;font-family:var(--sans);font-size:14px;color:var(--ink)">' + escHtml(g.name) + '</div>' +
-        '<div style="font-family:var(--sans);font-size:11px;color:var(--ink-muted)">Add ›</div>' +
-      '</div>';
-    }).join('');
+    listEl.innerHTML = '<div style="border:1px solid var(--rule);border-radius:10px;overflow:hidden;background:var(--cream-card)">' +
+      groups.map(function(g) {
+        return '<div style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--rule);cursor:pointer;-webkit-tap-highlight-color:rgba(0,0,0,.05)" onclick="addPlayerToGroupFromPicker(\'' + g.id + '\',this)">' +
+          '<div style="width:40px;height:40px;border-radius:50%;background:rgba(196,164,86,.12);border:1.5px solid rgba(196,164,86,.25);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">' + escHtml(g.emoji||'⛳') + '</div>' +
+          '<div style="flex:1;min-width:0">' +
+            '<div style="font-family:var(--serif);font-size:15px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + escHtml(g.name) + '</div>' +
+            (g.description ? '<div style="font-family:var(--sans);font-size:11px;color:var(--ink-muted);margin-top:2px">' + escHtml(g.description) + '</div>' : '') +
+          '</div>' +
+          '<div style="font-family:var(--sans);font-size:12px;font-weight:600;color:var(--green-deep);flex-shrink:0">Add</div>' +
+        '</div>';
+      }).join('') +
+    '</div>';
   }).catch(function(e) {
-    listEl.innerHTML = '<div style="padding:16px;text-align:center;font-family:var(--sans);font-size:12px;color:#8B2020">Error</div>';
+    listEl.innerHTML = '<div style="padding:16px;text-align:center;font-family:var(--sans);font-size:12px;color:#8B2020">Error loading groups</div>';
+    console.error('showAddToGroupPicker error:', e);
   });
 }
 
 async function addPlayerToGroupFromPicker(groupId, row) {
   if (!_atgPlayerId) return;
-  row.style.opacity = '0.5';
+  var addLabel = row.querySelector('div:last-child');
+  if (addLabel) { addLabel.textContent = '…'; addLabel.style.color = 'var(--ink-muted)'; }
   row.style.pointerEvents = 'none';
   try {
     await addGroupMember(groupId, _atgPlayerId);
-    row.innerHTML = '<div style="padding:4px;font-family:var(--sans);font-size:13px;color:var(--green-deep);text-align:center">Added!</div>';
+    if (addLabel) { addLabel.textContent = '✓ Added'; addLabel.style.color = 'var(--green-deep)'; }
+    row.style.opacity = '0.6';
   } catch(e) {
-    row.style.opacity = '1';
     row.style.pointerEvents = '';
     if (e.message && e.message.indexOf('duplicate') !== -1) {
-      row.innerHTML = '<div style="padding:4px;font-family:var(--sans);font-size:13px;color:var(--ink-muted);text-align:center">Already a member</div>';
+      if (addLabel) { addLabel.textContent = 'Already in'; addLabel.style.color = 'var(--ink-muted)'; }
+      row.style.opacity = '0.6';
     } else {
-      alert('Error: ' + e.message);
+      if (addLabel) { addLabel.textContent = 'Error'; addLabel.style.color = '#8B2020'; }
+      row.style.pointerEvents = '';
     }
   }
 }
