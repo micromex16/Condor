@@ -3266,7 +3266,7 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
 <script>
 (async () => {
   const { data: { session } } = await sb.auth.getSession();
-  if (!session) { console.warn('DEV: no session'); /* window.location.replace('login.html'); return; */ }
+  if (!session) { window.location.replace('login.html'); return; }
 
   // Check if user has set up their profile yet
   // Use maybeSingle() instead of single() so we get null instead of 406 when no row exists
@@ -5859,12 +5859,13 @@ async function openClubhouse() {
   // Reset section loaded flags
   window._chLoaded = { matches: false, merit: false, trophies: false, groups: false, members: false };
 
-  // Load my profile → mini avatar
-  const { data: me } = await sb
-    .from('players')
-    .select('username, hdcp_index, avatar_url')
-    .eq('id', userId)
-    .maybeSingle();
+  // Load profile + leaderboard data in parallel
+  var [meResult, allRoundsResult] = await Promise.all([
+    sb.from('players').select('username, hdcp_index, avatar_url').eq('id', userId).maybeSingle(),
+    sb.from('round_players').select('player_id, finish_position, money_result, gross_score, to_par, eagles, birdies, players(username, hdcp_index, avatar_url)')
+  ]);
+  var me = meResult.data;
+  var allRounds = allRoundsResult.data;
 
   if (me) {
     var miniAv = document.getElementById('ch-mini-avatar');
@@ -5877,11 +5878,6 @@ async function openClubhouse() {
       miniAv.style.backgroundImage = '';
     }
   }
-
-  // Load leaderboard data (used for merit + trophies)
-  const { data: allRounds } = await sb
-    .from('round_players')
-    .select('player_id, finish_position, money_result, gross_score, to_par, eagles, birdies, players(username, hdcp_index, avatar_url)');
 
   var boardMap = {};
   (allRounds || []).forEach(function(r) {
@@ -6082,8 +6078,13 @@ async function openMemberProfile(memberId) {
   document.getElementById('mp-round-history').innerHTML = '<div style="text-align:center;padding:20px;font-family:var(--sans);font-size:12px;color:var(--ink-muted)">Loading rounds…</div>';
   document.getElementById('mp-stats').innerHTML = '';
 
-  // Fetch player data
-  const { data: p } = await sb.from('players').select('id,username,hdcp_index,avatar_url,home_course,city,preferred_game,bio,created_at').eq('id', memberId).single();
+  // Fetch player data + rounds in parallel
+  var [pResult, roundsResult] = await Promise.all([
+    sb.from('players').select('id,username,hdcp_index,avatar_url,home_course,city,preferred_game,bio,created_at').eq('id', memberId).single(),
+    sb.from('round_players').select('finish_position,money_result,gross_score,to_par,round_id,rounds(id,course_name,played_at,tee_label,format,games_played,full_state)').eq('player_id', memberId).order('created_at', { ascending: false }).limit(30)
+  ]);
+  var p = pResult.data;
+  var rounds = roundsResult.data;
   if (!p) { document.getElementById('mp-name').textContent = 'Player not found'; return; }
 
   // Avatar
@@ -6116,9 +6117,6 @@ async function openMemberProfile(memberId) {
   // Add to Group button
   document.getElementById('mp-add-to-group').innerHTML =
     '<button class="btn btn-secondary btn-sm" onclick="showAddToGroupPicker(\'' + memberId + '\')" style="width:100%;margin-top:8px;font-size:12px;">Add to Group</button>';
-
-  // Stats from round_players — populate the card + fetch round details for history
-  const { data: rounds } = await sb.from('round_players').select('finish_position,money_result,gross_score,to_par,round_id,rounds(id,course_name,played_at,tee_label,format,games_played,full_state)').eq('player_id', memberId).order('created_at', { ascending: false }).limit(30);
   if (rounds && rounds.length > 0) {
     const count = rounds.length;
     const wins = rounds.filter(r => r.finish_position === 1).length;
@@ -6499,8 +6497,7 @@ function leaveGroupScreen() {
 async function loadGroupMessages(groupId) {
   var feed = document.getElementById('grp-chat-feed');
   try {
-    var msgs = await getGroupMessages(groupId, 50);
-    var user = await getCurrentUser();
+    var [msgs, user] = await Promise.all([getGroupMessages(groupId, 50), getCurrentUser()]);
     var myId = user ? user.id : null;
 
     if (!msgs || msgs.length === 0) {
