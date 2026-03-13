@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Condor — Round Card</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --green:  #1C3B2A;
+  --green2: #1a3526;
+  --cream:  #F4F1E6;
+  --gold:   #C6A46A;
+  --black:  #111111;
+  --brown:  #4A2E0E;
+  --red:    #8B2020;
+  --dred:   #6B1515;
+}
+
+html, body {
+  background: #131310;
+  min-height: 100vh;
+  font-family: 'Jost', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 16px 52px;
+  gap: 14px;
+}
+
+/* ── CHROME ──────────────────────────────────── */
+.ctrl-row { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
+.ctrl-btn {
+  background: transparent;
+  border: 1px solid rgba(198,164,106,0.3);
+  color: #C6A46A;
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  padding: 8px 18px;
+  cursor: pointer;
+  transition: all .2s;
+}
+.ctrl-btn.active, .ctrl-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+/* ── CANVAS ──────────────────────────────────── */
+#frame-wrap { position:relative; flex-shrink:0; }
+#canvas {
+  position: absolute;
+  top:0; left:0;
+  width: 1080px;
+  transform-origin: top left;
+  overflow: hidden;
+  background: var(--green);
+}
+
+/* ══════════════════════════════════════════════
+   CARD  —  full 1080px layout
+══════════════════════════════════════════════ */
+.card {
+  width: 1080px;
+  display: flex;
+  flex-direction: column;
+  background: var(--green);
+  position: relative;
+}
+
+/* no texture — solid green */
+
+/* gold top bar */
+.card-gold-bar {
+  height: 5px;
+  background: var(--gold);
+  position: relative;
+  z-index: 1;
+}
+
+/* ── HEADER ──────────────────────────────────── */
+.card-header {
+  padding: 28px 72px 20px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
+}
+
+.header-left {}
+.header-brand {
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  font-size: 16px;
+  letter-spacing: 0.5em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.header-course {
+  font-family: 'Playfair Display', serif;
+  font-weight: 400;
+  font-size: 60px;
+  color: var(--cream);
+  letter-spacing: -0.02em;
+  line-height: 1.0;
+}
+.header-meta {
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  font-size: 17px;
+  letter-spacing: 0.15em;
+  color: rgba(198,164,106,1);
+  margin-top: 6px;
+}
+
+/* bird */
+.header-bird {
+  width: 100px;
+  height: 100px;
+  flex-shrink: 0;
+  margin-top: 8px;
+}
+
+/* gold rule under header */
+.header-rule {
+  height: 1px;
+  background: var(--gold);
+  opacity: 0.5;
+  margin: 0 72px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── PLAYER BAND ─────────────────────────────── */
+.player-band {
+  padding: 16px 72px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
+}
+.player-left { display:flex; flex-direction:column; gap:8px; }
+.player-dot-row { display:flex; align-items:center; gap:16px; }
+.player-dot {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--gold);
+  flex-shrink: 0;
+}
+.player-name {
+  font-family: 'Playfair Display', serif;
+  font-weight: 400;
+  font-size: 78px;
+  color: var(--cream);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.player-hdcp {
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  font-size: 17px;
+  letter-spacing: 0.35em;
+  color: rgba(198,164,106,1);
+  text-transform: uppercase;
+  padding-left: 30px;
+}
+
+/* ── STATS BOX ───────────────────────────────── */
+.stats-box {
+  margin: 0 72px 18px;
+  border: 1px solid rgba(198,164,106,0.5);
+  position: relative;
+  z-index: 1;
+  background: transparent;
+}
+
+/* top row: to-par | gross | front/back */
+.stats-top {
+  display: grid;
+  grid-template-columns: 1fr 1px 1fr 1px 1fr;
+  padding: 20px 0 16px;
+  border-bottom: 1px solid rgba(198,164,106,0.55);
+}
+.stats-divider { background: rgba(198,164,106,0.55); margin: 8px 0; }
+.stat-item { text-align:center; padding: 0 20px; }
+
+.stat-main {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 400;
+  font-size: 80px;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--cream);
+}
+.stat-main.topar-under { color: var(--gold); }
+.stat-main.topar-over  { color: var(--cream); }
+.stat-label {
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  letter-spacing: 0.4em;
+  color: rgba(198,164,106,1);
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+/* front/back stacked */
+.stat-sub { text-align:center; padding: 0 20px; }
+.stat-sub-row { display:flex; flex-direction:column; gap:4px; }
+.stat-sub-item { display:flex; justify-content:space-between; align-items:baseline; gap:16px; }
+.stat-sub-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 400;
+  font-size: 52px;
+  line-height: 1;
+  color: var(--cream);
+  letter-spacing: -0.02em;
+}
+.stat-sub-lbl {
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  font-size: 13px;
+  letter-spacing: 0.3em;
+  color: rgba(198,164,106,1);
+  text-transform: uppercase;
+}
+
+/* bottom row: birdies pars bogeys doubles */
+.stats-bottom {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  padding: 14px 0 12px;
+}
+.stat-type { text-align:center; }
+.stat-type-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 400;
+  font-size: 52px;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.stat-type-num.birdies { color: var(--gold); }
+.stat-type-num.pars    { color: rgba(244,241,230,1); }
+.stat-type-num.bogeys  { color: rgba(244,241,230,1); }
+.stat-type-num.doubles { color: rgba(244,241,230,1); }
+.stat-type-lbl {
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  font-size: 13px;
+  letter-spacing: 0.3em;
+  color: rgba(198,164,106,1);
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+/* ── MONEY BAND ──────────────────────────────── */
+.money-band {
+  margin: 0 72px 18px;
+  background: #3B0F0F;
+  border: 1px solid rgba(139,32,32,0.4);
+  padding: 20px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
+}
+.money-band.won  { background: rgba(28,59,42,0.6); border-color: #C6A46A; }
+.money-band.even { background: rgba(0,0,0,0.2); border-color: #C6A46A; }
+.money-label {
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  letter-spacing: 0.45em;
+  color: rgba(198,164,106,1);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.money-amount {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 400;
+  font-size: 88px;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--red);
+}
+.money-amount.won  { color: var(--gold); }
+.money-amount.even { color: rgba(244,241,230,1); }
+
+/* money bird watermark */
+.money-bird-mark {
+  width: 120px;
+  height: 120px;
+  opacity: 0.12;
+  flex-shrink: 0;
+}
+
+/* ── SCORECARD ───────────────────────────────── */
+.scorecard-label {
+  text-align: center;
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  letter-spacing: 0.55em;
+  color: rgba(198,164,106,1);
+  text-transform: uppercase;
+  padding: 0 72px 12px;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.scorecard-label::before, .scorecard-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(198,164,106,0.55);
+}
+
+/* nine block */
+.nine-block {
+  margin: 0 72px 10px;
+  border: 1px solid rgba(198,164,106,0.45);
+  background: transparent;
+  position: relative;
+  z-index: 1;
+}
+
+.nine-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 28px 8px;
+  border-bottom: 1px solid rgba(198,164,106,0.4);
+}
+.nine-title {
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  letter-spacing: 0.4em;
+  color: var(--cream);
+  text-transform: uppercase;
+}
+.nine-par-lbl {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 18px;
+  color: rgba(198,164,106,1);
+}
+
+/* table */
+.sc-tbl {
+  width: 100%;
+  border-collapse: collapse;
+  padding: 8px 28px 12px;
+}
+.sc-tbl tr { }
+.sc-tbl td {
+  text-align: center;
+  padding: 3px 2px;
+  width: calc((100% - 140px - 90px) / 9);
+}
+.sc-tbl td.td-label {
+  width: 90px;
+  text-align: left;
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  font-size: 16px;
+  letter-spacing: 0.25em;
+  color: rgba(198,164,106,1);
+  text-transform: uppercase;
+}
+.sc-tbl td.td-total {
+  width: 110px;
+  border-left: 1px solid rgba(198,164,106,0.3);
+  padding-left: 12px;
+}
+
+/* row types */
+.sc-tbl tr.r-hole td {
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  font-size: 22px;
+  color: rgba(244,241,230,1);
+  padding-bottom: 1px;
+}
+.sc-tbl tr.r-si td {
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  font-size: 13px;
+  color: #C6A46A;
+  padding-bottom: 2px;
+}
+.sc-tbl tr.r-par td {
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  font-size: 22px;
+  color: rgba(244,241,230,1);
+  padding-bottom: 4px;
+}
+
+/* score cells */
+.sc-cell {
+  width: 100%;
+  max-width: 66px;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 500;
+  font-size: 28px;
+  color: var(--cream);
+  position: relative;
+}
+.sc-cell.birdie {
+  color: var(--cream);
+  border: 2px solid var(--cream);
+  border-radius: 50%;
+}
+.sc-cell.eagle {
+  color: #fff;
+  background: var(--dred);
+  border-radius: 50%;
+  font-weight: 600;
+}
+.sc-cell.eagle::before {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  border: 1.5px solid var(--dred);
+  border-radius: 50%;
+  opacity: 0.5;
+}
+.sc-cell.bogey {
+  color: var(--red);
+  border: 2px solid var(--red);
+}
+.sc-cell.double {
+  color: var(--red);
+  border: 2px solid var(--red);
+}
+.sc-cell.double::before {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  border: 1.5px solid rgba(139,32,32,0.45);
+}
+.sc-cell.par { color: rgba(244,241,230,1); }
+
+/* total block */
+.sc-total-blk { display:flex; flex-direction:column; align-items:flex-start; }
+.sc-total-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 500;
+  font-size: 36px;
+  color: var(--cream);
+  line-height: 1;
+  font-weight: 600;
+}
+.sc-total-diff {
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  color: rgba(244,241,230,1);
+  letter-spacing: 0.05em;
+}
+.sc-total-diff.under { color: var(--gold); }
+.sc-total-diff.over  { color: var(--red); }
+
+/* ── FOOTER ──────────────────────────────────── */
+.card-footer {
+  margin-top: 16px;
+  padding: 18px 72px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid rgba(198,164,106,0.45);
+  position: relative;
+  z-index: 1;
+}
+.footer-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.footer-course {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 22px;
+  color: rgba(244,241,230,1);
+}
+.footer-date {
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  letter-spacing: 0.3em;
+  color: rgba(198,164,106,1);
+  text-transform: uppercase;
+}
+.footer-wordmark {
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  font-size: 20px;
+  letter-spacing: 0.55em;
+  color: var(--gold);
+  text-transform: uppercase;
+}
+
+/* gold bottom bar */
+.card-gold-bar-bot {
+  height: 5px;
+  background: var(--gold);
+  position: relative;
+  z-index: 1;
+}
+
+/* ── SHARE ───────────────────────────────────── */
+.share-row { display:flex; gap:10px; }
+.share-btn {
+  background: transparent;
+  border: 1px solid rgba(198,164,106,0.4);
+  color: var(--gold);
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  padding: 11px 28px;
+  cursor: pointer;
+  transition: all .2s;
+}
+.share-btn:hover { background: rgba(198,164,106,0.55); }
+.share-btn.primary { background: var(--gold); color: var(--green); }
+.share-btn.primary:hover { background: #d4b47a; }
+</style>
+</head>
+<body>
+
+<!-- PLAYER TOGGLE -->
+<div class="ctrl-row">
+  <button class="ctrl-btn active" onclick="load('gio')">Gio · −2</button>
+  <button class="ctrl-btn" onclick="load('p2')">Player 2 · +4</button>
+  <button class="ctrl-btn" onclick="load('cody')">Cody · +16</button>
+</div>
+
+<!-- CANVAS -->
+<div id="frame-wrap">
+  <div id="canvas">
+  <div class="card" id="card">
+
+    <div class="card-gold-bar"></div>
+
+    <!-- HEADER -->
+    <div class="card-header">
+      <div class="header-left">
+        <div class="header-brand">Condor Golf</div>
+        <div class="header-course" id="h-course">Oro Valley Country Club</div>
+        <div class="header-meta" id="h-meta">March 10, 2026 · Blue Tees · 6,575 yds</div>
+      </div>
+      <!-- LOGO: replace src with your PNG path -->
+      <img class="header-bird" src="condor-logo.png" alt="Condor" onerror="this.style.display='none'">
+    </div>
+
+    <div class="header-rule"></div>
+
+    <!-- PLAYER -->
+    <div class="player-band">
+      <div class="player-left">
+        <div class="player-dot-row">
+          <div class="player-dot"></div>
+          <div class="player-name" id="p-name">Gio</div>
+        </div>
+        <div class="player-hdcp" id="p-hdcp">Course HDCP 0</div>
+      </div>
+    </div>
+
+    <!-- STATS BOX -->
+    <div class="stats-box">
+      <div class="stats-top">
+        <div class="stat-item">
+          <div class="stat-main topar-under" id="s-topar">−2</div>
+          <div class="stat-label">To Par</div>
+        </div>
+        <div class="stats-divider"></div>
+        <div class="stat-item">
+          <div class="stat-main" id="s-gross">70</div>
+          <div class="stat-label">Gross</div>
+        </div>
+        <div class="stats-divider"></div>
+        <div class="stat-sub">
+          <div class="stat-sub-row">
+            <div class="stat-sub-item">
+              <div class="stat-sub-num" id="s-front">36</div>
+              <div class="stat-sub-lbl">Front</div>
+            </div>
+            <div style="height:1px;background:rgba(198,164,106,0.55);margin:6px 0;"></div>
+            <div class="stat-sub-item">
+              <div class="stat-sub-num" id="s-back">34</div>
+              <div class="stat-sub-lbl">Back</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="stats-bottom">
+        <div class="stat-type">
+          <div class="stat-type-num birdies" id="s-birdies">5</div>
+          <div class="stat-type-lbl">Birdies</div>
+        </div>
+        <div class="stat-type">
+          <div class="stat-type-num pars" id="s-pars">10</div>
+          <div class="stat-type-lbl">Pars</div>
+        </div>
+        <div class="stat-type">
+          <div class="stat-type-num bogeys" id="s-bogeys">3</div>
+          <div class="stat-type-lbl">Bogeys</div>
+        </div>
+        <div class="stat-type">
+          <div class="stat-type-num doubles" id="s-doubles">0</div>
+          <div class="stat-type-lbl">Doubles+</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MONEY -->
+    <div class="money-band lost" id="money-band">
+      <div>
+        <div class="money-label" id="money-label">Money Owed</div>
+        <div class="money-amount lost" id="money-amount">−$90</div>
+      </div>
+      <!-- LOGO WATERMARK: replace src with your PNG path -->
+      <img class="money-bird-mark" src="condor-logo.png" alt="" onerror="this.style.display='none'">
+    </div>
+
+    <!-- SCORECARD LABEL -->
+    <div class="scorecard-label">Scorecard</div>
+
+    <!-- FRONT NINE -->
+    <div class="nine-block">
+      <div class="nine-header">
+        <span class="nine-title">Front Nine</span>
+        <span class="nine-par-lbl">Par 36</span>
+      </div>
+      <table class="sc-tbl" id="front-tbl"></table>
+    </div>
+
+    <!-- BACK NINE -->
+    <div class="nine-block">
+      <div class="nine-header">
+        <span class="nine-title">Back Nine</span>
+        <span class="nine-par-lbl">Par 36</span>
+      </div>
+      <table class="sc-tbl" id="back-tbl"></table>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="card-footer">
+      <div class="footer-left">
+        <div class="footer-course" id="f-course">Oro Valley Country Club</div>
+        <div class="footer-date" id="f-date">Mar 10, 2026</div>
+      </div>
+      <div class="footer-wordmark">Condor</div>
+    </div>
+
+    <div class="card-gold-bar-bot"></div>
+
+  </div><!-- .card -->
+  </div><!-- #canvas -->
+</div><!-- #frame-wrap -->
+
+<div class="share-row">
+  <button class="share-btn" onclick="doCopy()">Copy Link</button>
+  <button class="share-btn primary" onclick="doSave()">Save Image</button>
+</div>
+
+<script>
+const PLAYERS = {
+  gio: {
+    course:'Oro Valley Country Club', date:'Mar 10, 2026',
+    tees:'Blue Tees', yds:'6,575 yds',
+    name:'Gio', hdcp:'Course HDCP 0',
+    toPar:-2, gross:70, front:36, back:34,
+    birdies:5, pars:10, bogeys:3, doubles:0,
+    moneyLabel:'Money Won', moneyAmt:'+$90', moneyClass:'won',
+    fPar:[4,5,4,3,4,5,4,3,4], fScore:[4,4,4,3,4,4,4,4,5],
+    bPar:[4,5,4,3,4,5,4,3,4], bScore:[4,4,4,3,4,4,3,3,5],
+    fSI:[5,7,1,17,11,15,13,9,3], bSI:[2,10,14,16,8,12,6,18,4],
+  },
+  p2: {
+    course:'Oro Valley Country Club', date:'Mar 10, 2026',
+    tees:'Blue Tees', yds:'6,575 yds',
+    name:'Player 2', hdcp:'Course HDCP 9',
+    toPar:4, gross:76, front:33, back:43,
+    birdies:2, pars:2, bogeys:11, doubles:1,
+    moneyLabel:'Money Owed', moneyAmt:'Even', moneyClass:'even',
+    fPar:[4,5,4,3,4,5,4,3,4], fScore:[5,6,5,2,5,5,null,null,5],
+    bPar:[4,5,4,3,4,5,4,3,4], bScore:[6,6,3,3,5,6,5,4,5],
+    fSI:[5,7,1,17,11,15,13,9,3], bSI:[2,10,14,16,8,12,6,18,4],
+  },
+  cody: {
+    course:'Dove Valley Ranch Golf Club', date:'Mar 9, 2026',
+    tees:'White Tees', yds:'6,138 yds',
+    name:'Cody A.L.', hdcp:'Course HDCP —',
+    toPar:16, gross:88, front:39, back:49,
+    birdies:2, pars:5, bogeys:9, doubles:2,
+    moneyLabel:'Money Owed', moneyAmt:'−$40', moneyClass:'lost',
+    fPar:[4,4,4,4,5,3,4,4,4], fScore:[5,5,4,3,6,3,3,5,5],
+    bPar:[4,4,4,4,5,3,4,4,4], bScore:[6,4,4,5,6,7,4,8,5],
+    fSI:[3,9,11,15,1,17,7,5,13], bSI:[4,8,12,16,2,6,10,18,14],
+  }
+};
+
+function sCls(sc,par) {
+  if(sc==null) return 'par';
+  const d=sc-par;
+  if(d<=-2) return 'eagle';
+  if(d===-1) return 'birdie';
+  if(d===0)  return 'par';
+  if(d===1)  return 'bogey';
+  return 'double';
+}
+function tpStr(n) { return n===0?'E':n<0?`−${Math.abs(n)}`:`+${n}`; }
+function tpCls(n) { return n<0?'under':n>0?'over':'even'; }
+
+function buildTable(tblId, pars, scores, si, start) {
+  const t = document.getElementById(tblId);
+  t.innerHTML = '';
+
+  // hole row
+  const hr = t.insertRow(); hr.className='r-hole';
+  let lbl = hr.insertCell(); lbl.className='td-label'; lbl.textContent='HOLE';
+  for(let i=0;i<9;i++){const td=hr.insertCell();td.textContent=start+i;}
+  const outH=hr.insertCell();outH.className='td-total';
+  outH.style.cssText='font-family:Jost,sans-serif;font-weight:200;font-size:14px;color:rgba(198,164,106,0.55);letter-spacing:0.15em;';
+  outH.textContent=start===1?'OUT':'IN';
+
+  // SI row
+  const sir=t.insertRow();sir.className='r-si';
+  let siLbl=sir.insertCell();siLbl.className='td-label';siLbl.textContent='S.I.';
+  for(let i=0;i<9;i++){const td=sir.insertCell();td.textContent=si[i];}
+  sir.insertCell().className='td-total';
+
+  // par row
+  const pr=t.insertRow();pr.className='r-par';
+  let pLbl=pr.insertCell();pLbl.className='td-label';pLbl.textContent='PAR';
+  let pSum=0;
+  for(let i=0;i<9;i++){const td=pr.insertCell();td.textContent=pars[i];pSum+=pars[i];}
+  const pOut=pr.insertCell();pOut.className='td-total';
+  pOut.style.cssText='font-family:Jost,sans-serif;font-weight:300;font-size:18px;color:rgba(244,241,230,0.45);text-align:left;padding-left:12px;';
+  pOut.textContent=pSum;
+
+  // score row
+  const sr=t.insertRow();sr.className='r-score';
+  sr.insertCell().className='td-label';
+  let sSum=0;
+  for(let i=0;i<9;i++){
+    const td=sr.insertCell();
+    const sc=scores[i];
+    const div=document.createElement('div');
+    div.className=`sc-cell ${sCls(sc,pars[i])}`;
+    div.textContent=sc!=null?sc:'–';
+    if(sc!=null) sSum+=sc;
+    td.appendChild(div);
+  }
+  const outTd=sr.insertCell();outTd.className='td-total';
+  const blk=document.createElement('div');blk.className='sc-total-blk';
+  const num=document.createElement('div');num.className='sc-total-num';num.textContent=sSum;
+  const diff=sSum-pSum;
+  const dEl=document.createElement('div');
+  dEl.className='sc-total-diff '+tpCls(diff);
+  dEl.textContent=tpStr(diff);
+  blk.appendChild(num);blk.appendChild(dEl);outTd.appendChild(blk);
+}
+
+function load(key) {
+  const p = PLAYERS[key];
+  const tp = p.toPar;
+
+  document.getElementById('h-course').textContent = p.course;
+  document.getElementById('h-meta').textContent = `${p.date} · ${p.tees} · ${p.yds}`;
+  document.getElementById('p-name').textContent = p.name;
+  document.getElementById('p-hdcp').textContent = p.hdcp;
+
+  const tpEl = document.getElementById('s-topar');
+  tpEl.textContent = tpStr(tp);
+  tpEl.className = `stat-main ${tp<0?'topar-under':tp>0?'topar-over':''}`;
+
+  document.getElementById('s-gross').textContent = p.gross;
+  document.getElementById('s-front').textContent = p.front;
+  document.getElementById('s-back').textContent = p.back;
+  document.getElementById('s-birdies').textContent = p.birdies;
+  document.getElementById('s-pars').textContent = p.pars;
+  document.getElementById('s-bogeys').textContent = p.bogeys;
+  document.getElementById('s-doubles').textContent = p.doubles;
+
+  const mb = document.getElementById('money-band');
+  mb.className = `money-band ${p.moneyClass}`;
+  document.getElementById('money-label').textContent = p.moneyLabel;
+  const ma = document.getElementById('money-amount');
+  ma.textContent = p.moneyAmt;
+  ma.className = `money-amount ${p.moneyClass}`;
+
+  document.getElementById('f-course').textContent = p.course;
+  document.getElementById('f-date').textContent = p.date;
+
+  buildTable('front-tbl', p.fPar, p.fScore, p.fSI, 1);
+  buildTable('back-tbl',  p.bPar, p.bScore, p.bSI, 10);
+
+  document.querySelectorAll('.ctrl-btn').forEach((b,i)=>{
+    b.classList.toggle('active',['gio','p2','cody'][i]===key);
+  });
+
+  setTimeout(scaleCanvas, 50);
+}
+
+function scaleCanvas() {
+  const canvas = document.getElementById('canvas');
+  const wrap   = document.getElementById('frame-wrap');
+  const card   = document.getElementById('card');
+  const nW = 1080;
+  const nH = card.scrollHeight;
+  const maxW = Math.min(window.innerWidth-32, 480);
+  const maxH = window.innerHeight * 0.82;
+  const scale = Math.min(maxW/nW, maxH/nH);
+  canvas.style.width  = nW+'px';
+  canvas.style.height = nH+'px';
+  canvas.style.transform = `scale(${scale})`;
+  wrap.style.width  = Math.round(nW*scale)+'px';
+  wrap.style.height = Math.round(nH*scale)+'px';
+}
+
+function doCopy(){
+  navigator.clipboard?.writeText(window.location.href);
+  const b=event.target;const o=b.textContent;
+  b.textContent='Copied';setTimeout(()=>b.textContent=o,1500);
+}
+function doSave(){
+  const b=event.target;b.textContent='Saving…';
+  setTimeout(()=>b.textContent='Save Image',1200);
+  window.print();
+}
+
+window.addEventListener('resize', scaleCanvas);
+load('gio');
+</script>
+
+<style>
+@media print {
+  body{background:white;padding:0;}
+  .ctrl-row,.share-row{display:none!important;}
+  #frame-wrap{width:100%!important;height:auto!important;}
+  #canvas{transform:none!important;position:relative!important;width:100%!important;height:auto!important;}
+}
+</style>
+</body>
+</html>
