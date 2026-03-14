@@ -713,25 +713,26 @@ html, body {
 }
 .arc-player-chip + .arc-player-chip { border-left: 1px solid rgba(244,241,230,0.07); }
 
-/* ── LAST ROUND CARD (same aesthetic as active-round-card) ── */
-.last-round-card {
+/* ── PLAY TAB — PREVIOUS ROUND CARD ── */
+.play-prev-round {
   margin: 0 18px 20px;
   background: var(--condor-green);
   border-radius: 18px;
   padding: 24px 26px;
   position: relative;
   overflow: hidden;
+  cursor: pointer;
   box-shadow: 0 4px 20px rgba(28,59,42,0.12), 0 12px 32px rgba(28,59,42,0.06);
 }
-.last-round-card::after {
+.play-prev-round::after {
   content: '';
   position: absolute;
   top: 0; left: 24px; right: 24px;
   height: 1px;
   background: linear-gradient(90deg, transparent, rgba(198,164,106,0.3), transparent);
 }
-.last-round-card .arc-eyebrow { opacity: 0.6; }
-.last-round-card .arc-players { margin-top: 14px; padding-top: 14px; }
+.play-prev-round .arc-eyebrow { opacity: 0.6; }
+.play-prev-round .arc-players { margin-top: 14px; padding-top: 14px; }
 .plr-money {
   font-family: var(--font-display);
   font-size: 22px;
@@ -743,6 +744,15 @@ html, body {
 }
 .plr-money.negative { color: rgba(192,57,43,.7); }
 .plr-money.even { color: rgba(244,241,230,0.35); }
+.plr-play-again {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  margin-top: 16px; padding-top: 14px;
+  border-top: 1px solid rgba(244,241,230,0.08);
+  font-family: var(--font-ui); font-size: 11px; font-weight: 400;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--antique-gold); cursor: pointer;
+}
+.plr-play-again:active { opacity: 0.7; }
 
 /* ── START ROUND CTA (standalone) ── */
 #screen-play .start-cta {
@@ -2715,7 +2725,7 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
 
 /* ── PLAYER SEARCH SHEET ── */
 .player-search-overlay {
-  position:fixed; inset:0; z-index:1600;
+  position:fixed; inset:0; z-index:5000;
   background:rgba(10,22,14,.72);
   display:none; align-items:flex-end;
   backdrop-filter:blur(2px); -webkit-backdrop-filter:blur(2px);
@@ -2739,7 +2749,7 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
   -webkit-appearance:none;
 }
 .player-search-input:focus { border-color:var(--gold-rule); }
-.player-search-results { overflow-y:auto; flex:1; -webkit-overflow-scrolling:touch; }
+.player-search-results { overflow-y:auto; flex:1; -webkit-overflow-scrolling:touch; padding-bottom:80px; }
 .player-search-row {
   display:flex; align-items:center; gap:12px;
   padding:14px 16px; border-bottom:1px solid rgba(27,58,45,.06);
@@ -4245,8 +4255,8 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
         </div>
       </div>
 
-      <!-- LAST ROUND (shown when no round in progress) -->
-      <div class="last-round-card" id="play-last-round" style="display:none">
+      <!-- PREVIOUS ROUND (shown when no round in progress) -->
+      <div class="play-prev-round" id="play-last-round" style="display:none">
         <div class="arc-eyebrow" id="plr-eyebrow">Last Round</div>
         <div class="arc-course" id="plr-course"></div>
         <div class="arc-progress">
@@ -4258,6 +4268,7 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
         </div>
         <div class="arc-players" id="plr-players"></div>
         <div class="plr-money" id="plr-money"></div>
+        <div class="plr-play-again" id="plr-play-again" onclick="playAgainLastRound()">Play Again →</div>
       </div>
 
       <!-- START ROUND CTA -->
@@ -13018,6 +13029,41 @@ async function populatePlayLastRound() {
     card.style.display = '';
   } catch(e) {
     card.style.display = 'none';
+  }
+}
+
+// ─── PLAY AGAIN — pre-populate from last round ───
+async function playAgainLastRound() {
+  try {
+    const rounds = await getMyRounds(1);
+    if (!rounds || !rounds.length) { enterEngineFlow('screen-course'); return; }
+    const r = rounds[0];
+    const rd = r.rounds;
+
+    // Pre-populate course name for search
+    if (rd?.course_name) {
+      window._playAgainCourse = rd.course_name;
+    }
+
+    // Pre-populate players from full_state if available
+    if (rd?.full_state?.players && rd.full_state.players.length > 1) {
+      window._playAgainPlayers = rd.full_state.players;
+    }
+
+    enterEngineFlow('screen-course');
+
+    // Auto-fill course search after a tick
+    if (window._playAgainCourse) {
+      setTimeout(function() {
+        const input = document.getElementById('course-search');
+        if (input) {
+          input.value = window._playAgainCourse;
+          input.dispatchEvent(new Event('input'));
+        }
+      }, 300);
+    }
+  } catch(e) {
+    enterEngineFlow('screen-course');
   }
 }
 
