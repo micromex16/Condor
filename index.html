@@ -4418,68 +4418,15 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
         </div>
       </div>
 
-      <!-- NEW ROUND -->
-      <div class="play-new-section">
-        <div class="play-new-eyebrow">New Round</div>
+      <!-- LAST ROUND -->
+      <div id="play-last-round" style="display:none;"></div>
 
-        <!-- Format pills -->
-        <div class="format-pills">
-          <div class="format-pill selected" onclick="selectFormat(this)">
-            <span class="format-pill-name">Nassau</span>
-            <span class="format-pill-sub">Front · Back · Match</span>
-          </div>
-          <div class="format-pill" onclick="selectFormat(this)">
-            <span class="format-pill-name">Skins</span>
-            <span class="format-pill-sub">Hole by hole</span>
-          </div>
-          <div class="format-pill" onclick="selectFormat(this)">
-            <span class="format-pill-name">Wolf</span>
-            <span class="format-pill-sub">Rotating</span>
-          </div>
-        </div>
-
-        <!-- Bet — the one visible control -->
-        <div class="bet-control">
-          <span class="bet-label">Bet per nine</span>
-          <div class="stepper">
-            <button class="stepper-btn" onclick="adjustBet(-5)">−</button>
-            <span class="stepper-val" id="bet-val">$20</span>
-            <button class="stepper-btn" onclick="adjustBet(5)">+</button>
-          </div>
-        </div>
-
-        <!-- Advanced disclosure -->
-        <button class="advanced-toggle" onclick="toggleAdvanced(this)">
-          <span class="advanced-toggle-label">Advanced options</span>
-          <span class="advanced-toggle-icon" id="adv-icon">▾</span>
-        </button>
-
-        <!-- Collapsed config -->
-        <div class="nassau-config" id="nassau-config">
-          <div class="nc-row">
-            <span class="nc-label">Auto Press</span>
-            <div class="toggle on" onclick="this.classList.toggle('on')"></div>
-          </div>
-          <div class="nc-row">
-            <span class="nc-label">Stroke play handicaps</span>
-            <div class="toggle" onclick="this.classList.toggle('on')"></div>
-          </div>
-          <div class="nc-row">
-            <span class="nc-label">Skins alongside</span>
-            <div class="toggle on" onclick="this.classList.toggle('on')"></div>
-          </div>
-          <div class="nc-row">
-            <span class="nc-label">Players</span>
-            <span class="nc-value">4 selected</span>
-          </div>
-        </div>
-
-        <!-- The singular CTA -->
+      <!-- START NEW ROUND CTA -->
+      <div style="padding:0 18px 20px;">
         <button class="start-cta" onclick="enterEngineFlow('screen-course')">
           <span class="start-cta-text">Start Round</span>
         </button>
-
-      </div><!-- end play-new-section -->
+      </div>
 
       <div class="bottom-pad"></div>
     </div>
@@ -12924,6 +12871,7 @@ async function condorNavigate(tab) {
   document.getElementById('engine-overlay').classList.remove('visible');
   if (tab === 'play') {
     syncActiveRoundCard();
+    populatePlayLastRound();
   }
   if (tab === 'card') {
     populateCondorCard();
@@ -13168,6 +13116,64 @@ function resumeActiveRound() {
     document.getElementById('engine-overlay').classList.add('visible');
     goTo('screen-round');
   }
+}
+
+// ─── PLAY TAB: LAST ROUND CARD ───
+async function populatePlayLastRound() {
+  var container = document.getElementById('play-last-round');
+  if (!container) return;
+  try {
+    var rounds = await getMyRounds(1);
+    if (!rounds || !rounds.length) { container.style.display = 'none'; return; }
+    var r = rounds[0];
+    var rd = r.rounds;
+    var par = 72;
+    var diff = r.to_par != null ? r.to_par : ((r.gross_score || 0) - par);
+    var scoreStr = diff === 0 ? 'E' : (diff > 0 ? '+' + diff : '' + diff);
+    var scoreColor = diff <= 0 ? 'var(--condor-green)' : 'var(--saddle-brown)';
+    var money = r.money_result || 0;
+    var moneyStr = money >= 0 ? '+$' + money : '\u2212$' + Math.abs(money);
+    var moneyColor = money >= 0 ? 'var(--condor-green)' : '#c0392b';
+    var course = rd?.course_name || '\u2014';
+    var dateStr = '';
+    if (rd?.played_at) {
+      dateStr = new Date(rd.played_at + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }
+    var partners = '';
+    if (rd?.full_state?.players) {
+      partners = rd.full_state.players.slice(1).map(function(p) {
+        return (p.name || '').split(' ')[0];
+      }).join(' \u00B7 ');
+    }
+
+    container.innerHTML =
+      '<div style="margin:0 18px 16px;">' +
+        '<div style="font-family:var(--sans);font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(27,58,45,0.4);margin-bottom:8px;">LAST ROUND</div>' +
+        '<div class="last-round-card" style="cursor:default;margin-bottom:0;">' +
+          '<div class="lrc-top">' +
+            '<div>' +
+              '<span class="lrc-course">' + course + '</span>' +
+              '<span class="lrc-meta">' + dateStr + (partners ? ' \u00B7 ' + partners : '') + '</span>' +
+            '</div>' +
+            '<div class="lrc-score">' +
+              '<span class="lrc-score-num" style="color:' + scoreColor + '">' + scoreStr + '</span>' +
+              '<span class="lrc-winnings" style="color:' + moneyColor + '">' + moneyStr + '</span>' +
+            '</div>' +
+          '</div>' +
+          '<div style="border-top:1px solid rgba(27,58,45,0.07);margin-top:14px;padding-top:12px;display:flex;justify-content:center;">' +
+            '<button onclick="playAgainFromLastRound()" style="background:none;border:1px solid var(--condor-green);color:var(--condor-green);font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:10px 28px;border-radius:10px;cursor:pointer;">Play Again \u2192</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    container.style.display = '';
+  } catch(e) {
+    console.error('Play last round:', e);
+    container.style.display = 'none';
+  }
+}
+
+function playAgainFromLastRound() {
+  enterEngineFlow('screen-players');
 }
 
 // Shows/hides the active-round-card on the Play tab based on engine state
