@@ -439,8 +439,19 @@ html, body {
 .card-action-btn.primary .card-action-label { color: rgba(244,241,230,0.85); }
 
 /* ── INLINE EDITING ON CARD ── */
-[data-editable] { cursor:pointer; }
+[data-editable] { cursor:pointer; position:relative; }
+[data-editable]::after {
+  content: '✎';
+  display: inline-block;
+  font-size: 10px;
+  margin-left: 6px;
+  color: rgba(198,164,106,0.5);
+  vertical-align: middle;
+  transition: opacity 0.2s;
+}
 [data-editable]:hover { opacity:0.8; }
+[data-editable]:hover::after { color: rgba(198,164,106,0.8); }
+[data-editable].editing::after { display: none; }
 .card-inline-input {
   background:transparent; border:none; outline:none;
   border-bottom:1px solid rgba(198,164,106,.4);
@@ -13011,12 +13022,13 @@ function makeCardFieldEditable(el) {
     input.maxLength = field === 'username' ? 40 : 80;
   }
   input.setAttribute('data-original', currentValue);
+  el.classList.add('editing');
   el.textContent = '';
   el.appendChild(input);
   input.focus();
   input.select();
 
-  input.addEventListener('blur', function() { saveCardField(el, input, field); });
+  input.addEventListener('blur', function() { el.classList.remove('editing'); saveCardField(el, input, field); });
   input.addEventListener('keydown', function(e) {
     if (e.key === 'Enter') input.blur();
     if (e.key === 'Escape') { input.value = input.getAttribute('data-original'); input.blur(); }
