@@ -4179,7 +4179,7 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
       </div>
 
       <!-- ACTIVE ROUND -->
-      <div class="active-round-card" onclick="if(_roundInProgress && state.currentHole > 0){ goTo('screen-round'); renderRound(); }">
+      <div class="active-round-card" onclick="if(_roundInProgress && state.currentHole > 0){ enterEngineFlow('screen-round'); renderRound(); }">
         <div class="arc-eyebrow">Round In Progress · Nassau Active</div>
         <div class="arc-course">Augusta National GC</div>
         <div class="arc-progress">
@@ -7706,16 +7706,16 @@ async function searchPlayers(query) {
 
   if (!players || !players.length) return [];
 
-  // Try to fetch accepted friends to rank them first
+  // Friends table may not exist yet — skip friend ranking silently
   let friendIds = new Set();
   try {
-    const { data: friends } = await sb
+    const { data: friends, error: fErr } = await sb
       .from('friends')
       .select('friend_id')
       .eq('player_id', userId)
       .eq('status', 'accepted');
-    (friends || []).forEach(f => friendIds.add(f.friend_id));
-  } catch(e) { /* friends table may not exist yet — degrade gracefully */ }
+    if (!fErr && friends) friends.forEach(f => friendIds.add(f.friend_id));
+  } catch(e) { /* degrade gracefully */ }
 
   return players
     .map(p => ({ ...p, isFriend: friendIds.has(p.id) }))
