@@ -5680,13 +5680,13 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
         <span class="nav-drawer-item-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span> Clubhouse
       </div>
       <div class="nav-drawer-divider"></div>
-      <div class="nav-drawer-item" data-screen="screen-rules" onclick="navTo('screen-rules')">
+      <div class="nav-drawer-item" data-screen="screen-rules" onclick="closeNavDrawer();enterEngineFlow('screen-rules')">
         <span class="nav-drawer-item-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span> Rules of the Games
       </div>
-      <div class="nav-drawer-item" data-screen="screen-about" onclick="navTo('screen-about')">
+      <div class="nav-drawer-item" data-screen="screen-about" onclick="closeNavDrawer();enterEngineFlow('screen-about')">
         <span class="nav-drawer-item-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span> About
       </div>
-      <div class="nav-drawer-item" data-screen="screen-terms" onclick="navTo('screen-terms')">
+      <div class="nav-drawer-item" data-screen="screen-terms" onclick="closeNavDrawer();enterEngineFlow('screen-terms')">
         <span class="nav-drawer-item-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span> Terms & Conditions
       </div>
     </div>
@@ -13120,14 +13120,19 @@ function syncActiveRoundCard() {
 async function populateLastRound() {
   const { data: { session } } = await sb.auth.getSession();
   if (!session) return;
-  const { data } = await sb
+
+  // Step 1: Get the user's most recent round_player entry with round info
+  const { data, error } = await sb
     .from('round_players')
-    .select('gross_score, money_result, finish_position, rounds ( course_name, played_at, game_tags ), players!round_players_player_id_fkey ( username )')
+    .select('gross_score, money_result, finish_position, round_id, rounds ( course_name, played_at, game_tags )')
     .eq('player_id', session.user.id)
     .order('created_at', { ascending: false })
     .limit(1)
     .maybeSingle();
+
+  if (error) { console.error('Last round query error:', error); return; }
   if (!data) return;
+
   var par = 72;
   var diff = (data.gross_score || 0) - par;
   var scoreStr = diff === 0 ? 'E' : (diff > 0 ? '+' + diff : diff);
@@ -13145,6 +13150,28 @@ async function populateLastRound() {
     diff <= 0 ? 'var(--condor-green)' : 'var(--saddle-brown)';
   document.querySelector('.lrc-winnings').style.color =
     money >= 0 ? 'var(--condor-green)' : 'var(--saddle-brown)';
+
+  // Step 2: Get playing partners from same round (exclude current user)
+  if (data.round_id) {
+    const { data: partners } = await sb
+      .from('round_players')
+      .select('players ( first_name, last_name, username )')
+      .eq('round_id', data.round_id)
+      .neq('player_id', session.user.id);
+
+    var partnerEl = document.querySelector('.lrc-players');
+    if (partnerEl && partners && partners.length) {
+      partnerEl.textContent = partners.map(function(p) {
+        var pl = p.players;
+        if (!pl) return '?';
+        if (pl.last_name) return pl.last_name;
+        if (pl.username) return pl.username.split(' ').pop();
+        return '?';
+      }).join(' \u00B7 ');
+    } else if (partnerEl) {
+      partnerEl.textContent = '';
+    }
+  }
 }
 
 // Fire after engine auth completes
