@@ -13099,7 +13099,7 @@ document.getElementById('card-avatar-input').addEventListener('change', async fu
     if (upResult.error) throw upResult.error;
     var urlData = sb.storage.from('avatars').getPublicUrl(path);
     var avatarUrl = urlData.data.publicUrl;
-    var result = await sb.from('players').upsert({ id: session.user.id, avatar_url: avatarUrl }, { onConflict: 'id' });
+    var result = await sb.from('players').update({ avatar_url: avatarUrl }).eq('id', session.user.id);
     if (result.error) throw result.error;
   } catch (e) {
     console.error('Avatar upload failed:', e);
