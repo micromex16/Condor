@@ -71,8 +71,8 @@ html, body {
   display: flex;
 }
 
-/* ─── SCREENS ─── */
-.screen {
+/* ─── SHELL SCREENS ─── */
+.shell-screen {
   position: absolute;
   inset: 0;
   display: flex;
@@ -83,7 +83,7 @@ html, body {
   transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   transform: translateY(12px);
 }
-.screen.active {
+.shell-screen.active {
   opacity: 1;
   pointer-events: all;
   transform: translateY(0);
@@ -3615,7 +3615,7 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
 <div class="app">
 
   <!-- ═══ SCREEN: CONDOR CARD ═══ -->
-  <div class="screen active" id="screen-card">
+  <div class="shell-screen active" id="screen-card">
     <div class="status-bar"></div>
     <div class="scroll-body">
 
@@ -3792,7 +3792,7 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
   </div>
 
   <!-- ═══ SCREEN: PLAY ROUND ═══ -->
-  <div class="screen" id="screen-play">
+  <div class="shell-screen" id="screen-play">
     <div class="status-bar"></div>
     <div class="scroll-body">
 
@@ -3946,7 +3946,7 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
   </div>
 
   <!-- ═══ SCREEN: BIRDHOUSE ═══ -->
-  <div class="screen" id="screen-birdhouse">
+  <div class="shell-screen" id="screen-birdhouse">
     <div class="status-bar"></div>
     <div class="scroll-body">
 
@@ -12719,7 +12719,7 @@ loadCourses();
 <script>
 // ─── NAVIGATION ───
 function navigate(screen) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.shell-screen').forEach(s => s.classList.remove('active'));
   document.getElementById('screen-' + screen).classList.add('active');
   // Sync all nav bars
   document.querySelectorAll('.nav-item').forEach(item => {
