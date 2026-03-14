@@ -13637,7 +13637,7 @@ async function bhLoadNewMembers() {
         var { count } = await sb.from('players').select('*', { count: 'exact', head: true }).lt('created_at', p.created_at);
         num = 'C' + String((count != null ? count : 0) + 1).padStart(4, '0');
       } catch(e) {}
-      html += '<div class="bh-spotlight">' +
+      html += '<div class="bh-spotlight" style="cursor:pointer" onclick="bhOpenProfile(\'' + p.id + '\')">' +
         '<div class="bh-avatar" style="width:40px;height:40px;font-size:14px;">' + bhAvatarHtml(p.avatar_url, p.username) + '</div>' +
         '<div class="bh-spotlight-name">' + (p.username || 'New Member') + '</div>' +
         '<div class="bh-spotlight-sub">' + (p.home_course || '') + '</div>' +
