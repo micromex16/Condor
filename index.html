@@ -2132,7 +2132,7 @@ body::before { display:none; }
   line-height:1.3;
 }
 .standing-micro .standing-value {
-  font-family:var(--serif); font-size:22px; font-style:italic;
+  font-family:var(--serif); font-size:32px; font-style:italic;
   font-weight:500; color:var(--green-deep); line-height:1.1;
 }
 .standing-micro.winning { background:rgba(196,164,86,.06); }
@@ -6815,6 +6815,19 @@ function getEntityShortName(idx) {
   return members.map(pi => state.players[pi].name.split(' ')[0]).join(' & ');
 }
 
+// Standings cell name — team name → initials → first name
+function getEntityStandingsName(idx) {
+  // Individual format — first name only
+  if (!state.teams) return state.players[idx].name.split(' ')[0];
+  // Team format — check for custom team name first
+  const custom = state.teamNames && state.teamNames[idx];
+  const hasCustom = custom && custom.trim() && custom !== 'Team A' && custom !== 'Team B' && custom !== 'Team C';
+  if (hasCustom) return custom.trim();
+  // No custom name — first initials with ampersand
+  const members = state.teams[idx];
+  return members.map(function(pi) { return state.players[pi].name.charAt(0).toUpperCase(); }).join(' & ');
+}
+
 // Recalculate front/back/match for entity A vs entity B from scratch
 function calcSideScores(aIdx, bIdx) {
   let frontA=0,frontB=0,backA=0,backB=0;
@@ -9381,7 +9394,7 @@ function renderStandingsStrip() {
     sides.forEach(function(item) {
       if (item.stake <= 0) return;
       var isEven = item.s.leader < 0;
-      var lname = !isEven ? getEntityFullLabel(item.s.leader) : null;
+      var lname = !isEven ? getEntityStandingsName(item.s.leader) : null;
       var cls = isEven ? 'even' : 'winning';
       var valText = isEven ? 'Even' : lname + ' +' + item.s.holesUp;
       gameCells.push(cell(item.label, valText, cls));
