@@ -990,7 +990,7 @@ html, body {
   font-family: var(--font-display);
   font-size: 28px;
   font-weight: 400;
-  color: #fff;
+  color: var(--condor-green);
   letter-spacing: -0.02em;
 }
 .birdhouse-sub {
@@ -998,7 +998,7 @@ html, body {
   font-size: 16px;
   font-weight: 400;
   font-style: italic;
-  color: rgba(255,255,255,0.4);
+  color: rgba(28,59,42,0.4);
 }
 
 /* ── GROUP PILL ROW ── */
@@ -1018,7 +1018,7 @@ html, body {
   gap: 8px;
   padding: 10px 16px 10px 12px;
   border-radius: 22px;
-  border: 1px solid rgba(255,255,255,0.12);
+  border: 1px solid rgba(28,59,42,0.14);
   background: none;
   cursor: pointer;
   white-space: nowrap;
@@ -1027,14 +1027,14 @@ html, body {
   position: relative;
 }
 .flock-pill.active {
-  background: var(--augusta-green);
-  border-color: rgba(255,255,255,0.15);
+  background: var(--condor-green);
+  border-color: transparent;
 }
 .flock-pill-dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.2);
+  background: rgba(28,59,42,0.2);
   flex-shrink: 0;
 }
 .flock-pill.active .flock-pill-dot { background: var(--antique-gold); }
@@ -1043,22 +1043,22 @@ html, body {
   font-size: 13px;
   font-weight: 400;
   letter-spacing: 0.08em;
-  color: rgba(255,255,255,0.6);
+  color: rgba(28,59,42,0.7);
 }
-.flock-pill.active .flock-pill-name { color: #fff; }
+.flock-pill.active .flock-pill-name { color: var(--vintage-cream); }
 .flock-pill-count {
   font-family: var(--font-ui);
   font-size: 11px;
   font-weight: 400;
   letter-spacing: 0.04em;
-  color: rgba(255,255,255,0.4);
-  background: rgba(255,255,255,0.08);
+  color: rgba(28,59,42,0.4);
+  background: rgba(28,59,42,0.07);
   padding: 2px 7px;
   border-radius: 10px;
 }
 .flock-pill.active .flock-pill-count {
-  background: rgba(255,255,255,0.12);
-  color: rgba(255,255,255,0.55);
+  background: rgba(244,241,230,0.14);
+  color: rgba(244,241,230,0.55);
 }
 .flock-pill.add-pill {
   border-style: dashed;
@@ -1301,7 +1301,7 @@ html, body {
   font-weight: 400;
   letter-spacing: 0.28em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.45);
+  color: rgba(28,59,42,0.5);
 }
 .flight-log-action {
   font-family: var(--font-editorial);
@@ -1318,7 +1318,7 @@ html, body {
 .log-list { padding: 0 18px; }
 .log-entry {
   padding: 18px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(28,59,42,0.07);
   cursor: pointer;
 }
 .log-entry:last-child { border-bottom: none; }
@@ -1334,37 +1334,37 @@ html, body {
   font-weight: 400;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.5);
+  color: rgba(28,59,42,0.55);
 }
 .log-when {
   font-family: var(--font-ui);
   font-size: 11px;
   font-weight: 400;
   letter-spacing: 0.06em;
-  color: rgba(255,255,255,0.35);
+  color: rgba(28,59,42,0.4);
 }
 .log-text {
   font-family: var(--font-editorial);
   font-size: 18px;
   font-weight: 400;
-  color: #fff;
+  color: var(--scorecard-black);
   line-height: 1.5;
 }
 .log-text em {
   font-style: normal;
-  color: var(--antique-gold);
+  color: var(--condor-green);
   font-weight: 600;
 }
 .log-amount {
   font-family: var(--font-display);
   font-size: 17px;
   font-weight: 500;
-  color: rgba(255,255,255,0.5);
+  color: rgba(28,59,42,0.5);
   margin-top: 5px;
   display: block;
 }
-.log-amount.credit { color: var(--antique-gold); }
-.log-amount.debit { color: #c0392b; }
+.log-amount.credit { color: var(--condor-green); }
+.log-amount.debit { color: var(--saddle-brown); }
 
 /* ── INVITE STRIP ── */
 .flock-strip {
@@ -1373,7 +1373,7 @@ html, body {
   align-items: center;
   justify-content: space-between;
   padding: 18px 22px;
-  border: 1px solid rgba(198,164,106,0.25);
+  border: 1px solid rgba(198,164,106,0.22);
   border-radius: 14px;
   cursor: pointer;
   transition: border-color 0.18s;
@@ -1384,7 +1384,7 @@ html, body {
   font-size: 17px;
   font-weight: 400;
   font-style: italic;
-  color: var(--antique-gold);
+  color: var(--saddle-brown);
 }
 .flock-arrow {
   font-family: var(--font-ui);
@@ -3497,177 +3497,8 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
 #screen-card,
 #screen-play,
 #screen-birdhouse {
-  background: var(--condor-green);
+  background: var(--app-bg);
   padding-bottom: 76px;
-}
-
-/* ── BIRDHOUSE SECTIONS ── */
-.bh-section { padding: 0 16px; margin-top: 28px; }
-.bh-section-label {
-  font-family: var(--font-ui); font-size: 8px; font-weight: 400;
-  letter-spacing: 0.25em; text-transform: uppercase;
-  color: var(--antique-gold); margin-bottom: 10px; padding-left: 2px;
-}
-.bh-section-label.white { color: rgba(255,255,255,0.4); }
-.bh-skeleton {
-  background: rgba(255,255,255,0.04); border-radius: 12px;
-  height: 120px; animation: bhPulse 1.5s ease-in-out infinite;
-}
-@keyframes bhPulse { 0%,100%{opacity:0.5} 50%{opacity:1} }
-
-/* Leaderboard */
-.bh-leaderboard {
-  background: var(--augusta-green); border-radius: 12px;
-  overflow: hidden;
-}
-.bh-lb-row {
-  display: flex; align-items: center; gap: 10px;
-  padding: 12px 16px;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-}
-.bh-lb-row:last-child { border-bottom: none; }
-.bh-lb-row.rank1 { background: rgba(196,164,86,0.08); }
-.bh-lb-rank { font-family: var(--font-ui); font-size: 11px; color: rgba(255,255,255,0.4); min-width: 18px; }
-.bh-lb-avatar {
-  width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
-  background: var(--condor-green); display: flex; align-items: center; justify-content: center;
-  font-family: var(--font-ui); font-size: 10px; color: rgba(255,255,255,0.7);
-  overflow: hidden;
-}
-.bh-lb-avatar img { width: 100%; height: 100%; object-fit: cover; }
-.bh-lb-name { font-family: var(--font-ui); font-size: 12px; color: #fff; flex: 1; }
-.bh-lb-rounds { font-family: var(--font-ui); font-size: 10px; color: rgba(255,255,255,0.4); margin-right: 8px; }
-.bh-lb-money { font-family: var(--font-ui); font-size: 13px; font-weight: 500; text-align: right; min-width: 50px; }
-.bh-lb-money.pos { color: var(--antique-gold); }
-.bh-lb-money.neg { color: #c0392b; }
-.bh-lb-money.zero { color: rgba(255,255,255,0.3); }
-
-/* New Members */
-.bh-new-members-row {
-  display: flex; gap: 10px; overflow-x: auto; padding-bottom: 4px;
-  -webkit-overflow-scrolling: touch; scrollbar-width: none;
-}
-.bh-new-members-row::-webkit-scrollbar { display: none; }
-.bh-nm-card {
-  flex-shrink: 0; width: 120px; min-height: 140px;
-  background: var(--augusta-green); border-radius: 12px;
-  border: 1px solid rgba(196,164,86,0.3);
-  display: flex; flex-direction: column; align-items: center;
-  justify-content: center; padding: 14px 8px; gap: 6px; text-align: center;
-}
-.bh-nm-avatar {
-  width: 40px; height: 40px; border-radius: 50%;
-  background: var(--condor-green); display: flex; align-items: center; justify-content: center;
-  font-family: var(--font-ui); font-size: 14px; color: rgba(255,255,255,0.7);
-  overflow: hidden;
-}
-.bh-nm-avatar img { width: 100%; height: 100%; object-fit: cover; }
-.bh-nm-name { font-family: var(--font-editorial); font-size: 16px; font-style: italic; color: #fff; line-height: 1.2; }
-.bh-nm-course { font-family: var(--font-ui); font-size: 9px; color: rgba(255,255,255,0.4); }
-.bh-nm-id { font-family: var(--font-ui); font-size: 8px; color: var(--antique-gold); letter-spacing: 0.1em; }
-
-/* Members Directory */
-.bh-search-wrap {
-  background: var(--augusta-green); border-radius: 12px;
-  padding: 12px 14px; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;
-}
-.bh-search-icon { color: rgba(255,255,255,0.3); flex-shrink: 0; }
-.bh-search-input {
-  background: transparent; border: none; outline: none; width: 100%;
-  font-family: var(--font-ui); font-size: 12px; color: #fff;
-}
-.bh-search-input::placeholder { color: rgba(255,255,255,0.3); }
-.bh-members-list {
-  background: var(--augusta-green); border-radius: 12px;
-  overflow: hidden; max-height: 400px; overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-}
-.bh-member-row {
-  display: flex; align-items: center; gap: 10px;
-  padding: 12px 16px; cursor: pointer;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
-}
-.bh-member-row:last-child { border-bottom: none; }
-.bh-member-row:active { background: rgba(255,255,255,0.03); }
-.bh-mr-avatar {
-  width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
-  background: var(--condor-green); display: flex; align-items: center; justify-content: center;
-  font-family: var(--font-ui); font-size: 12px; color: rgba(255,255,255,0.7);
-  overflow: hidden;
-}
-.bh-mr-avatar img { width: 100%; height: 100%; object-fit: cover; }
-.bh-mr-info { flex: 1; }
-.bh-mr-name { font-family: var(--font-ui); font-size: 13px; color: #fff; }
-.bh-mr-course { font-family: var(--font-ui); font-size: 10px; color: rgba(255,255,255,0.3); margin-top: 2px; }
-.bh-mr-hcp { font-family: var(--font-ui); font-size: 11px; color: rgba(255,255,255,0.4); }
-
-/* Member Profile Sheet */
-.member-sheet-overlay {
-  position: fixed; inset: 0; z-index: 5000;
-  background: rgba(10,22,14,0.72); display: none; align-items: flex-end;
-  backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px);
-}
-.member-sheet-overlay.open { display: flex; }
-.member-sheet {
-  width: 100%; background: var(--condor-green); border-radius: 16px 16px 0 0;
-  max-height: 80vh; overflow-y: auto; padding: 28px 20px 40px;
-  animation: slideUp .22s ease;
-}
-.ms-handle { width: 36px; height: 4px; background: rgba(255,255,255,0.15); border-radius: 2px; margin: 0 auto 20px; }
-.ms-name { font-family: var(--font-editorial); font-size: 24px; font-style: italic; color: #fff; text-align: center; margin-bottom: 4px; }
-.ms-member-id { font-family: var(--font-ui); font-size: 9px; color: var(--antique-gold); letter-spacing: 0.2em; text-align: center; margin-bottom: 6px; }
-.ms-course { font-family: var(--font-ui); font-size: 11px; color: rgba(255,255,255,0.4); text-align: center; margin-bottom: 4px; }
-.ms-hcp { font-family: var(--font-display); font-size: 42px; font-weight: 500; color: var(--antique-gold); text-align: center; margin: 16px 0 20px; }
-.ms-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
-.ms-stat {
-  background: var(--augusta-green); border-radius: 10px; padding: 14px 10px; text-align: center;
-}
-.ms-stat-val { font-family: var(--font-display); font-size: 20px; font-weight: 500; color: #fff; }
-.ms-stat-label { font-family: var(--font-ui); font-size: 8px; color: rgba(255,255,255,0.4); letter-spacing: 0.15em; text-transform: uppercase; margin-top: 4px; }
-
-/* Bulletin */
-.bh-bulletin-cell {
-  background: var(--augusta-green); border-radius: 12px; padding: 24px 20px;
-}
-.bh-bulletin-gen-btn {
-  display: block; margin: 20px auto; background: transparent;
-  border: 1px solid var(--antique-gold); color: var(--antique-gold);
-  font-family: var(--font-ui); font-size: 10px; font-weight: 400;
-  letter-spacing: 0.2em; text-transform: uppercase;
-  padding: 12px 24px; border-radius: 6px; cursor: pointer;
-  transition: background 0.2s, color 0.2s;
-}
-.bh-bulletin-gen-btn:active { background: var(--antique-gold); color: var(--condor-green); }
-.bh-bulletin-gen-btn:disabled { opacity: 0.4; cursor: default; }
-.bh-bulletin-placeholder {
-  font-family: var(--font-ui); font-size: 11px; color: rgba(255,255,255,0.4);
-  font-style: italic; text-align: center; padding: 20px 0;
-}
-.bh-bulletin-edition { font-family: var(--font-ui); font-size: 8px; color: rgba(255,255,255,0.4); letter-spacing: 0.15em; }
-.bh-bulletin-date { font-family: var(--font-ui); font-size: 8px; color: rgba(255,255,255,0.4); float: right; }
-.bh-bulletin-headline {
-  font-family: var(--font-editorial); font-size: 22px; font-style: italic;
-  color: #fff; margin: 14px 0; line-height: 1.3;
-}
-.bh-bulletin-rule { height: 1px; background: var(--antique-gold); margin: 16px 0; opacity: 0.4; }
-.bh-bulletin-body {
-  font-family: var(--font-editorial); font-size: 14px; color: rgba(255,255,255,0.8);
-  line-height: 1.7; white-space: pre-wrap;
-}
-.bh-bulletin-actions {
-  margin-top: 16px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.06);
-  display: flex; align-items: center; justify-content: space-between;
-}
-.bh-bulletin-share-btn {
-  background: transparent; border: 1px solid rgba(255,255,255,0.15);
-  color: rgba(255,255,255,0.6); font-family: var(--font-ui); font-size: 9px;
-  letter-spacing: 0.15em; text-transform: uppercase; padding: 8px 16px;
-  border-radius: 4px; cursor: pointer;
-}
-.bh-bulletin-prev-link {
-  font-family: var(--font-ui); font-size: 9px; color: rgba(255,255,255,0.35);
-  letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;
-  background: none; border: none; text-decoration: underline;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -4584,58 +4415,12 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
         <span class="flock-arrow">→</span>
       </div>
 
-      <!-- SECTION 1: SEASON LEADERBOARD -->
-      <div class="bh-section" id="bh-leaderboard-section">
-        <div class="bh-section-label">Season Leaderboard · 2026</div>
-        <div id="bh-leaderboard-content"><div class="bh-skeleton"></div></div>
-      </div>
-
-      <!-- SECTION 2: NEW MEMBERS -->
-      <div class="bh-section" id="bh-newmembers-section" style="display:none;">
-        <div class="bh-section-label">New to the Club</div>
-        <div class="bh-new-members-row" id="bh-newmembers-content"></div>
-      </div>
-
-      <!-- SECTION 3: MEMBERS DIRECTORY -->
-      <div class="bh-section" id="bh-members-section">
-        <div class="bh-section-label white">Members</div>
-        <div class="bh-search-wrap">
-          <svg class="bh-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input class="bh-search-input" id="bh-member-search" type="text" placeholder="Search members" oninput="filterMembersDirectory(this.value)">
-        </div>
-        <div class="bh-members-list" id="bh-members-list"><div class="bh-skeleton"></div></div>
-      </div>
-
-      <!-- SECTION 4: CONDOR BULLETIN -->
-      <div class="bh-section" id="bh-bulletin-section">
-        <div class="bh-section-label">The Condor Bulletin</div>
-        <div class="bh-bulletin-cell" id="bh-bulletin-cell">
-          <div id="bh-bulletin-content"></div>
-        </div>
-      </div>
-
       <div class="bottom-pad"></div>
     </div>
 
   </div>
 
 </div><!-- end .app -->
-
-<!-- MEMBER PROFILE SHEET -->
-<div class="member-sheet-overlay" id="member-sheet-overlay" onclick="if(event.target===this)closeMemberSheet()">
-  <div class="member-sheet">
-    <div class="ms-handle"></div>
-    <div class="ms-name" id="ms-name"></div>
-    <div class="ms-member-id" id="ms-member-id"></div>
-    <div class="ms-course" id="ms-course"></div>
-    <div class="ms-hcp" id="ms-hcp"></div>
-    <div class="ms-stats">
-      <div class="ms-stat"><div class="ms-stat-val" id="ms-rounds">—</div><div class="ms-stat-label">Rounds</div></div>
-      <div class="ms-stat"><div class="ms-stat-val" id="ms-winnings">—</div><div class="ms-stat-label">Winnings</div></div>
-      <div class="ms-stat"><div class="ms-stat-val" id="ms-winrate">—</div><div class="ms-stat-label">Win Rate</div></div>
-    </div>
-  </div>
-</div>
 
 <!-- ═══ FLOCK BOTTOM SHEET ═══ -->
 <div class="sheet-overlay" id="sheet-overlay" onclick="closeFlockSheet()"></div>
@@ -12961,10 +12746,6 @@ async function condorNavigate(tab) {
     populateFlightBoard();
     populateFlightLog();
     populateFlockPills();
-    loadSeasonLeaderboard();
-    loadNewMembers();
-    loadMembersDirectory();
-    loadBulletin();
   }
 }
 
@@ -13729,452 +13510,6 @@ function switchFlock(pill, groupId) {
   });
   document.getElementById('engine-overlay').classList.add('visible');
   openGroupDetail(groupId);
-}
-
-// ═══════════════════════════════════════════════════════════════
-// BIRDHOUSE SECTIONS
-// ═══════════════════════════════════════════════════════════════
-
-// ── All members cache ──
-var _allMembers = null;
-
-// ── SECTION 1: SEASON LEADERBOARD ──
-async function loadSeasonLeaderboard() {
-  var container = document.getElementById('bh-leaderboard-content');
-  container.innerHTML = '<div class="bh-skeleton"></div>';
-  try {
-    var { data: { session } } = await sb.auth.getSession();
-    if (!session) return;
-
-    // Get all round_players with rounds played_at in 2026
-    var { data: rp } = await sb
-      .from('round_players')
-      .select('player_id, money_result, rounds!inner(played_at)')
-      .gte('rounds.played_at', '2026-01-01');
-
-    if (!rp || !rp.length) {
-      container.innerHTML = '<div style="padding:20px;text-align:center;font-family:var(--font-ui);font-size:11px;color:rgba(255,255,255,0.3);">No rounds this season</div>';
-      return;
-    }
-
-    // Aggregate by player
-    var agg = {};
-    rp.forEach(function(r) {
-      if (!agg[r.player_id]) agg[r.player_id] = { total: 0, rounds: 0 };
-      agg[r.player_id].total += (r.money_result || 0);
-      agg[r.player_id].rounds++;
-    });
-
-    var playerIds = Object.keys(agg);
-    var { data: players } = await sb
-      .from('players')
-      .select('id, username, avatar_url')
-      .in('id', playerIds);
-
-    var playerMap = {};
-    (players || []).forEach(function(p) { playerMap[p.id] = p; });
-
-    var sorted = playerIds.map(function(id) {
-      return { id: id, total: agg[id].total, rounds: agg[id].rounds, player: playerMap[id] };
-    }).sort(function(a, b) { return b.total - a.total; }).slice(0, 10);
-
-    var html = '<div class="bh-leaderboard">';
-    sorted.forEach(function(item, i) {
-      var p = item.player || {};
-      var name = p.username || 'Unknown';
-      var initials = name.split(/\s+/).map(function(w){return w[0]}).join('').toUpperCase().substring(0,2);
-      var avatarHtml = p.avatar_url
-        ? '<img src="' + p.avatar_url + '">'
-        : initials;
-      var moneyClass = item.total > 0 ? 'pos' : item.total < 0 ? 'neg' : 'zero';
-      var moneySign = item.total > 0 ? '+$' : item.total < 0 ? '\u2212$' : '$';
-      var rowClass = i === 0 ? 'bh-lb-row rank1' : 'bh-lb-row';
-      html += '<div class="' + rowClass + '">' +
-        '<span class="bh-lb-rank">' + (i + 1) + '</span>' +
-        '<div class="bh-lb-avatar">' + avatarHtml + '</div>' +
-        '<span class="bh-lb-name">' + name + '</span>' +
-        '<span class="bh-lb-rounds">' + item.rounds + ' rds</span>' +
-        '<span class="bh-lb-money ' + moneyClass + '">' + moneySign + Math.abs(item.total) + '</span>' +
-        '</div>';
-    });
-    html += '</div>';
-    container.innerHTML = html;
-  } catch(e) {
-    console.error('Leaderboard error:', e);
-    container.innerHTML = '<div style="padding:16px;text-align:center;font-family:var(--font-ui);font-size:11px;color:rgba(255,255,255,0.3);">Could not load leaderboard</div>';
-  }
-}
-
-// ── SECTION 2: NEW MEMBERS ──
-async function loadNewMembers() {
-  var section = document.getElementById('bh-newmembers-section');
-  var container = document.getElementById('bh-newmembers-content');
-  try {
-    var thirtyDaysAgo = new Date();
-    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-    var cutoff = thirtyDaysAgo.toISOString();
-
-    var { data: newPlayers } = await sb
-      .from('players')
-      .select('id, username, home_course, avatar_url, created_at')
-      .gte('created_at', cutoff)
-      .order('created_at', { ascending: false });
-
-    if (!newPlayers || !newPlayers.length) {
-      section.style.display = 'none';
-      return;
-    }
-
-    section.style.display = '';
-    var html = '';
-    for (var i = 0; i < newPlayers.length; i++) {
-      var p = newPlayers[i];
-      var name = p.username || 'New Member';
-      var initials = name.split(/\s+/).map(function(w){return w[0]}).join('').toUpperCase().substring(0,2);
-      var avatarHtml = p.avatar_url
-        ? '<img src="' + p.avatar_url + '">'
-        : initials;
-
-      // Member number
-      var memberNum = 'C????';
-      try {
-        var { count } = await sb.from('players').select('*', { count: 'exact', head: true }).lt('created_at', p.created_at);
-        memberNum = 'C' + String((count != null ? count : 0) + 1).padStart(4, '0');
-      } catch(e) {}
-
-      html += '<div class="bh-nm-card">' +
-        '<div class="bh-nm-avatar">' + avatarHtml + '</div>' +
-        '<div class="bh-nm-name">' + name + '</div>' +
-        '<div class="bh-nm-course">' + (p.home_course || '') + '</div>' +
-        '<div class="bh-nm-id">' + memberNum + '</div>' +
-        '</div>';
-    }
-    container.innerHTML = html;
-  } catch(e) {
-    console.error('New members error:', e);
-    section.style.display = 'none';
-  }
-}
-
-// ── SECTION 3: MEMBERS DIRECTORY ──
-async function loadMembersDirectory() {
-  var container = document.getElementById('bh-members-list');
-  container.innerHTML = '<div class="bh-skeleton"></div>';
-  try {
-    var { data: players } = await sb
-      .from('players')
-      .select('id, username, hdcp_index, home_course, avatar_url, created_at')
-      .order('username', { ascending: true });
-
-    _allMembers = players || [];
-    renderMembersList(_allMembers);
-  } catch(e) {
-    console.error('Members directory error:', e);
-    container.innerHTML = '<div style="padding:16px;text-align:center;font-family:var(--font-ui);font-size:11px;color:rgba(255,255,255,0.3);">Could not load members</div>';
-  }
-}
-
-function renderMembersList(members) {
-  var container = document.getElementById('bh-members-list');
-  if (!members || !members.length) {
-    container.innerHTML = '<div style="padding:16px;text-align:center;font-family:var(--font-ui);font-size:11px;color:rgba(255,255,255,0.3);">No members found</div>';
-    return;
-  }
-  container.innerHTML = members.map(function(p) {
-    var name = p.username || 'Unknown';
-    var initials = name.split(/\s+/).map(function(w){return w[0]}).join('').toUpperCase().substring(0,2);
-    var avatarHtml = p.avatar_url
-      ? '<img src="' + p.avatar_url + '">'
-      : initials;
-    var hcp = p.hdcp_index != null ? p.hdcp_index : '—';
-    return '<div class="bh-member-row" onclick="openMemberSheet(\'' + p.id + '\')">' +
-      '<div class="bh-mr-avatar">' + avatarHtml + '</div>' +
-      '<div class="bh-mr-info">' +
-        '<div class="bh-mr-name">' + name + '</div>' +
-        '<div class="bh-mr-course">' + (p.home_course || '') + '</div>' +
-      '</div>' +
-      '<span class="bh-mr-hcp">' + hcp + '</span>' +
-      '</div>';
-  }).join('');
-}
-
-function filterMembersDirectory(query) {
-  if (!_allMembers) return;
-  var q = query.toLowerCase().trim();
-  if (!q) { renderMembersList(_allMembers); return; }
-  var filtered = _allMembers.filter(function(p) {
-    var name = (p.username || '').toLowerCase();
-    return name.indexOf(q) >= 0;
-  });
-  renderMembersList(filtered);
-}
-
-// Member profile sheet
-async function openMemberSheet(playerId) {
-  var overlay = document.getElementById('member-sheet-overlay');
-  overlay.classList.add('open');
-
-  document.getElementById('ms-name').textContent = '...';
-  document.getElementById('ms-member-id').textContent = '';
-  document.getElementById('ms-course').textContent = '';
-  document.getElementById('ms-hcp').textContent = '—';
-  document.getElementById('ms-rounds').textContent = '—';
-  document.getElementById('ms-winnings').textContent = '—';
-  document.getElementById('ms-winrate').textContent = '—';
-
-  try {
-    var { data: player } = await sb
-      .from('players')
-      .select('username, hdcp_index, home_course, city, created_at')
-      .eq('id', playerId)
-      .maybeSingle();
-
-    if (player) {
-      document.getElementById('ms-name').textContent = player.username || 'Unknown';
-      var courseCity = [player.home_course, player.city].filter(Boolean).join(' · ');
-      document.getElementById('ms-course').textContent = courseCity;
-      document.getElementById('ms-hcp').textContent = player.hdcp_index != null ? player.hdcp_index : '—';
-
-      // Member number
-      try {
-        var { count } = await sb.from('players').select('*', { count: 'exact', head: true }).lt('created_at', player.created_at);
-        document.getElementById('ms-member-id').textContent = '№ C' + String((count != null ? count : 0) + 1).padStart(4, '0');
-      } catch(e) {
-        document.getElementById('ms-member-id').textContent = '№ C????';
-      }
-    }
-
-    // Stats
-    var { data: rounds } = await sb
-      .from('round_players')
-      .select('finish_position, money_result')
-      .eq('player_id', playerId);
-
-    if (rounds && rounds.length) {
-      var total = rounds.length;
-      var wins = rounds.filter(function(r) { return r.finish_position === 1; }).length;
-      var money = rounds.reduce(function(s, r) { return s + (r.money_result || 0); }, 0);
-      var winPct = total > 0 ? Math.round((wins / total) * 100) : 0;
-
-      document.getElementById('ms-rounds').textContent = total;
-      document.getElementById('ms-winnings').textContent = (money >= 0 ? '+$' : '\u2212$') + Math.abs(money);
-      document.getElementById('ms-winrate').textContent = winPct + '%';
-    }
-  } catch(e) {
-    console.error('Member sheet error:', e);
-  }
-}
-
-function closeMemberSheet() {
-  document.getElementById('member-sheet-overlay').classList.remove('open');
-}
-
-// ── SECTION 4: CONDOR BULLETIN ──
-var CONDOR_ADMIN_ID = 'c180643a-1d14-4b8f-bb92-49744a0289f0';
-
-function loadBulletin() {
-  var container = document.getElementById('bh-bulletin-content');
-  var stored = localStorage.getItem('condor_bulletin_latest');
-
-  sb.auth.getSession().then(function(res) {
-    var session = res.data.session;
-    var isAdmin = session && session.user.id === CONDOR_ADMIN_ID;
-
-    if (stored) {
-      try {
-        var bulletin = JSON.parse(stored);
-        renderBulletin(bulletin, isAdmin);
-        return;
-      } catch(e) {}
-    }
-
-    // No bulletin — show generate or placeholder
-    if (isAdmin) {
-      container.innerHTML = '<button class="bh-bulletin-gen-btn" onclick="generateBulletin(this)">Generate This Week\'s Bulletin</button>';
-    } else {
-      container.innerHTML = '<div class="bh-bulletin-placeholder">Bulletin coming soon</div>';
-    }
-  });
-}
-
-function renderBulletin(bulletin, isAdmin) {
-  var container = document.getElementById('bh-bulletin-content');
-  var text = bulletin.text || '';
-  var lines = text.split('\n').filter(function(l) { return l.trim(); });
-  var headline = lines.length > 0 ? lines[0] : 'The Condor Bulletin';
-  var body = lines.slice(1).join('\n');
-  var editionNum = bulletin.edition || 1;
-  var dateStr = bulletin.date || new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-
-  container.innerHTML =
-    '<div style="display:flex;justify-content:space-between;align-items:center;">' +
-      '<span class="bh-bulletin-edition">EDITION NO. ' + String(editionNum).padStart(3, '0') + '</span>' +
-      '<span class="bh-bulletin-date">' + dateStr + '</span>' +
-    '</div>' +
-    '<div class="bh-bulletin-headline">' + headline + '</div>' +
-    '<div class="bh-bulletin-rule"></div>' +
-    '<div class="bh-bulletin-body">' + body + '</div>' +
-    '<div class="bh-bulletin-actions">' +
-      '<button class="bh-bulletin-share-btn" onclick="shareBulletin()">Share Bulletin</button>' +
-      '<button class="bh-bulletin-prev-link" onclick="showPrevBulletins()">Previous Editions</button>' +
-    '</div>' +
-    (isAdmin ? '<button class="bh-bulletin-gen-btn" style="margin-top:16px;" onclick="generateBulletin(this)">Regenerate</button>' : '');
-}
-
-async function generateBulletin(btn) {
-  btn.disabled = true;
-  btn.textContent = 'Generating...';
-  try {
-    var { data: { session } } = await sb.auth.getSession();
-    if (!session) return;
-
-    // Collect data from last 7 days
-    var weekAgo = new Date();
-    weekAgo.setDate(weekAgo.getDate() - 7);
-    var cutoff = weekAgo.toISOString().split('T')[0];
-
-    var { data: recentRounds } = await sb
-      .from('round_players')
-      .select('player_id, gross_score, to_par, money_result, finish_position, rounds!inner(course_name, played_at, games_played, full_state)')
-      .gte('rounds.played_at', cutoff);
-
-    var { data: allPlayers } = await sb.from('players').select('id, username');
-    var pMap = {};
-    (allPlayers || []).forEach(function(p) { pMap[p.id] = p.username || 'Unknown'; });
-
-    // New members
-    var { data: newMembers } = await sb.from('players').select('username').gte('created_at', new Date(weekAgo).toISOString());
-
-    // Build context
-    var context = 'ROUND DATA (Last 7 Days):\n';
-    if (recentRounds && recentRounds.length) {
-      recentRounds.forEach(function(r) {
-        var rd = r.rounds;
-        context += '- ' + (pMap[r.player_id] || '?') + ' at ' + (rd.course_name || '?') +
-          ' on ' + rd.played_at + ': Gross ' + (r.gross_score || '?') +
-          ', To Par ' + (r.to_par != null ? r.to_par : '?') +
-          ', Money ' + (r.money_result != null ? '$' + r.money_result : '?') +
-          ', Finish ' + (r.finish_position || '?') + '\n';
-      });
-
-      // Find low gross, biggest winner, eagles
-      var lowGross = recentRounds.reduce(function(best, r) {
-        if (r.gross_score && (!best || r.gross_score < best.gross_score)) return r;
-        return best;
-      }, null);
-      if (lowGross) context += '\nLOW GROSS: ' + pMap[lowGross.player_id] + ' with ' + lowGross.gross_score + '\n';
-
-      var bigWinner = recentRounds.reduce(function(best, r) {
-        if (r.money_result && (!best || r.money_result > best.money_result)) return r;
-        return best;
-      }, null);
-      if (bigWinner) context += 'BIGGEST WINNER: ' + pMap[bigWinner.player_id] + ' with +$' + bigWinner.money_result + '\n';
-
-      var eagles = recentRounds.filter(function(r) { return r.to_par != null && r.to_par <= -2; });
-      if (eagles.length) {
-        context += 'EAGLES/BETTER: ' + eagles.map(function(r) { return pMap[r.player_id] + ' (' + r.to_par + ')'; }).join(', ') + '\n';
-      }
-    } else {
-      context += 'No rounds recorded this week.\n';
-    }
-
-    if (newMembers && newMembers.length) {
-      context += '\nNEW MEMBERS: ' + newMembers.map(function(m) { return m.username; }).join(', ') + '\n';
-    }
-
-    // Call Claude API
-    var response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': prompt('Enter Anthropic API key:'),
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 600,
-        system: 'You are the editorial voice of Condor, a private golf scoring and wagering app. Write a weekly club bulletin in the style of a dry, witty, private members club circular. Think Augusta National annual report meets The Economist. No exclamation marks. No startup language. No emojis. Cormorant Garamond editorial register — understated, precise, occasionally wry. Structure: one headline, three to four short sections (Low Round, Money Report, Notable Shots, New Members if any), one closing line. Keep total length under 300 words. Return plain text only, no markdown.',
-        messages: [{ role: 'user', content: context }]
-      })
-    });
-
-    var result = await response.json();
-    var bulletinText = result.content[0].text;
-
-    // Get edition number
-    var history = JSON.parse(localStorage.getItem('condor_bulletin_history') || '[]');
-    var edition = history.length + 1;
-
-    var bulletin = {
-      text: bulletinText,
-      edition: edition,
-      date: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
-      timestamp: Date.now()
-    };
-
-    // Store
-    localStorage.setItem('condor_bulletin_latest', JSON.stringify(bulletin));
-    history.push(bulletin);
-    if (history.length > 4) history = history.slice(-4);
-    localStorage.setItem('condor_bulletin_history', JSON.stringify(history));
-
-    renderBulletin(bulletin, true);
-  } catch(e) {
-    console.error('Bulletin generation error:', e);
-    btn.disabled = false;
-    btn.textContent = 'Generate This Week\'s Bulletin';
-    alert('Failed to generate bulletin: ' + e.message);
-  }
-}
-
-async function shareBulletin() {
-  try {
-    var cell = document.getElementById('bh-bulletin-cell');
-    var canvas = await html2canvas(cell, { scale: 3, backgroundColor: '#234B37' });
-    canvas.toBlob(async function(blob) {
-      var file = new File([blob], 'condor-bulletin.png', { type: 'image/png' });
-      if (navigator.share && navigator.canShare({ files: [file] })) {
-        await navigator.share({ title: 'The Condor Bulletin', files: [file] });
-      } else {
-        var url = URL.createObjectURL(blob);
-        var a = document.createElement('a');
-        a.href = url; a.download = 'condor-bulletin.png'; a.click();
-        URL.revokeObjectURL(url);
-      }
-    }, 'image/png');
-  } catch(e) {
-    console.error('Share bulletin error:', e);
-  }
-}
-
-function showPrevBulletins() {
-  var history = JSON.parse(localStorage.getItem('condor_bulletin_history') || '[]');
-  if (!history.length) { alert('No previous editions.'); return; }
-
-  var overlay = document.getElementById('member-sheet-overlay');
-  var sheet = overlay.querySelector('.member-sheet');
-
-  sheet.innerHTML = '<div class="ms-handle"></div>' +
-    '<div style="font-family:var(--font-ui);font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--antique-gold);margin-bottom:16px;">Previous Editions</div>' +
-    history.slice().reverse().map(function(b, i) {
-      return '<div style="padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.06);cursor:pointer;" onclick="viewPastBulletin(' + (history.length - 1 - i) + ')">' +
-        '<div style="font-family:var(--font-editorial);font-size:16px;font-style:italic;color:#fff;">' + (b.text.split('\n')[0] || 'Edition ' + b.edition) + '</div>' +
-        '<div style="font-family:var(--font-ui);font-size:9px;color:rgba(255,255,255,0.4);margin-top:4px;">' + b.date + '</div>' +
-        '</div>';
-    }).join('');
-
-  overlay.classList.add('open');
-}
-
-function viewPastBulletin(idx) {
-  var history = JSON.parse(localStorage.getItem('condor_bulletin_history') || '[]');
-  if (!history[idx]) return;
-  closeMemberSheet();
-  sb.auth.getSession().then(function(res) {
-    var isAdmin = res.data.session && res.data.session.user.id === CONDOR_ADMIN_ID;
-    renderBulletin(history[idx], isAdmin);
-  });
 }
 </script>
 
