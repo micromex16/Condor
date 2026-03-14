@@ -2108,26 +2108,32 @@ body::before { display:none; }
    NASSAU STANDINGS — BENTO GRID
 ══════════════════════════════════════════ */
 .standings-inline {
-  display:grid; grid-template-columns:repeat(auto-fit, minmax(80px, 1fr));
-  gap:10px; padding:14px 0 6px;
+  display:flex; flex-direction:column; gap:8px;
+  padding:14px 0 6px;
 }
 .standings-inline:empty { padding:0; display:none; }
+.standings-row {
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(100px, 1fr));
+  gap:8px;
+}
 .standing-micro {
   display:flex; flex-direction:column; align-items:center; justify-content:center;
-  gap:4px; padding:14px 10px; border-radius:12px;
+  gap:4px; padding:10px 12px; border-radius:12px;
   font-family:var(--sans); font-size:10px; font-weight:600;
-  letter-spacing:.5px; white-space:nowrap;
+  letter-spacing:.5px; white-space:normal; text-align:center;
   border:none; background:#fff;
   color:rgba(27,58,45,.45);
   box-shadow:0 2px 12px rgba(0,0,0,.06);
-  min-height:56px;
+  min-height:72px;
 }
 .standing-micro .standing-label {
   font-size:8px; letter-spacing:2px; text-transform:uppercase;
   color:rgba(27,58,45,.4); font-weight:700;
+  line-height:1.3;
 }
 .standing-micro .standing-value {
-  font-size:18px; font-weight:700; color:var(--green-deep);
+  font-family:var(--serif); font-size:22px; font-style:italic;
+  font-weight:500; color:var(--green-deep); line-height:1.1;
 }
 .standing-micro.winning { background:rgba(196,164,86,.06); }
 .standing-micro.winning .standing-label { color:var(--gold-rule); }
@@ -9336,7 +9342,13 @@ function renderRound() {
 // ═══════════════════════════════════════════════════════════════════
 function renderStandingsStrip() {
   var strip = document.getElementById('standings-strip');
-  var pills = [];
+  var gameCells = [];
+  var moneyCells = [];
+  var extraCells = [];
+
+  function cell(label, value, cls) {
+    return '<div class="standing-micro '+cls+'"><span class="standing-label">'+label+'</span><span class="standing-value">'+value+'</span></div>';
+  }
 
   if (state.games.nassau) {
     var sides = [
@@ -9350,15 +9362,15 @@ function renderStandingsStrip() {
       var lname = !isEven ? getEntityFullLabel(item.s.leader) : null;
       var cls = isEven ? 'even' : 'winning';
       var valText = isEven ? 'Even' : lname + ' +' + item.s.holesUp;
-      pills.push('<div class="standing-micro '+cls+'">'+item.label+': '+valText+'</div>');
+      gameCells.push(cell(item.label, valText, cls));
     });
 
     state.nassau.presses.filter(function(p){return !p.resolved && !p.declined;}).forEach(function(p, i) {
-      pills.push('<div class="standing-micro" style="border-color:rgba(196,164,86,.4);color:var(--gold)">Press '+(i+1)+': '+(p.leader<0?'Even':'+'+p.holesUp)+'</div>');
+      gameCells.push(cell('Press '+(i+1), p.leader<0?'Even':'+'+p.holesUp, 'winning'));
     });
   }
 
-  // ── MATCH PLAY PILL ──
+  // ── MATCH PLAY ──
   if (state.games.matchplay && state.players.length >= 2) {
     var mpStake = parseFloat(state.stakes.matchplay)||0;
     if (mpStake > 0) {
@@ -9381,11 +9393,11 @@ function renderStandingsStrip() {
       else if (mpIsClosed) { mpValText = mpLeaderName + ' ' + mpUp + '&' + mpRemain; }
       else if (mpIsDormie) { mpValText = mpLeaderName + ' Dormie'; }
       else { mpValText = mpLeaderName + ' ' + mpUp + ' UP'; }
-      pills.push('<div class="standing-micro '+mpCls+'">Match: '+mpValText+'</div>');
+      gameCells.push(cell('Match', mpValText, mpCls));
     }
   }
 
-  // ── STROKE PLAY PILL ──
+  // ── STROKE PLAY ──
   if (state.games.stroke && state.players.length >= 2) {
     var spStake = parseFloat(state.stakes.stroke)||0;
     if (spStake > 0) {
@@ -9406,13 +9418,13 @@ function renderStandingsStrip() {
       var spLeaderName = spLeaderIdx >= 0 ? state.players[spLeaderIdx].name.split(' ')[0] : null;
       var spBy = spIsEven ? 0 : spTotals.sort(function(a,b){return a-b;})[1] - spMin;
       var spValText = spIsEven ? 'Tied' : spLeaderName + ' −' + spBy;
-      pills.push('<div class="standing-micro '+(spIsEven?'even':'winning')+'">Stroke: '+spValText+'</div>');
+      gameCells.push(cell('Stroke', spValText, spIsEven?'even':'winning'));
     }
   }
 
   if (state.games.skins) {
     var pot = state.skins.carryover + (parseFloat(state.stakes.skins)||0);
-    pills.push('<div class="standing-micro" style="color:var(--gold);border-color:rgba(196,164,86,.3)">Skins: $'+pot+'</div>');
+    extraCells.push(cell('Skins', '$'+pot, 'winning'));
   }
 
   if (state.games.wolf) {
@@ -9420,18 +9432,23 @@ function renderStandingsStrip() {
     var wolfIdx2 = getWolfIdx(state.currentHole);
     var wolfName = state.players[wolfIdx2].name.split(' ')[0];
     var wolfVal = ws2 ? ws2.decLabel : 'Deciding';
-    pills.push('<div class="standing-micro" style="color:var(--gold);border-color:rgba(196,164,86,.3)">\uD83D\uDC3A '+wolfName+': '+wolfVal+'</div>');
+    extraCells.push(cell('\uD83D\uDC3A Wolf', wolfName + ' · ' + wolfVal, 'winning'));
   }
 
-  // Running money micro-pills
+  // Running money — one cell per player
   var money = getRunningMoney();
   money.forEach(function(m, i) {
-    var sign = m > 0 ? '+' : '';
+    var sign = m > 0 ? '+' : m < 0 ? '\u2212' : '';
     var cls  = m > 0 ? 'winning' : m < 0 ? 'losing' : 'even';
-    pills.push('<div class="standing-micro '+cls+'">'+state.players[i].name.split(' ')[0]+': '+sign+'$'+Math.abs(m).toFixed(0)+'</div>');
+    moneyCells.push(cell(state.players[i].name.split(' ')[0], sign+'$'+Math.abs(m).toFixed(0), cls));
   });
 
-  strip.innerHTML = pills.join('');
+  // Build rows
+  var html = '';
+  if (gameCells.length) html += '<div class="standings-row">' + gameCells.join('') + '</div>';
+  if (moneyCells.length) html += '<div class="standings-row">' + moneyCells.join('') + '</div>';
+  if (extraCells.length) html += '<div class="standings-row">' + extraCells.join('') + '</div>';
+  strip.innerHTML = html;
 }
 
 // ═══════════════════════════════════════════════════════════════════
