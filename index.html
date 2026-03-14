@@ -4230,7 +4230,7 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
 
       <!-- Last round — single entry, not a list -->
       <div class="last-round-section">
-        <div class="last-round-eyebrow">Last Round</div>
+        <div class="last-round-eyebrow">Last Round <span style="float:right;font-family:var(--font-editorial,var(--serif));font-size:14px;font-style:italic;font-weight:400;color:rgba(198,164,106,0.7);cursor:pointer;letter-spacing:0" onclick="enterEngineFlow('screen-locker');openLocker()">All rounds</span></div>
         <div class="last-round-card">
           <div class="lrc-top">
             <div>
@@ -4739,8 +4739,8 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
 ════════════════════════════════════════════════ -->
 <div class="screen engine-screen hidden" id="screen-locker">
   <div class="header">
-    <button class="back-btn" onclick="openClubhouse()">← Back</button>
-    <div class="header-title">My Locker</div>
+    <button class="back-btn" onclick="exitEngineToShell('card')">← Back</button>
+    <div class="header-title">Round History</div>
   </div>
   <div class="body" style="padding:0">
     <div style="font-family:var(--sans);font-size:9px;font-weight:700;letter-spacing:3.5px;text-transform:uppercase;color:var(--green-augusta);padding:16px 16px 8px;">Round History</div>
