@@ -13155,7 +13155,7 @@ async function populateLastRound() {
   if (data.round_id) {
     const { data: partners } = await sb
       .from('round_players')
-      .select('players ( first_name, last_name )')
+      .select('player_id, players ( username )')
       .eq('round_id', data.round_id)
       .neq('player_id', session.user.id);
 
@@ -13164,8 +13164,7 @@ async function populateLastRound() {
       partnerEl.textContent = partners.map(function(p) {
         var pl = p.players;
         if (!pl) return '?';
-        if (pl.last_name) return pl.last_name;
-        if (pl.first_name) return pl.first_name;
+        if (pl.username) return pl.username;
         return '?';
       }).join(' \u00B7 ');
     } else if (partnerEl) {
