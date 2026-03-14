@@ -2142,6 +2142,28 @@ body::before { display:none; }
 .standing-micro.losing .standing-label { color:rgba(192,57,43,.5); }
 .standing-micro.even .standing-value { color:rgba(27,58,45,.35); }
 
+/* ── MERGED PLAYERS MONEY CELL ── */
+.sm-players-cell { width:100%; padding:10px 0 12px; }
+.sm-players-cell .standing-label { display:block; width:100%; text-align:center; margin-bottom:8px; }
+.sm-cols {
+  display:grid; grid-template-columns:repeat(4, 1fr); width:100%;
+}
+.sm-col {
+  display:flex; flex-direction:column; align-items:center; gap:4px;
+  padding:6px 4px; text-align:center;
+}
+.sm-col + .sm-col { border-left:1px solid rgba(27,58,45,.06); }
+.sm-name {
+  font-family:var(--sans); font-size:10px; font-weight:400;
+  color:rgba(27,58,45,.6); line-height:1.3;
+}
+.sm-money {
+  font-family:var(--sans); font-size:14px; font-weight:600; line-height:1;
+}
+.sm-money.sm-pos { color:var(--green-deep); }
+.sm-money.sm-neg { color:#c0392b; }
+.sm-money.sm-zero { color:rgba(27,58,45,.3); }
+
 /* Details drawer — light */
 .details-drawer-toggle {
   display:flex; align-items:center; justify-content:center;
@@ -9435,18 +9457,22 @@ function renderStandingsStrip() {
     extraCells.push(cell('\uD83D\uDC3A Wolf', wolfName + ' · ' + wolfVal, 'winning'));
   }
 
-  // Running money — one cell per player
+  // Running money — merged players cell with horizontal columns
   var money = getRunningMoney();
-  money.forEach(function(m, i) {
-    var sign = m > 0 ? '+' : m < 0 ? '\u2212' : '';
-    var cls  = m > 0 ? 'winning' : m < 0 ? 'losing' : 'even';
-    moneyCells.push(cell(state.players[i].name.split(' ')[0], sign+'$'+Math.abs(m).toFixed(0), cls));
-  });
+  var playersCell = '';
+  if (money.length) {
+    var cols = money.map(function(m, i) {
+      var sign = m > 0 ? '+' : m < 0 ? '\u2212' : '';
+      var valCls = m > 0 ? 'sm-pos' : m < 0 ? 'sm-neg' : 'sm-zero';
+      return '<div class="sm-col"><span class="sm-name">' + state.players[i].name.split(' ')[0] + '</span><span class="sm-money ' + valCls + '">' + sign + '$' + Math.abs(m).toFixed(0) + '</span></div>';
+    }).join('');
+    playersCell = '<div class="standing-micro sm-players-cell"><span class="standing-label">Players</span><div class="sm-cols">' + cols + '</div></div>';
+  }
 
   // Build rows
   var html = '';
   if (gameCells.length) html += '<div class="standings-row">' + gameCells.join('') + '</div>';
-  if (moneyCells.length) html += '<div class="standings-row">' + moneyCells.join('') + '</div>';
+  if (playersCell) html += '<div class="standings-row">' + playersCell + '</div>';
   if (extraCells.length) html += '<div class="standings-row">' + extraCells.join('') + '</div>';
   strip.innerHTML = html;
 }
