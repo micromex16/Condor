@@ -4228,27 +4228,11 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
         </button>
       </div>
 
-      <!-- Last round — single entry, not a list -->
+      <!-- Past Rounds -->
       <div class="last-round-section">
-        <div class="last-round-eyebrow">Last Round <span style="float:right;font-family:var(--font-editorial,var(--serif));font-size:14px;font-style:italic;font-weight:400;color:rgba(198,164,106,0.7);cursor:pointer;letter-spacing:0" onclick="enterEngineFlow('screen-locker');openLocker()">All rounds</span></div>
-        <div class="last-round-card">
-          <div class="lrc-top">
-            <div>
-              <span class="lrc-course">Augusta National</span>
-              <span class="lrc-meta">Nassau · Skins · March 8</span>
-            </div>
-            <div class="lrc-score">
-              <span class="lrc-score-num">−3</span>
-              <span class="lrc-winnings">+$120</span>
-            </div>
-          </div>
-          <div class="lrc-divider"></div>
-          <div class="lrc-players">
-            <span class="lrc-player">Whitmore</span>
-            <span class="lrc-player">Osei</span>
-            <span class="lrc-player">Harrington</span>
-            <span class="lrc-player">Aldridge</span>
-          </div>
+        <div class="last-round-eyebrow">Past Rounds</div>
+        <div id="past-rounds-list">
+          <div style="padding:20px;text-align:center;font-family:var(--sans);font-size:12px;color:rgba(0,0,0,0.35);">Loading rounds…</div>
         </div>
       </div>
 
@@ -5392,7 +5376,7 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
 ════════════════════════════════════════════════ -->
 <div class="screen engine-screen hidden" id="screen-scorecard">
   <div class="header">
-    <button class="back-btn" onclick="goTo(state.scorecardReturnTo||'screen-round')">← Back</button>
+    <button class="back-btn" onclick="closeScorecardBack()">← Back</button>
     <div class="header-title" id="sc-screen-title">Scorecard</div>
     <button onclick="downloadScorecard()" style="background:none;border:1px solid rgba(212,200,154,.2);color:rgba(212,200,154,.75);border-radius:8px;font-size:11px;padding:5px 10px;cursor:pointer;letter-spacing:1px;font-family:var(--sans);text-transform:uppercase">Save</button>
   </div>
@@ -10417,6 +10401,19 @@ function openScorecard(returnTo) {
   switchScTab('scores');
 }
 
+function closeScorecardBack() {
+  if (state.scorecardReturnTo === 'profile') {
+    // Restore original state and return to profile card shell
+    if (window._savedStateBeforeReview) {
+      Object.assign(state, window._savedStateBeforeReview);
+      window._savedStateBeforeReview = null;
+    }
+    exitEngineToShell('card');
+  } else {
+    goTo(state.scorecardReturnTo || 'screen-round');
+  }
+}
+
 function goTo(screenId) {
   _currentScreen = screenId;
   if (screenId === 'screen-round') _roundInProgress = true;
@@ -12951,8 +12948,8 @@ async function populateCondorCard() {
       document.getElementById('cc-avg-score').textContent = '—';
       document.getElementById('cc-season-net').textContent = '$0';
     }
-    // Populate the Last Round card on the Card tab
-    await populateLastRound();
+    // Populate the Past Rounds list on the Card tab
+    await populateRoundHistory();
   } catch (e) { console.error('Condor card populate error:', e); }
 }
 
@@ -13122,60 +13119,75 @@ function syncActiveRoundCard() {
 
 // ─── POPULATE LAST ROUND ───
 // Queries the most recent round for the logged-in user and populates the Card tab's Last Round section
-async function populateLastRound() {
-  const { data: { session } } = await sb.auth.getSession();
-  if (!session) return;
+async function populateRoundHistory() {
+  var container = document.getElementById('past-rounds-list');
+  if (!container) return;
 
-  // Step 1: Get the user's most recent round_player entry with round info
-  const { data, error } = await sb
-    .from('round_players')
-    .select('gross_score, money_result, finish_position, round_id, rounds ( course_name, played_at, games_played )')
-    .eq('player_id', session.user.id)
-    .order('created_at', { ascending: false })
-    .limit(1)
-    .maybeSingle();
+  try {
+    var rounds = await getMyRounds(10);
+    window._profileRounds = rounds;
 
-  if (error) { console.error('Last round query error:', error); return; }
-  if (!data) return;
-
-  var par = 72;
-  var diff = (data.gross_score || 0) - par;
-  var scoreStr = diff === 0 ? 'E' : (diff > 0 ? '+' + diff : diff);
-  var money = data.money_result || 0;
-  document.querySelector('.lrc-course').textContent =
-    data.rounds?.course_name || '';
-  document.querySelector('.lrc-score-num').textContent = scoreStr;
-  document.querySelector('.lrc-winnings').textContent =
-    money >= 0 ? '+$' + money : '\u2212$' + Math.abs(money);
-  document.querySelector('.lrc-meta').textContent =
-    (Array.isArray(data.rounds?.games_played) ? data.rounds.games_played.join(' \u00B7 ') : '') + ' \u00B7 ' +
-    new Date(data.rounds?.played_at).toLocaleDateString('en-US',
-      { month: 'short', day: 'numeric' });
-  document.querySelector('.lrc-score-num').style.color =
-    diff <= 0 ? 'var(--condor-green)' : 'var(--saddle-brown)';
-  document.querySelector('.lrc-winnings').style.color =
-    money >= 0 ? 'var(--condor-green)' : 'var(--saddle-brown)';
-
-  // Step 2: Get playing partners from same round (exclude current user)
-  if (data.round_id) {
-    const { data: partners } = await sb
-      .from('round_players')
-      .select('player_id, players ( username )')
-      .eq('round_id', data.round_id)
-      .neq('player_id', session.user.id);
-
-    var partnerEl = document.querySelector('.lrc-players');
-    if (partnerEl && partners && partners.length) {
-      partnerEl.textContent = partners.map(function(p) {
-        var pl = p.players;
-        if (!pl) return '?';
-        if (pl.username) return pl.username;
-        return '?';
-      }).join(' \u00B7 ');
-    } else if (partnerEl) {
-      partnerEl.textContent = '';
+    if (!rounds || rounds.length === 0) {
+      container.innerHTML = '<div style="padding:24px;text-align:center;font-family:var(--sans);font-size:12px;color:rgba(0,0,0,0.35);">No rounds yet</div>';
+      return;
     }
+
+    container.innerHTML = rounds.map(function(r, idx) {
+      var rd = r.rounds;
+      var par = 72;
+      var diff = r.to_par != null ? r.to_par : ((r.gross_score || 0) - par);
+      var scoreStr = diff === 0 ? 'E' : (diff > 0 ? '+' + diff : '' + diff);
+      var scoreColor = diff <= 0 ? 'var(--condor-green)' : 'var(--saddle-brown)';
+      var money = r.money_result || 0;
+      var moneyStr = money >= 0 ? '+$' + money : '\u2212$' + Math.abs(money);
+      var moneyColor = money >= 0 ? 'var(--condor-green)' : 'var(--saddle-brown)';
+      var course = rd?.course_name || '\u2014';
+      var games = Array.isArray(rd?.games_played) ? rd.games_played.join(' \u00B7 ') : '';
+      var dateStr = '';
+      if (rd?.played_at) {
+        dateStr = new Date(rd.played_at + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      }
+      var meta = [games, dateStr].filter(Boolean).join(' \u00B7 ');
+      var partners = '';
+      if (rd?.full_state?.players) {
+        partners = rd.full_state.players.slice(1).map(function(p) {
+          var name = p.name || '';
+          var parts = name.split(' ');
+          return parts.length >= 2 ? parts[parts.length - 1] : name;
+        }).join(' \u00B7 ');
+      }
+
+      return '<div class="last-round-card" onclick="openRoundScorecard(' + idx + ')" style="cursor:pointer;margin-bottom:10px;">' +
+        '<div class="lrc-top">' +
+          '<div>' +
+            '<span class="lrc-course">' + course + '</span>' +
+            '<span class="lrc-meta">' + meta + '</span>' +
+          '</div>' +
+          '<div class="lrc-score">' +
+            '<span class="lrc-score-num" style="color:' + scoreColor + '">' + scoreStr + '</span>' +
+            '<span class="lrc-winnings" style="color:' + moneyColor + '">' + moneyStr + '</span>' +
+          '</div>' +
+        '</div>' +
+        (partners ? '<div class="lrc-divider"></div><div class="lrc-players">' + partners + '</div>' : '') +
+      '</div>';
+    }).join('');
+  } catch (e) {
+    console.error('populateRoundHistory error:', e);
+    container.innerHTML = '<div style="padding:24px;text-align:center;font-family:var(--sans);font-size:12px;color:rgba(0,0,0,0.35);">Could not load rounds</div>';
   }
+}
+
+function openRoundScorecard(idx) {
+  var r = (window._profileRounds || [])[idx];
+  if (!r || !r.rounds || !r.rounds.full_state) {
+    showToast('Scorecard data not available', 'error');
+    return;
+  }
+  // Save current state so we can restore on back
+  window._savedStateBeforeReview = JSON.parse(JSON.stringify(state));
+  Object.assign(state, r.rounds.full_state);
+  document.getElementById('engine-overlay').classList.add('visible');
+  openScorecard('profile');
 }
 
 // Fire after engine auth completes
