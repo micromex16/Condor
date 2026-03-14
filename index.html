@@ -13009,8 +13009,8 @@ function makeCardFieldEditable(el) {
   input.value = displayValue;
 
   if (field === 'hdcp_index') {
-    input.type = 'number'; input.min = '0'; input.max = '54';
-    input.step = '0.1'; input.inputMode = 'decimal';
+    input.type = 'text'; input.inputMode = 'decimal';
+    input.pattern = '[0-9.]*';
   } else {
     input.type = 'text';
     input.maxLength = field === 'username' ? 40 : 80;
@@ -13059,13 +13059,14 @@ async function saveCardField(el, input, field) {
     var sess = await sb.auth.getSession();
     var session = sess.data.session;
     if (!session) return;
-    var updates = { id: session.user.id };
+    var updates = {};
     if (field === 'hdcp_index') {
       updates.hdcp_index = newValue ? parseFloat(newValue) : null;
     } else {
       updates[field] = newValue || null;
     }
-    var result = await sb.from('players').upsert(updates, { onConflict: 'id' });
+    var result = await sb.from('players').update(updates).eq('id', session.user.id);
+    console.log('Card save:', field, '=', newValue, result.error ? 'ERROR: ' + result.error.message : 'OK');
     if (result.error) throw result.error;
   } catch (e) {
     console.error('Save field failed:', e);
