@@ -1819,11 +1819,11 @@ body::before { display:none; }
 .hole-dot { width:26px; height:26px; border-radius:6px; display:flex; align-items:center;
   justify-content:center; font-family:var(--sans); font-size:11px; font-weight:500;
   cursor:pointer; transition:all .14s; flex-shrink:0; color:rgba(255,255,255,.3); }
-.hole-dot.current { background:var(--gold-rule); color:var(--green-deep); font-weight:600; }
-.hole-dot.complete-good { background:rgba(196,164,86,.15); color:var(--gold-rule); border:1px solid rgba(196,164,86,.2); }
-.hole-dot.complete-par  { background:rgba(255,255,255,.08); color:rgba(255,255,255,.5); }
-.hole-dot.complete-bad  { background:rgba(192,57,43,.12); color:#c0392b; border:1px solid rgba(192,57,43,.2); }
-.hole-dot.future        { background:transparent; color:rgba(255,255,255,.2); border:1px solid rgba(255,255,255,.08); }
+.hole-dot.current { background:var(--gold-rule); color:#fff; font-weight:600; }
+.hole-dot.complete-good { background:rgba(196,164,86,.12); color:var(--gold-rule); border:1px solid rgba(196,164,86,.2); }
+.hole-dot.complete-par  { background:rgba(27,58,45,.06); color:rgba(27,58,45,.5); }
+.hole-dot.complete-bad  { background:rgba(192,57,43,.08); color:#c0392b; border:1px solid rgba(192,57,43,.15); }
+.hole-dot.future        { background:transparent; color:rgba(27,58,45,.15); border:1px solid rgba(27,58,45,.08); }
 
 /* ══════════════════════════════════════════
    SCORE ENTRY — The heart of it
@@ -1835,12 +1835,12 @@ body::before { display:none; }
 .score-grid { display:flex; flex-direction:column; gap:12px; }
 .score-row {
   position:relative;
-  background:var(--green-augusta);
+  background:#fff;
   border:none;
   border-radius:12px;
   overflow:hidden;
   display:flex; align-items:stretch;
-  box-shadow:0 2px 8px rgba(0,0,0,.15);
+  box-shadow:0 2px 12px rgba(0,0,0,.06);
   transition:box-shadow .15s;
 }
 /* Remove cream foil-stamp and inner highlight */
@@ -1852,21 +1852,21 @@ body::before { display:none; }
   display:flex; align-items:center; justify-content:center;
   width:54px; min-height:60px;
   background:transparent; border:none; cursor:pointer;
-  color:rgba(255,255,255,.5); font-size:24px;
+  color:rgba(27,58,45,.35); font-size:24px;
   font-family:var(--sans); font-weight:300;
   transition:background .1s, color .1s;
   -webkit-tap-highlight-color:transparent;
   position:relative; z-index:1;
 }
-.paddle-minus { border-right:1px solid rgba(255,255,255,.06); }
-.paddle-plus  { border-left:1px solid rgba(255,255,255,.06); }
-.paddle-minus:active { background:rgba(192,57,43,.12); color:#e74c3c; }
-.paddle-plus:active  { background:rgba(196,164,86,.1); color:var(--gold-rule); }
+.paddle-minus { border-right:1px solid rgba(27,58,45,.06); }
+.paddle-plus  { border-left:1px solid rgba(27,58,45,.06); }
+.paddle-minus:active { background:rgba(192,57,43,.08); color:#e74c3c; }
+.paddle-plus:active  { background:rgba(196,164,86,.08); color:var(--gold-rule); }
 .paddle-icon {
   display:flex; align-items:center; justify-content:center;
   width:36px; height:36px; border-radius:50%;
   border:none;
-  background:rgba(255,255,255,.08);
+  background:rgba(27,58,45,.06);
   font-size:20px; line-height:1;
   color:inherit;
 }
@@ -1882,27 +1882,27 @@ body::before { display:none; }
 .score-hero { display:flex; flex-direction:column; align-items:center; min-width:52px; }
 .score-hero-val {
   font-family:var(--serif); font-size:56px; font-weight:500;
-  line-height:1; color:#fff;
+  line-height:1; color:var(--green-deep);
   transition:opacity .15s ease;
 }
 .score-hero-label {
   font-family:var(--sans); font-size:7px; font-weight:600;
   letter-spacing:2.5px; text-transform:uppercase;
-  color:rgba(255,255,255,.35); margin-top:2px;
+  color:rgba(27,58,45,.3); margin-top:2px;
   transition:opacity .15s ease;
 }
-/* Score coloring — dark surface */
+/* Score coloring — light surface */
 .score-hero-val.birdie { color:var(--gold-rule); }
 .score-hero-val.eagle  { color:var(--gold-rule); font-weight:700; }
 .score-hero-val.bogey  { color:#c0392b; }
 .score-hero-val.double { color:#c0392b; }
-.score-hero-val.at-par { color:#fff; }
+.score-hero-val.at-par { color:var(--green-deep); }
 /* Score label coloring */
 .score-row .score-hero-label.birdie-label,
 .score-row .score-hero-label.eagle-label { color:var(--gold-rule); }
 .score-row .score-hero-label.bogey-label,
 .score-row .score-hero-label.double-label { color:rgba(192,57,43,.7); }
-.score-row .score-hero-label.par-label { color:rgba(255,255,255,.35); }
+.score-row .score-hero-label.par-label { color:rgba(27,58,45,.3); }
 /* Pop animation */
 .score-hero-val.pop { animation:pop .18s ease; }
 
@@ -1911,11 +1911,11 @@ body::before { display:none; }
 .score-player-line { display:flex; align-items:center; gap:4px; flex-wrap:wrap; }
 .score-player-name {
   font-family:var(--serif); font-size:14px; font-weight:500;
-  color:#fff; letter-spacing:.1px;
+  color:var(--green-deep); letter-spacing:.1px;
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
 }
 .score-meta {
-  font-family:var(--sans); font-size:10px; color:rgba(255,255,255,.4);
+  font-family:var(--sans); font-size:10px; color:rgba(27,58,45,.4);
   margin-top:2px; letter-spacing:.3px;
 }
 
@@ -1925,7 +1925,7 @@ body::before { display:none; }
   font-family:var(--sans); font-size:10px; font-weight:600;
   color:var(--gold-rule); letter-spacing:.3px; margin-left:6px;
   padding:1px 6px; border-radius:8px;
-  background:rgba(196,164,86,.12); border:1px solid rgba(196,164,86,.2);
+  background:rgba(196,164,86,.08); border:1px solid rgba(196,164,86,.15);
 }
 .score-pops-pip {
   width:5px; height:5px; border-radius:50%; background:var(--gold-rule);
@@ -1935,14 +1935,13 @@ body::before { display:none; }
 .score-money {
   font-family:var(--sans); font-size:11px; font-weight:500;
   margin-top:3px; letter-spacing:.3px;
-  color:rgba(255,255,255,.5);
+  color:rgba(27,58,45,.4);
 }
 .score-money.positive { color:var(--gold-rule); }
 .score-money.negative { color:#c0392b; }
-.score-money.neutral  { color:rgba(255,255,255,.3); }
+.score-money.neutral  { color:rgba(27,58,45,.25); }
 .score-money.leader {
   color:var(--gold-rule); font-weight:700;
-  text-shadow:0 0 8px rgba(196,164,86,.2);
 }
 
 /* Handicap dots (legacy compat) */
@@ -1952,19 +1951,19 @@ body::before { display:none; }
 /* ══════════════════════════════════════════
    HOLE OVERVIEW — Caddie notes (dark)
 ══════════════════════════════════════════ */
-.hole-overview { background:var(--green-augusta); border:none;
+.hole-overview { background:#fff; border:none;
   border-radius:10px; padding:14px 16px; margin-bottom:12px;
-  border-left:3px solid var(--gold-rule); }
+  border-left:3px solid var(--gold-rule); box-shadow:0 2px 12px rgba(0,0,0,.06); }
 .hole-overview-title { font-family:var(--sans); font-size:10px; font-weight:500;
   letter-spacing:3px; text-transform:uppercase; color:var(--gold-rule); margin-bottom:8px; }
 .hole-overview-desc { font-family:var(--serif); font-size:14px; font-style:italic;
-  color:rgba(255,255,255,.55); line-height:1.65; font-weight:400; }
+  color:rgba(27,58,45,.55); line-height:1.65; font-weight:400; }
 .hole-overview-stats { display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; }
-.hole-stat { text-align:center; padding:6px 12px; background:rgba(255,255,255,.05);
-  border:1px solid rgba(255,255,255,.08); border-radius:6px; }
-.hole-stat-val { font-family:var(--serif); font-size:18px; font-weight:500; color:#fff; }
+.hole-stat { text-align:center; padding:6px 12px; background:rgba(27,58,45,.03);
+  border:1px solid rgba(27,58,45,.08); border-radius:6px; }
+.hole-stat-val { font-family:var(--serif); font-size:18px; font-weight:500; color:var(--green-deep); }
 .hole-stat-label { font-family:var(--sans); font-size:9px; letter-spacing:1.5px;
-  text-transform:uppercase; color:rgba(255,255,255,.35); margin-top:2px; }
+  text-transform:uppercase; color:rgba(27,58,45,.35); margin-top:2px; }
 
 /* ══════════════════════════════════════════
    PRESS ALERT — dark surface
@@ -1983,8 +1982,8 @@ body::before { display:none; }
 .press-btn:active { transform:scale(.96); }
 
 /* ── MANUAL PRESS BTN ── */
-.manual-press-btn { background:transparent; border:1px solid rgba(196,164,86,.35);
-  color:rgba(212,200,154,.75); border-radius:8px; padding:6px 12px; font-family:var(--sans);
+.manual-press-btn { background:transparent; border:1px solid rgba(255,255,255,.3);
+  color:rgba(255,255,255,.7); border-radius:8px; padding:6px 12px; font-family:var(--sans);
   font-size:10px; font-weight:500; cursor:pointer; transition:all .12s;
   letter-spacing:1.5px; text-transform:uppercase; }
 
@@ -1998,7 +1997,7 @@ body::before { display:none; }
   flex-shrink:0; box-sizing:border-box;
 }
 .hole-nav-arrow {
-  background:none; border:none; color:rgba(255,255,255,.35);
+  background:none; border:none; color:rgba(255,255,255,.5);
   font-size:28px; padding:4px 6px; cursor:pointer; font-family:var(--sans);
   line-height:1; -webkit-tap-highlight-color:transparent;
   flex-shrink:0;
@@ -2008,7 +2007,7 @@ body::before { display:none; }
 .hole-header-center {
   display:flex; align-items:center; gap:10px; flex:1; cursor:pointer;
   -webkit-tap-highlight-color:transparent;
-  background:var(--green-augusta); border-radius:12px;
+  background:rgba(255,255,255,.08); border-radius:12px;
   padding:8px 14px;
 }
 .hole-header-hole {
@@ -2022,39 +2021,39 @@ body::before { display:none; }
   letter-spacing:1px; text-transform:uppercase; font-weight:500;
 }
 .hole-header-yards {
-  font-family:var(--sans); font-size:10px; color:rgba(255,255,255,.5);
+  font-family:var(--sans); font-size:10px; color:rgba(255,255,255,.6);
 }
 .hole-header-hcp {
-  font-family:var(--sans); font-size:9px; color:rgba(255,255,255,.35);
+  font-family:var(--sans); font-size:9px; color:rgba(255,255,255,.45);
   letter-spacing:1px; text-transform:uppercase;
 }
 .hole-header-right {
   display:flex; align-items:center; gap:6px;
-  background:var(--green-augusta); border-radius:12px;
+  background:rgba(255,255,255,.08); border-radius:12px;
   padding:8px 12px; margin-left:10px;
 }
 .hole-header-gear {
-  background:none; border:none; color:rgba(255,255,255,.3);
+  background:none; border:none; color:rgba(255,255,255,.4);
   font-size:16px; padding:4px 6px; cursor:pointer;
 }
-.hole-header-gear:active { color:rgba(255,255,255,.7); }
+.hole-header-gear:active { color:rgba(255,255,255,.8); }
 
-/* Progress bar — dark */
+/* Progress bar — light */
 .hole-progress-bar { display:flex; height:3px; flex-shrink:0; }
 .hole-progress-seg { flex:1; cursor:pointer; transition:background .2s; }
 .hole-progress-seg.good { background:var(--green-augusta); }
-.hole-progress-seg.par { background:rgba(255,255,255,.12); }
+.hole-progress-seg.par { background:rgba(27,58,45,.12); }
 .hole-progress-seg.bad { background:#c0392b; }
 .hole-progress-seg.current { background:var(--gold-rule); }
-.hole-progress-seg.future { background:rgba(255,255,255,.04); }
+.hole-progress-seg.future { background:rgba(27,58,45,.04); }
 
-/* Hole dots drawer — dark */
-.hole-dots-drawer { background:var(--green-deep); border-bottom:1px solid rgba(255,255,255,.06); }
+/* Hole dots drawer — light */
+.hole-dots-drawer { background:#F8F8F8; border-bottom:1px solid rgba(27,58,45,.08); }
 .hole-dots-drawer .hole-dots { background:transparent; border-bottom:none; }
 
-/* Press alert inline — dark */
+/* Press alert inline — light */
 .press-alert-inline {
-  background:rgba(196,164,86,.1); border:1px solid rgba(196,164,86,.2);
+  background:rgba(196,164,86,.08); border:1px solid rgba(196,164,86,.2);
   border-radius:10px; padding:8px 12px; margin-bottom:8px;
   display:flex; align-items:center; gap:8px;
 }
@@ -2073,29 +2072,30 @@ body::before { display:none; }
   gap:2px; padding:6px 12px; border-radius:10px;
   font-family:var(--sans); font-size:10px; font-weight:600;
   letter-spacing:.5px; white-space:nowrap; flex-shrink:0;
-  border:none; background:var(--green-augusta);
-  color:rgba(255,255,255,.4);
+  border:none; background:#fff;
+  color:rgba(27,58,45,.35);
+  box-shadow:0 1px 6px rgba(0,0,0,.04);
 }
 .standing-micro .standing-label {
   font-size:7px; letter-spacing:2px; text-transform:uppercase;
-  color:rgba(255,255,255,.4);
+  color:rgba(27,58,45,.35);
 }
 .standing-micro .standing-value {
-  font-size:13px; color:#fff;
+  font-size:13px; color:var(--green-deep);
 }
 .standing-micro.winning { color:var(--gold-rule); }
 .standing-micro.winning .standing-value { color:var(--gold-rule); }
 .standing-micro.losing { color:#c0392b; }
 .standing-micro.losing .standing-value { color:#c0392b; }
-.standing-micro.even { color:rgba(255,255,255,.35); }
+.standing-micro.even { color:rgba(27,58,45,.25); }
 
-/* Details drawer — dark */
+/* Details drawer — light */
 .details-drawer-toggle {
   display:flex; align-items:center; justify-content:center;
   padding:8px; cursor:pointer; gap:6px;
   font-family:var(--sans); font-size:9px; font-weight:700;
-  letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,.3);
-  border-top:1px solid rgba(255,255,255,.06); margin-top:8px;
+  letter-spacing:2px; text-transform:uppercase; color:rgba(27,58,45,.3);
+  border-top:1px solid rgba(27,58,45,.06); margin-top:8px;
   -webkit-tap-highlight-color:transparent;
 }
 .details-drawer-toggle .chevron {
@@ -2112,13 +2112,13 @@ body::before { display:none; }
 ══════════════════════════════════════════ */
 .bottom-nav-round {
   flex-shrink:0; padding:8px 12px calc(env(safe-area-inset-bottom, 8px) + 8px);
-  background:var(--green-deep); border-top:none;
-  box-shadow:0 -1px 0 rgba(255,255,255,.06);
+  background:#fff; border-top:none;
+  box-shadow:0 -1px 0 rgba(0,0,0,.06);
   display:flex; align-items:center; gap:8px;
 }
 .btn-next-hole {
   flex:1; padding:14px; background:transparent;
-  border:none; border-radius:0; color:var(--gold-rule);
+  border:none; border-radius:0; color:var(--green-deep);
   font-family:var(--sans); font-size:13px; font-weight:700;
   letter-spacing:1.5px; text-transform:uppercase; cursor:pointer;
   transition:opacity .1s; text-align:center;
@@ -2131,7 +2131,7 @@ body::before { display:none; }
 }
 .bottom-action-label {
   font-family:var(--sans); font-size:9px; font-weight:700;
-  letter-spacing:1.5px; text-transform:uppercase; color:rgba(255,255,255,.5);
+  letter-spacing:1.5px; text-transform:uppercase; color:rgba(27,58,45,.4);
 }
 
 /* ── SIDE BET MODAL ── */
@@ -2174,25 +2174,25 @@ body::before { display:none; }
 .sidebet-note-input:focus { border-color:var(--gold); }
 
 /* ── SIDE BET PILLS (in Running Money) ── */
-.sidebet-pills { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; padding-top:10px; border-top:1px solid var(--rule); }
+.sidebet-pills { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; padding-top:10px; border-top:1px solid rgba(27,58,45,.08); }
 .sidebet-pill { font-family:var(--sans); font-size:11px; padding:5px 10px; border-radius:20px;
-  border:1px solid var(--rule); background:var(--cream-card); color:var(--ink-dim);
+  border:1px solid rgba(27,58,45,.1); background:#fff; color:rgba(27,58,45,.5);
   cursor:pointer; white-space:nowrap; transition:all .15s; letter-spacing:.2px; }
 .sidebet-pill:active { transform:scale(.96); }
-.sidebet-pill.unresolved { border-color:rgba(138,109,47,.4); color:var(--gold);
+.sidebet-pill.unresolved { border-color:rgba(196,164,86,.4); color:var(--gold-rule);
   animation:pulse-gold 2s ease-in-out infinite; }
-.sidebet-pill.resolved { border-color:rgba(46,97,71,.3); background:var(--green-pale); color:var(--green-deep); }
+.sidebet-pill.resolved { border-color:rgba(27,58,45,.15); background:rgba(27,58,45,.04); color:var(--green-deep); }
 @keyframes pulse-gold { 0%,100%{box-shadow:0 0 0 0 rgba(138,109,47,0)} 50%{box-shadow:0 0 0 3px rgba(138,109,47,.15)} }
 
 /* ── RUNNING MONEY ── */
 .money-row { display:flex; justify-content:space-between; align-items:center;
-  padding:10px 0; border-bottom:1px solid var(--rule); }
+  padding:10px 0; border-bottom:1px solid rgba(27,58,45,.06); }
 .money-row:last-child { border-bottom:none; }
-.money-label { font-family:var(--serif); font-size:14px; color:var(--ink); font-weight:500; }
+.money-label { font-family:var(--serif); font-size:14px; color:var(--green-deep); font-weight:500; }
 .money-amount { font-family:var(--sans); font-size:14px; font-weight:600; }
-.money-amount.positive { color:var(--green-augusta); }
-.money-amount.negative { color:var(--score-bogey); }
-.money-amount.neutral  { color:var(--ink-muted); }
+.money-amount.positive { color:var(--gold-rule); }
+.money-amount.negative { color:#c0392b; }
+.money-amount.neutral  { color:rgba(27,58,45,.25); }
 
 /* ── BOTTOM NAV ── */
 .bottom-nav { flex-shrink:0; padding:10px 16px env(safe-area-inset-bottom, 12px);
@@ -2560,17 +2560,17 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
   box-shadow:0 -4px 32px rgba(15,31,20,.35);
 }
 .modal-handle {
-  width:36px; height:4px; background:rgba(138,109,47,.35); border-radius:2px;
+  width:36px; height:4px; background:rgba(27,58,45,.15); border-radius:2px;
   margin:12px auto 4px;
 }
 .modal-title {
   font-family:var(--serif); font-size:19px; font-weight:600;
-  color:var(--ink); padding:8px 20px 2px; letter-spacing:.3px;
+  color:var(--green-deep); padding:8px 20px 2px; letter-spacing:.3px;
 }
 .modal-subtitle {
-  font-family:var(--sans); font-size:11px; color:var(--ink-muted);
+  font-family:var(--sans); font-size:11px; color:rgba(27,58,45,.4);
   padding:4px 20px 12px; letter-spacing:.3px;
-  border-bottom:1px solid var(--rule);
+  border-bottom:1px solid rgba(27,58,45,.06);
 }
 .modal-row {
   display:flex; align-items:center; gap:12px; padding:14px 20px;
@@ -2685,46 +2685,47 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
 }
 .player-search-overlay.open { display:flex; }
 .player-search-sheet {
-  width:100%; background:var(--cream); border-radius:12px 12px 0 0;
+  width:100%; background:#fff; border-radius:12px 12px 0 0;
   overflow:hidden; animation:slideUp .22s ease;
-  max-height:78vh; display:flex; flex-direction:column;
+  max-height:85vh; display:flex; flex-direction:column;
   box-shadow:0 -4px 32px rgba(15,31,20,.35);
 }
 .player-search-input-wrap {
-  padding:16px 16px 10px; border-bottom:1px solid var(--rule);
-  background:var(--cream);
+  padding:16px 16px 10px; border-bottom:1px solid rgba(27,58,45,.08);
+  background:#fff; position:sticky; top:0; z-index:1;
 }
 .player-search-input {
   width:100%; box-sizing:border-box;
-  padding:10px 14px; border:1px solid var(--rule); border-radius:8px;
-  font-family:var(--sans); font-size:14px; background:var(--cream-card);
-  color:var(--ink); outline:none;
+  padding:12px 14px; border:1px solid rgba(27,58,45,.12); border-radius:10px;
+  font-family:var(--sans); font-size:16px; background:#F8F8F8;
+  color:var(--green-deep); outline:none;
+  -webkit-appearance:none;
 }
-.player-search-input:focus { border-color:var(--gold); }
-.player-search-results { overflow-y:auto; flex:1; }
+.player-search-input:focus { border-color:var(--gold-rule); }
+.player-search-results { overflow-y:auto; flex:1; -webkit-overflow-scrolling:touch; }
 .player-search-row {
   display:flex; align-items:center; gap:12px;
-  padding:13px 16px; border-bottom:1px solid var(--rule);
-  cursor:pointer; transition:background .1s; background:var(--cream-card);
+  padding:14px 16px; border-bottom:1px solid rgba(27,58,45,.06);
+  cursor:pointer; transition:background .1s; background:#fff;
 }
-.player-search-row:active { background:var(--green-pale); }
+.player-search-row:active { background:rgba(27,58,45,.04); }
 .player-search-av {
-  width:36px; height:36px; border-radius:50%; flex-shrink:0;
-  background:rgba(138,109,47,.12); border:1px solid rgba(196,164,86,.3);
+  width:40px; height:40px; border-radius:50%; flex-shrink:0;
+  background:rgba(27,58,45,.06); border:none;
   display:flex; align-items:center; justify-content:center;
-  font-family:var(--serif); font-size:14px; font-weight:600; color:var(--gold);
+  font-family:var(--serif); font-size:14px; font-weight:600; color:var(--green-deep);
 }
-.player-search-name { font-family:var(--serif); font-size:15px; font-weight:600; color:var(--ink); }
-.player-search-meta { font-family:var(--sans); font-size:11px; color:var(--ink-muted); margin-top:1px; }
+.player-search-name { font-family:var(--serif); font-size:15px; font-weight:600; color:var(--green-deep); }
+.player-search-meta { font-family:var(--sans); font-size:11px; color:rgba(27,58,45,.4); margin-top:1px; }
 .player-search-friend-badge {
   margin-left:auto; font-family:var(--sans); font-size:9px; font-weight:700;
-  letter-spacing:1.5px; text-transform:uppercase; color:var(--gold);
-  border:1px solid rgba(196,164,86,.4); border-radius:10px; padding:2px 7px;
+  letter-spacing:1.5px; text-transform:uppercase; color:var(--gold-rule);
+  border:1px solid rgba(196,164,86,.3); border-radius:10px; padding:2px 7px;
   flex-shrink:0;
 }
 .player-search-empty {
   padding:32px 20px; text-align:center;
-  font-family:var(--sans); font-size:13px; color:var(--ink-muted);
+  font-family:var(--sans); font-size:13px; color:rgba(27,58,45,.35);
 }
 /* ── PROFILE SETUP MODAL ── */
 .profile-setup-overlay {
@@ -3521,16 +3522,16 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
   color: var(--saddle-brown);
 }
 
-/* ── screen-round dark surface — override condor design system ── */
-#screen-round { background:var(--green-deep); }
-#screen-round .body { background:var(--green-deep); color:#fff; }
+/* ── screen-round light surface — white with green accents ── */
+#screen-round { background:#F8F8F8; }
+#screen-round .body { background:#F8F8F8; color:var(--green-deep); }
 #screen-round .score-hero-val.birdie,
 #screen-round .score-hero-val.eagle { color:var(--gold-rule); }
-#screen-round .score-hero-val.at-par { color:#fff; }
+#screen-round .score-hero-val.at-par { color:var(--green-deep); }
 #screen-round .score-hero-val.bogey,
 #screen-round .score-hero-val.double { color:#c0392b; }
-#screen-round .score-player-name { color:#fff; }
-#screen-round .card { background:var(--green-augusta); border:none; color:rgba(255,255,255,.55); }
+#screen-round .score-player-name { color:var(--green-deep); }
+#screen-round .card { background:#fff; border:none; color:rgba(27,58,45,.55); box-shadow:0 2px 12px rgba(0,0,0,.06); }
 
 /* ── screen-settlement ── */
 #screen-settlement .debt-amount {
@@ -4178,7 +4179,7 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
       </div>
 
       <!-- ACTIVE ROUND -->
-      <div class="active-round-card">
+      <div class="active-round-card" onclick="if(_roundInProgress && state.currentHole > 0){ goTo('screen-round'); renderRound(); }">
         <div class="arc-eyebrow">Round In Progress · Nassau Active</div>
         <div class="arc-course">Augusta National GC</div>
         <div class="arc-progress">
@@ -5237,10 +5238,10 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
     <div class="press-alert-inline" id="press-alert" style="display:none">
       <div style="flex:1;display:flex;align-items:center;gap:8px">
         <span style="font-family:var(--serif);font-weight:600;color:var(--gold);font-style:italic;font-size:13px">Press</span>
-        <span class="press-alert-text" id="press-alert-text" style="font-family:var(--sans);font-size:12px;color:var(--ink)">Press available</span>
+        <span class="press-alert-text" id="press-alert-text" style="font-family:var(--sans);font-size:12px;color:var(--green-deep)">Press available</span>
       </div>
       <button class="press-btn" onclick="acceptPress()" style="padding:5px 12px;font-size:11px">Press</button>
-      <button class="press-btn" onclick="declinePress()" style="background:var(--ink-muted);margin-left:4px;padding:5px 10px;font-size:11px">Skip</button>
+      <button class="press-btn" onclick="declinePress()" style="background:rgba(27,58,45,.2);margin-left:4px;padding:5px 10px;font-size:11px">Skip</button>
     </div>
 
     <!-- Score grid (primary content) -->
@@ -5257,14 +5258,14 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
     <div class="details-drawer-body" id="details-drawer-body">
 
       <div id="side-games-section" style="display:none">
-        <div style="font-family:var(--sans);font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:10px;padding-top:8px">Side Games — Hole <span id="sg-hole-label">1</span></div>
+        <div style="font-family:var(--sans);font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:rgba(27,58,45,.35);margin-bottom:10px;padding-top:8px">Side Games — Hole <span id="sg-hole-label">1</span></div>
         <div class="card" style="padding:12px 16px">
           <div id="side-games-grid"></div>
         </div>
       </div>
 
       <div style="display:flex;align-items:center;justify-content:space-between;margin:12px 0 8px">
-        <div style="font-family:var(--sans);font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.4)">Running Money</div>
+        <div style="font-family:var(--sans);font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:rgba(27,58,45,.35)">Running Money</div>
         <button onclick="addHoleSideWager()" style="font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);background:none;border:1px solid rgba(181,154,99,0.3);border-radius:8px;padding:4px 10px;cursor:pointer">+ Side Bet</button>
       </div>
       <div class="card" style="padding:12px 16px">
@@ -7734,8 +7735,8 @@ function openPlayerSearch() {
     const input = document.getElementById('player-search-input');
     if (input) { input.value = ''; input.focus(); }
     document.getElementById('player-search-results').innerHTML =
-      '<div class="player-search-empty">Start typing to search members</div>';
-  }, 80);
+      '<div class="player-search-empty">Type a name to search members or add a guest</div>';
+  }, 150);
 }
 
 function closePlayerSearch(e) {
@@ -7789,8 +7790,8 @@ function renderPlayerSearchResults(players, query) {
   // Always show "Add as Guest" row at bottom
   const guestName = query.charAt(0).toUpperCase() + query.slice(1);
   html += `<div class="player-search-row" onclick="addSearchedPlayer(null,'${guestName.replace(/'/g,"\\'")}',0,true)"
-    style="opacity:.8">
-    <div class="player-search-av" style="font-size:18px;background:none;border:1px dashed rgba(196,164,86,.35);">+</div>
+    style="background:rgba(27,58,45,.02)">
+    <div class="player-search-av" style="font-size:18px;background:none;border:1px dashed rgba(27,58,45,.15);color:var(--green-deep)">+</div>
     <div style="flex:1">
       <div class="player-search-name">Add "${guestName}" as Guest</div>
       <div class="player-search-meta">Will not be linked to a Condor account</div>
