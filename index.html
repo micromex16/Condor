@@ -13062,6 +13062,9 @@ async function saveCardField(el, input, field) {
     var updates = {};
     if (field === 'hdcp_index') {
       updates.hdcp_index = newValue ? parseFloat(newValue) : null;
+    } else if (field === 'username') {
+      if (!newValue) return; // username cannot be empty
+      updates.username = newValue;
     } else {
       updates[field] = newValue || null;
     }
