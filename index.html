@@ -5831,7 +5831,7 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
 <script>
 (async () => {
   const { data: { session } } = await sb.auth.getSession();
-  if (!session) { /* BYPASS: window.location.replace('login.html'); return; */ }
+  if (!session) { window.location.replace('login.html'); return; }
 
   // Check if user has set up their profile yet
   // Use maybeSingle() instead of single() so we get null instead of 406 when no row exists
