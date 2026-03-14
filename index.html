@@ -3732,6 +3732,320 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
   border-color: rgba(28,59,42,0.15);
   border-top-color: var(--condor-green);
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   CONDOR RESKIN — screen-games
+   Per approved Screen 3 design spec. Visual overrides only.
+═══════════════════════════════════════════════════════════════ */
+
+/* ── Background & body ── */
+#screen-games {
+  background: var(--vintage-cream) !important;
+}
+#screen-games .body {
+  background: var(--vintage-cream);
+  padding: 8px 22px 24px;
+}
+
+/* ── Header ── */
+#screen-games .header {
+  background: var(--condor-green);
+  padding: 52px 22px 18px;
+}
+#screen-games .header .back-btn {
+  color: var(--antique-gold);
+}
+#screen-games .header .header-title {
+  color: var(--antique-gold);
+  font-family: var(--font-display);
+  font-size: 16px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+/* ── Category headers ── */
+#screen-games .game-category {
+  margin-bottom: 20px;
+}
+#screen-games .game-category-header {
+  padding: 14px 0 8px;
+  background: transparent;
+  border: none;
+}
+#screen-games .game-category-header:active {
+  background: transparent;
+}
+#screen-games .game-category-title {
+  font-family: var(--font-display) !important;
+  font-size: 11px !important;
+  font-weight: 600;
+  letter-spacing: 3.5px;
+  text-transform: uppercase;
+  color: var(--condor-green) !important;
+}
+#screen-games .game-category-chevron {
+  color: var(--condor-green);
+  opacity: 0.5;
+}
+
+/* ── Game toggle cards ── */
+#screen-games .game-toggle {
+  background: #fff;
+  border: none;
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin-bottom: 0;
+  box-shadow: 0 1px 6px rgba(28,59,42,0.07), 0 1px 2px rgba(0,0,0,0.04);
+  transition: box-shadow 0.15s;
+}
+#screen-games .game-toggle.active {
+  background: #fff;
+  border: none;
+  border-radius: 14px 14px 0 0;
+  box-shadow: 0 1px 6px rgba(28,59,42,0.07), 0 1px 2px rgba(0,0,0,0.04);
+}
+
+/* ── Game name & description ── */
+#screen-games .game-name {
+  font-family: var(--font-editorial);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--scorecard-black);
+  letter-spacing: 0.1px;
+}
+#screen-games .game-desc {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  color: rgba(28,59,42,0.50);
+  margin-top: 2px;
+}
+
+/* ── Game icon letter ── */
+#screen-games .game-icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(28,59,42,0.06);
+  font-family: var(--font-editorial) !important;
+  font-size: 16px !important;
+  font-weight: 600;
+  font-style: italic;
+  color: var(--condor-green) !important;
+  opacity: 1 !important;
+}
+
+/* ── Toggle switch ── */
+#screen-games .toggle-switch {
+  width: 44px;
+  height: 24px;
+  border-radius: 12px;
+  background: rgba(28,59,42,0.12);
+  border: none;
+  transition: background 0.2s;
+}
+#screen-games .toggle-switch.on {
+  background: var(--condor-green);
+  border: none;
+}
+#screen-games .toggle-knob {
+  width: 18px;
+  height: 18px;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+#screen-games .toggle-switch.on .toggle-knob {
+  transform: translateX(20px);
+}
+
+/* ── Config panels ── */
+#screen-games .game-config-panel {
+  background: #fff;
+  border: none;
+  border-radius: 0 0 14px 14px;
+  box-shadow: 0 1px 6px rgba(28,59,42,0.07), 0 1px 2px rgba(0,0,0,0.04);
+  overflow: hidden;
+}
+#screen-games .game-config-panel.open {
+  margin-bottom: 0;
+}
+
+/* ── Spacing between toggle+config pairs ── */
+#screen-games .game-category-body > div[style*="height:8px"] {
+  height: 12px !important;
+}
+
+/* ── Nassau stakes grid ── */
+#screen-games .nassau-stakes-grid {
+  gap: 10px;
+  margin-bottom: 12px;
+}
+#screen-games .stake-cell {
+  background: var(--vintage-cream);
+  border: 1px solid rgba(28,59,42,0.08);
+  border-radius: 12px;
+  padding: 12px 8px;
+}
+#screen-games .stake-cell input {
+  border-bottom-color: var(--antique-gold);
+  font-family: var(--font-editorial);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--scorecard-black);
+}
+#screen-games .stake-cell-label {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  color: rgba(28,59,42,0.50);
+  letter-spacing: 1.5px;
+}
+
+/* ── Stake rows (skins, stroke, etc.) ── */
+#screen-games .stake-row {
+  padding: 12px 18px;
+  background: transparent;
+}
+#screen-games .stake-label {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  color: rgba(28,59,42,0.60);
+}
+#screen-games .stake-input {
+  border-bottom-color: var(--antique-gold);
+  font-family: var(--font-editorial);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--scorecard-black);
+}
+
+/* ── Press config ── */
+#screen-games .press-config {
+  background: var(--vintage-cream);
+  border: 1px solid rgba(28,59,42,0.08);
+  border-radius: 10px;
+  margin: 8px 16px 12px;
+  padding: 12px 14px;
+}
+#screen-games .press-row-label {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: rgba(28,59,42,0.65);
+}
+#screen-games .press-check {
+  accent-color: var(--condor-green);
+}
+#screen-games .press-side-checks label {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  color: rgba(28,59,42,0.60);
+}
+
+/* ── Handicap config panel ── */
+#screen-games .body > div:first-child {
+  background: #fff;
+  border: none;
+  border-left: 3px solid var(--antique-gold) !important;
+  border-radius: 14px;
+  box-shadow: 0 1px 6px rgba(28,59,42,0.07), 0 1px 2px rgba(0,0,0,0.04);
+  padding: 16px 18px !important;
+  margin-bottom: 20px !important;
+}
+
+/* ── Team format / handicap buttons ── */
+#screen-games .team-format-btn {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(28,59,42,0.12);
+  background: #fff;
+  color: rgba(28,59,42,0.65);
+  padding: 7px 14px;
+  transition: all 0.15s;
+}
+#screen-games .team-format-btn.active {
+  background: var(--condor-green);
+  border-color: var(--condor-green);
+  color: var(--vintage-cream);
+}
+
+/* ── Add matchup / wager button ── */
+#screen-games .add-matchup-btn {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: var(--condor-green);
+  border: 1px dashed rgba(28,59,42,0.2);
+  border-radius: 12px;
+  background: transparent;
+  padding: 12px;
+}
+#screen-games .add-matchup-btn:active {
+  background: rgba(28,59,42,0.04);
+}
+
+/* ── Bottom nav / Start Round ── */
+#screen-games .bottom-nav {
+  background: var(--vintage-cream);
+  border-top: 1px solid rgba(28,59,42,0.08);
+  padding: 12px 22px calc(12px + env(safe-area-inset-bottom, 0px));
+}
+#screen-games .btn-gold {
+  background: var(--condor-green) !important;
+  color: var(--vintage-cream) !important;
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 14px;
+  padding: 16px;
+  width: 100%;
+}
+#screen-games .btn-gold:active {
+  background: var(--augusta-green) !important;
+}
+
+/* ── Game summary chip ── */
+#screen-games .game-summary-chip {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  color: rgba(28,59,42,0.60);
+  text-align: center;
+  padding-bottom: 8px;
+}
+#screen-games .game-summary-chip span {
+  color: var(--condor-green);
+  font-weight: 600;
+}
+
+/* ── Custom wagers panel ── */
+#screen-games .body div[style*="border-left:3px solid var(--gold-rule)"] {
+  background: #fff !important;
+  border: none !important;
+  border-left: 3px solid var(--antique-gold) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 1px 6px rgba(28,59,42,0.07), 0 1px 2px rgba(0,0,0,0.04);
+  padding: 16px 18px !important;
+}
+
+/* ── Wolf config override ── */
+#screen-games #wolf-config {
+  background: #fff !important;
+  border: none !important;
+  border-radius: 0 0 14px 14px !important;
+  padding: 14px 18px 16px !important;
+}
+
+/* ── Birdie bets config override ── */
+#screen-games #birdiebets-config {
+  background: #fff !important;
+  border: none !important;
+  border-radius: 0 0 14px 14px !important;
+  padding: 14px 18px 16px !important;
+}
 </style>
 
 </head>
@@ -4770,7 +5084,7 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
 
    <div class="screen engine-screen hidden" id="screen-players">
   <div class="header">
-    <button class="back-btn" onclick="openClubhouse()">← Back</button>
+    <button class="back-btn" onclick="goTo('screen-course')">← Back</button>
     <div class="header-title">Players & Tees</div>
   </div>
   <div class="body">
@@ -4809,7 +5123,7 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
 ════════════════════════════════════════════════ -->
 <div class="screen engine-screen hidden" id="screen-games">
   <div class="header">
-    <button class="back-btn" onclick="openClubhouse()">← Back</button>
+    <button class="back-btn" onclick="goTo('screen-players')">← Back</button>
     <div class="header-title">Game Setup</div>
   </div>
   <div class="body">
@@ -5620,7 +5934,7 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
     </div>
     <button class="psc-btn" id="ps-save-btn" onclick="saveProfileSheet()">Save Changes</button>
     <button onclick="exportMemberCard()" style="width:100%;margin-top:10px;padding:12px;background:var(--green-deep);border:none;border-radius:10px;font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#C6A46A;cursor:pointer;">My Member Card</button>
-    <button onclick="closeProfileSheet();openClubhouse();" style="width:100%;margin-top:10px;padding:12px;background:var(--green-deep);border:none;border-radius:10px;font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#d4c89a;cursor:pointer;">View Clubhouse</button>
+    <button onclick="closeProfileSheet();exitEngineToShell('birdhouse');" style="width:100%;margin-top:10px;padding:12px;background:var(--green-deep);border:none;border-radius:10px;font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#d4c89a;cursor:pointer;">View Clubhouse</button>
     <button onclick="closeProfileSheet()" style="width:100%;margin-top:10px;padding:12px;background:transparent;border:1px solid var(--rule);border-radius:10px;font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--ink-muted);cursor:pointer;">Cancel</button>
     <button onclick="signOut().then(()=>window.location.replace('login.html'))" style="width:100%;margin-top:10px;padding:12px;background:transparent;border:none;font-family:var(--sans);font-size:11px;color:var(--ink-muted);cursor:pointer;letter-spacing:1px;">Sign Out</button>
   </div>
