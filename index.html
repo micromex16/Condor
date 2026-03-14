@@ -4386,7 +4386,7 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
       <div class="birdhouse-header" style="position:relative;">
         <button class="hamburger-btn card-hamburger" onclick="openNavDrawer()"><span></span><span></span><span></span></button>
         <div class="birdhouse-title">Birdhouse</div>
-        <span class="birdhouse-sub">The Flock</span>
+        <span class="birdhouse-sub">Groups</span>
       </div>
 
       <!-- FLOCK PILL ROW -->
@@ -4496,7 +4496,7 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
 
       <!-- FLOCK INVITE -->
       <div class="flock-strip">
-        <span class="flock-text">Extend an invitation to the Flock</span>
+        <span class="flock-text">Invite friends to a Group</span>
         <span class="flock-arrow">→</span>
       </div>
 
@@ -4512,7 +4512,7 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
 <div class="bottom-sheet" id="flock-sheet">
   <div class="sheet-handle"></div>
   <div class="sheet-header">
-    <span class="sheet-title">Your Flocks</span>
+    <span class="sheet-title">Your Groups</span>
     <button class="sheet-close" onclick="closeFlockSheet()">Done</button>
   </div>
   <div class="sheet-groups">
@@ -4542,7 +4542,7 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
     </div>
   </div>
   <div class="sheet-new-group" onclick="closeFlockSheet();openCreateGroupModal()">
-    <span class="sheet-new-label">Create a new Flock</span>
+    <span class="sheet-new-label">Create a new Group</span>
   </div>
 </div>
 
@@ -8734,6 +8734,7 @@ async function loadMyGroups() {
 }
 
 async function openCreateGroupModal() {
+  document.getElementById('engine-overlay').classList.add('visible');
   document.getElementById('create-group-overlay').style.display = '';
   document.getElementById('cg-name').value = '';
   document.getElementById('cg-desc').value = '';
@@ -8780,6 +8781,10 @@ async function openCreateGroupModal() {
 
 function closeCreateGroupModal() {
   document.getElementById('create-group-overlay').style.display = 'none';
+  // Return to birdhouse shell if no group screen is active
+  if (!_currentGroupId) {
+    document.getElementById('engine-overlay').classList.remove('visible');
+  }
 }
 
 function toggleCgFriend(id, row) {
@@ -13314,7 +13319,7 @@ async function populateFlockPills() {
     if (!groups || groups.length === 0) {
       pillRow.innerHTML = '<div class="flock-pill add-pill" onclick="openFlockSheet()">' +
         '<div class="flock-pill-dot" style="background:rgba(198,164,106,0.35)"></div>' +
-        '<span class="flock-pill-name">Join a Flock</span>' +
+        '<span class="flock-pill-name">Create a Group</span>' +
       '</div>';
       if (sheetGroups) sheetGroups.innerHTML = '<div style="padding:24px;text-align:center;font-family:var(--sans);font-size:13px;color:rgba(255,255,255,0.4);">No groups yet</div>';
       return;
