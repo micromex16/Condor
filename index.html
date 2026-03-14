@@ -8819,7 +8819,8 @@ async function submitCreateGroup() {
       try { await addGroupMember(group.id, fid); } catch(e) { console.warn('Could not add member:', fid, e); }
     }
     closeCreateGroupModal();
-    loadMyGroups();
+    populateFlockPills();
+    document.getElementById('engine-overlay').classList.add('visible');
     openGroupDetail(group.id);
   } catch(e) {
     alert('Error creating group: ' + e.message);
@@ -8870,8 +8871,7 @@ function leaveGroupScreen() {
   if (_groupChatTimer) { clearInterval(_groupChatTimer); _groupChatTimer = null; }
   _currentGroupId = null;
   _currentGroupData = null;
-  goTo('screen-clubhouse');
-  switchClubhouseTab('groups');
+  exitEngineToShell('birdhouse');
 }
 
 async function loadGroupMessages(groupId) {
