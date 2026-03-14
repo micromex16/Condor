@@ -713,6 +713,42 @@ html, body {
 }
 .arc-player-chip + .arc-player-chip { border-left: 1px solid rgba(244,241,230,0.07); }
 
+/* ── LAST ROUND CARD (same aesthetic as active-round-card) ── */
+.last-round-card {
+  margin: 0 18px 20px;
+  background: var(--condor-green);
+  border-radius: 18px;
+  padding: 24px 26px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(28,59,42,0.12), 0 12px 32px rgba(28,59,42,0.06);
+}
+.last-round-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 24px; right: 24px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(198,164,106,0.3), transparent);
+}
+.last-round-card .arc-eyebrow { opacity: 0.6; }
+.last-round-card .arc-players { margin-top: 14px; padding-top: 14px; }
+.plr-money {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--antique-gold);
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(244,241,230,0.08);
+}
+.plr-money.negative { color: rgba(192,57,43,.7); }
+.plr-money.even { color: rgba(244,241,230,0.35); }
+
+/* ── START ROUND CTA (standalone) ── */
+#screen-play .start-cta {
+  margin: 0 18px 24px;
+}
+
 /* ── NEW ROUND ── */
 .play-new-section {
   padding: 0 18px;
@@ -4179,110 +4215,55 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
         <span class="play-subtitle">Saturday, 7am</span>
       </div>
 
-      <!-- ACTIVE ROUND -->
+      <!-- ACTIVE ROUND (hidden by default, shown by syncActiveRoundCard) -->
       <div class="active-round-card" onclick="if(_roundInProgress && state.currentHole > 0){ enterEngineFlow('screen-round'); renderRound(); }">
-        <div class="arc-eyebrow">Round In Progress · Nassau Active</div>
-        <div class="arc-course">Augusta National GC</div>
+        <div class="arc-eyebrow">Round In Progress</div>
+        <div class="arc-course"></div>
         <div class="arc-progress">
-          <span class="arc-hole-info">Hole 9 of 18 · Par 4</span>
+          <span class="arc-hole-info"></span>
           <div class="arc-score-display">
-            <span class="arc-score-num">−2</span>
-            <span class="arc-score-par">thru 8</span>
+            <span class="arc-score-num"></span>
+            <span class="arc-score-par"></span>
           </div>
         </div>
         <div class="hole-progress">
-          <div class="hole-dot done"></div><div class="hole-dot done"></div>
-          <div class="hole-dot done"></div><div class="hole-dot done"></div>
-          <div class="hole-dot done"></div><div class="hole-dot done"></div>
-          <div class="hole-dot done"></div><div class="hole-dot done"></div>
-          <div class="hole-dot current"></div><div class="hole-dot"></div>
+          <div class="hole-dot"></div><div class="hole-dot"></div>
+          <div class="hole-dot"></div><div class="hole-dot"></div>
+          <div class="hole-dot"></div><div class="hole-dot"></div>
+          <div class="hole-dot"></div><div class="hole-dot"></div>
+          <div class="hole-dot"></div><div class="hole-dot"></div>
           <div class="hole-dot"></div><div class="hole-dot"></div>
           <div class="hole-dot"></div><div class="hole-dot"></div>
           <div class="hole-dot"></div><div class="hole-dot"></div>
           <div class="hole-dot"></div><div class="hole-dot"></div>
         </div>
         <div class="arc-players">
-          <div class="arc-player-chip">
-            <span class="arc-player-name">You</span>
-            <span class="arc-player-score" style="color:var(--antique-gold)">−2</span>
-          </div>
-          <div class="arc-player-chip">
-            <span class="arc-player-name">Harrington</span>
-            <span class="arc-player-score">E</span>
-          </div>
-          <div class="arc-player-chip">
-            <span class="arc-player-name">Whitmore</span>
-            <span class="arc-player-score">+1</span>
-          </div>
-          <div class="arc-player-chip">
-            <span class="arc-player-name">Osei</span>
-            <span class="arc-player-score">+3</span>
-          </div>
+          <div class="arc-player-chip"><span class="arc-player-name"></span><span class="arc-player-score"></span></div>
+          <div class="arc-player-chip"><span class="arc-player-name"></span><span class="arc-player-score"></span></div>
+          <div class="arc-player-chip"><span class="arc-player-name"></span><span class="arc-player-score"></span></div>
+          <div class="arc-player-chip"><span class="arc-player-name"></span><span class="arc-player-score"></span></div>
         </div>
       </div>
 
-      <!-- NEW ROUND -->
-      <div class="play-new-section">
-        <div class="play-new-eyebrow">New Round</div>
-
-        <!-- Format pills -->
-        <div class="format-pills">
-          <div class="format-pill selected" onclick="selectFormat(this)">
-            <span class="format-pill-name">Nassau</span>
-            <span class="format-pill-sub">Front · Back · Match</span>
-          </div>
-          <div class="format-pill" onclick="selectFormat(this)">
-            <span class="format-pill-name">Skins</span>
-            <span class="format-pill-sub">Hole by hole</span>
-          </div>
-          <div class="format-pill" onclick="selectFormat(this)">
-            <span class="format-pill-name">Wolf</span>
-            <span class="format-pill-sub">Rotating</span>
+      <!-- LAST ROUND (shown when no round in progress) -->
+      <div class="last-round-card" id="play-last-round" style="display:none">
+        <div class="arc-eyebrow" id="plr-eyebrow">Last Round</div>
+        <div class="arc-course" id="plr-course"></div>
+        <div class="arc-progress">
+          <span class="arc-hole-info" id="plr-date"></span>
+          <div class="arc-score-display">
+            <span class="arc-score-num" id="plr-score"></span>
+            <span class="arc-score-par" id="plr-par-label"></span>
           </div>
         </div>
+        <div class="arc-players" id="plr-players"></div>
+        <div class="plr-money" id="plr-money"></div>
+      </div>
 
-        <!-- Bet — the one visible control -->
-        <div class="bet-control">
-          <span class="bet-label">Bet per nine</span>
-          <div class="stepper">
-            <button class="stepper-btn" onclick="adjustBet(-5)">−</button>
-            <span class="stepper-val" id="bet-val">$20</span>
-            <button class="stepper-btn" onclick="adjustBet(5)">+</button>
-          </div>
-        </div>
-
-        <!-- Advanced disclosure -->
-        <button class="advanced-toggle" onclick="toggleAdvanced(this)">
-          <span class="advanced-toggle-label">Advanced options</span>
-          <span class="advanced-toggle-icon" id="adv-icon">▾</span>
-        </button>
-
-        <!-- Collapsed config -->
-        <div class="nassau-config" id="nassau-config">
-          <div class="nc-row">
-            <span class="nc-label">Auto Press</span>
-            <div class="toggle on" onclick="this.classList.toggle('on')"></div>
-          </div>
-          <div class="nc-row">
-            <span class="nc-label">Stroke play handicaps</span>
-            <div class="toggle" onclick="this.classList.toggle('on')"></div>
-          </div>
-          <div class="nc-row">
-            <span class="nc-label">Skins alongside</span>
-            <div class="toggle on" onclick="this.classList.toggle('on')"></div>
-          </div>
-          <div class="nc-row">
-            <span class="nc-label">Players</span>
-            <span class="nc-value">4 selected</span>
-          </div>
-        </div>
-
-        <!-- The singular CTA -->
-        <button class="start-cta" onclick="enterEngineFlow('screen-course')">
-          <span class="start-cta-text">Start Round</span>
-        </button>
-
-      </div><!-- end play-new-section -->
+      <!-- START ROUND CTA -->
+      <button class="start-cta" onclick="enterEngineFlow('screen-course')">
+        <span class="start-cta-text">Start Round</span>
+      </button>
 
       <div class="bottom-pad"></div>
     </div>
@@ -12704,6 +12685,7 @@ async function condorNavigate(tab) {
   document.getElementById('engine-overlay').classList.remove('visible');
   if (tab === 'play') {
     syncActiveRoundCard();
+    populatePlayLastRound();
   }
   if (tab === 'card') {
     populateCondorCard();
@@ -12930,11 +12912,13 @@ function syncActiveRoundCard() {
     && _roundInProgress
     && state.scores
     && state.currentHole > 0;
+  const lastRoundCard = document.getElementById('play-last-round');
   if (!inProgress) {
     card.style.display = 'none';
     return;
   }
   card.style.display = '';
+  if (lastRoundCard) lastRoundCard.style.display = 'none';
   const courseName = state.course?.name || '';
   const holeNum = state.currentHole || 1;
   const par = state.course?.holes?.[holeNum - 1]?.par || 4;
@@ -12966,6 +12950,75 @@ function syncActiveRoundCard() {
     chips[i].querySelector('.arc-player-score').textContent =
       pt === 0 ? 'E' : (pt > 0 ? '+' + pt : pt);
   });
+}
+
+// ─── PLAY TAB — LAST ROUND CARD ───
+async function populatePlayLastRound() {
+  const card = document.getElementById('play-last-round');
+  if (!card) return;
+
+  // Don't show if round in progress
+  if (_roundInProgress && state.currentHole > 0) {
+    card.style.display = 'none';
+    return;
+  }
+
+  try {
+    const rounds = await getMyRounds(1);
+    if (!rounds || !rounds.length) {
+      card.style.display = 'none';
+      return;
+    }
+
+    const r = rounds[0];
+    const rd = r.rounds;
+    const course = rd?.course_name || 'Unknown Course';
+    const playedAt = rd?.played_at ? new Date(rd.played_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
+    const games = Array.isArray(rd?.games_played) ? rd.games_played.join(' \u00b7 ') : '';
+    const par = 72;
+    const diff = r.to_par != null ? r.to_par : ((r.gross_score || 0) - par);
+    const scoreStr = diff === 0 ? 'E' : (diff > 0 ? '+' + diff : '' + diff);
+    const money = r.money_result || 0;
+
+    document.getElementById('plr-eyebrow').textContent = games ? 'Last Round \u00b7 ' + games : 'Last Round';
+    document.getElementById('plr-course').textContent = course;
+    document.getElementById('plr-date').textContent = playedAt;
+    document.getElementById('plr-score').textContent = r.gross_score || scoreStr;
+    document.getElementById('plr-par-label').textContent = scoreStr === 'E' ? 'Even' : scoreStr;
+
+    // Money result
+    const moneyEl = document.getElementById('plr-money');
+    if (money !== 0) {
+      const sign = money > 0 ? '+' : '\u2212';
+      moneyEl.textContent = sign + '$' + Math.abs(money);
+      moneyEl.className = 'plr-money' + (money < 0 ? ' negative' : '');
+      moneyEl.style.display = '';
+    } else {
+      moneyEl.textContent = 'Even';
+      moneyEl.className = 'plr-money even';
+    }
+
+    // Populate players if we have round_id
+    const playersEl = document.getElementById('plr-players');
+    if (r.round_id) {
+      try {
+        const rp = await getRoundPlayers(r.round_id);
+        if (rp && rp.length) {
+          playersEl.innerHTML = rp.map(function(p) {
+            const name = p.players?.username?.split(' ')[0] || 'Player';
+            const pt = p.to_par != null ? p.to_par : 0;
+            const ptStr = pt === 0 ? 'E' : (pt > 0 ? '+' + pt : '' + pt);
+            return '<div class="arc-player-chip"><span class="arc-player-name">' + name +
+              '</span><span class="arc-player-score">' + ptStr + '</span></div>';
+          }).join('');
+        }
+      } catch(e) { /* skip player chips on error */ }
+    }
+
+    card.style.display = '';
+  } catch(e) {
+    card.style.display = 'none';
+  }
 }
 
 // ─── POPULATE LAST ROUND ───
