@@ -4071,36 +4071,40 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
 }
 #screen-birdhouse .bh-search-wrap {
   display: flex; align-items: center; gap: 8px;
-  background: var(--green-augusta); border-radius: 10px;
+  background: #FFFFFF; border: 1px solid rgba(27,58,45,0.12); border-radius: 10px;
   padding: 10px 14px; margin-bottom: 8px;
 }
-#screen-birdhouse .bh-search-icon { color: rgba(255,255,255,0.3); font-size: 16px; }
+#screen-birdhouse .bh-search-icon { color: rgba(27,58,45,0.35); font-size: 16px; }
 #screen-birdhouse .bh-search {
   background: none; border: none; outline: none;
-  font-family: var(--sans); font-size: 13px; color: #fff; width: 100%;
+  font-family: var(--sans); font-size: 13px; color: var(--green-deep); width: 100%;
 }
-#screen-birdhouse .bh-search::placeholder { color: rgba(255,255,255,0.3); }
-#screen-birdhouse .bh-member-list { display: flex; flex-direction: column; }
+#screen-birdhouse .bh-search::placeholder { color: rgba(27,58,45,0.35); }
+#screen-birdhouse .bh-member-list {
+  display: flex; flex-direction: column;
+  background: #FFFFFF; border-radius: 12px; padding: 6px 14px;
+}
 #screen-birdhouse .bh-member-row {
   display: flex; align-items: center; gap: 12px;
-  padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer;
+  padding: 10px 0; border-bottom: 1px solid rgba(27,58,45,0.08); cursor: pointer;
 }
 #screen-birdhouse .bh-member-row:last-child { border-bottom: none; }
 #screen-birdhouse .bh-member-row:active { opacity: 0.7; }
 #screen-birdhouse .bh-mr-info { flex: 1; }
-#screen-birdhouse .bh-mr-name { font-family: var(--sans); font-size: 13px; color: #fff; }
-#screen-birdhouse .bh-mr-course { font-family: var(--sans); font-size: 10px; color: rgba(255,255,255,0.3); margin-top: 2px; }
-#screen-birdhouse .bh-mr-hcp { font-family: var(--sans); font-size: 11px; color: rgba(255,255,255,0.4); }
+#screen-birdhouse .bh-mr-name { font-family: var(--sans); font-size: 13px; color: var(--green-deep); }
+#screen-birdhouse .bh-mr-course { font-family: var(--sans); font-size: 10px; color: rgba(27,58,45,0.4); margin-top: 2px; }
+#screen-birdhouse .bh-mr-hcp { font-family: var(--sans); font-size: 11px; color: rgba(27,58,45,0.5); }
+#screen-birdhouse .bh-cell.bh-bulletin-cell { background: #FFFFFF; }
 #screen-birdhouse .bh-bulletin-content {
   font-family: var(--serif); font-size: 14px;
-  color: rgba(255,255,255,0.85); line-height: 1.75; white-space: pre-wrap;
+  color: rgba(27,58,45,0.85); line-height: 1.75; white-space: pre-wrap;
 }
 #screen-birdhouse .bh-bulletin-headline {
   font-family: var(--serif); font-style: italic; font-size: 20px;
-  color: #fff; margin-bottom: 12px;
+  color: var(--green-deep); margin-bottom: 12px;
 }
 #screen-birdhouse .bh-bulletin-meta {
-  font-family: var(--sans); font-size: 8px; color: rgba(255,255,255,0.4);
+  font-family: var(--sans); font-size: 8px; color: rgba(27,58,45,0.4);
   letter-spacing: 2px; text-transform: uppercase;
   display: flex; justify-content: space-between; margin-bottom: 12px;
 }
@@ -4117,17 +4121,17 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
 #screen-birdhouse .bh-bulletin-btn:disabled { opacity: 0.4; cursor: default; }
 #screen-birdhouse .bh-bulletin-actions {
   margin-top: 12px; padding-top: 10px;
-  border-top: 1px solid rgba(255,255,255,0.06);
+  border-top: 1px solid rgba(27,58,45,0.08);
   display: flex; justify-content: space-between; align-items: center;
 }
 #screen-birdhouse .bh-bulletin-share {
-  background: transparent; border: 1px solid rgba(255,255,255,0.15);
-  color: rgba(255,255,255,0.6); font-family: var(--sans); font-size: 9px;
+  background: transparent; border: 1px solid rgba(27,58,45,0.15);
+  color: rgba(27,58,45,0.6); font-family: var(--sans); font-size: 9px;
   letter-spacing: 2px; text-transform: uppercase; padding: 8px 16px;
   border-radius: 4px; cursor: pointer;
 }
 #screen-birdhouse .bh-bulletin-prev {
-  font-family: var(--sans); font-size: 9px; color: rgba(255,255,255,0.35);
+  font-family: var(--sans); font-size: 9px; color: rgba(27,58,45,0.35);
   letter-spacing: 1px; text-transform: uppercase; cursor: pointer;
   background: none; border: none; text-decoration: underline;
 }
@@ -4604,23 +4608,23 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
         <div class="bh-scroll-row" id="bh-newmembers"></div>
       </div>
 
-      <!-- SECTION 3: MEMBERS DIRECTORY -->
+      <!-- SECTION 3: CONDOR BULLETIN -->
       <div class="bh-section">
-        <div class="bh-label bh-white">Members</div>
+        <div class="bh-label">The Condor Bulletin</div>
+        <div class="bh-cell bh-bulletin-cell" id="bh-bulletin">
+          <div id="bh-bulletin-content"></div>
+          <button class="bh-bulletin-btn" id="bh-generate-btn" style="display:none" onclick="bhGenerateBulletin(this)">Generate This Week's Bulletin</button>
+        </div>
+      </div>
+
+      <!-- SECTION 4: MEMBER DIRECTORY -->
+      <div class="bh-section">
+        <div class="bh-label">Member Directory</div>
         <div class="bh-search-wrap">
           <span class="bh-search-icon">⌕</span>
           <input class="bh-search" id="bh-member-search" type="text" placeholder="Search members" oninput="bhFilterMembers(this.value)">
         </div>
         <div class="bh-member-list" id="bh-member-list"></div>
-      </div>
-
-      <!-- SECTION 4: CONDOR BULLETIN -->
-      <div class="bh-section">
-        <div class="bh-label">The Condor Bulletin</div>
-        <div class="bh-cell" id="bh-bulletin">
-          <div id="bh-bulletin-content"></div>
-          <button class="bh-bulletin-btn" id="bh-generate-btn" style="display:none" onclick="bhGenerateBulletin(this)">Generate This Week's Bulletin</button>
-        </div>
       </div>
 
       <div class="bottom-pad"></div>
