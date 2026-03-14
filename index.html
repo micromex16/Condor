@@ -379,11 +379,10 @@ html, body {
   padding-top: 14px;
   border-top: 1px solid rgba(244,241,230,0.07);
 }
-.card-qr-logo {
-  height: 48px;
-  width: auto;
-  mix-blend-mode: screen;
-  opacity: 0.5;
+.card-qr {
+  width: 44px;
+  height: 44px;
+  opacity: 0.35;
 }
 .card-season-note {
   text-align: right;
@@ -713,52 +712,6 @@ html, body {
   color: var(--vintage-cream);
 }
 .arc-player-chip + .arc-player-chip { border-left: 1px solid rgba(244,241,230,0.07); }
-
-/* ── PLAY TAB — PREVIOUS ROUND CARD ── */
-.play-prev-round {
-  margin: 0 18px 20px;
-  background: var(--condor-green);
-  border-radius: 18px;
-  padding: 24px 26px;
-  position: relative;
-  overflow: hidden;
-  cursor: pointer;
-  box-shadow: 0 4px 20px rgba(28,59,42,0.12), 0 12px 32px rgba(28,59,42,0.06);
-}
-.play-prev-round::after {
-  content: '';
-  position: absolute;
-  top: 0; left: 24px; right: 24px;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(198,164,106,0.3), transparent);
-}
-.play-prev-round .arc-eyebrow { opacity: 0.6; }
-.play-prev-round .arc-players { margin-top: 14px; padding-top: 14px; }
-.plr-money {
-  font-family: var(--font-display);
-  font-size: 22px;
-  font-weight: 500;
-  color: var(--antique-gold);
-  margin-top: 14px;
-  padding-top: 12px;
-  border-top: 1px solid rgba(244,241,230,0.08);
-}
-.plr-money.negative { color: rgba(192,57,43,.7); }
-.plr-money.even { color: rgba(244,241,230,0.35); }
-.plr-play-again {
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  margin-top: 16px; padding-top: 14px;
-  border-top: 1px solid rgba(244,241,230,0.08);
-  font-family: var(--font-ui); font-size: 11px; font-weight: 400;
-  letter-spacing: 0.2em; text-transform: uppercase;
-  color: var(--antique-gold); cursor: pointer;
-}
-.plr-play-again:active { opacity: 0.7; }
-
-/* ── START ROUND CTA (standalone) ── */
-#screen-play .start-cta {
-  margin: 0 18px 24px;
-}
 
 /* ── NEW ROUND ── */
 .play-new-section {
@@ -1866,11 +1819,11 @@ body::before { display:none; }
 .hole-dot { width:26px; height:26px; border-radius:6px; display:flex; align-items:center;
   justify-content:center; font-family:var(--sans); font-size:11px; font-weight:500;
   cursor:pointer; transition:all .14s; flex-shrink:0; color:rgba(255,255,255,.3); }
-.hole-dot.current { background:var(--gold-rule); color:#fff; font-weight:600; }
-.hole-dot.complete-good { background:rgba(196,164,86,.12); color:var(--gold-rule); border:1px solid rgba(196,164,86,.2); }
-.hole-dot.complete-par  { background:rgba(27,58,45,.06); color:rgba(27,58,45,.5); }
-.hole-dot.complete-bad  { background:rgba(192,57,43,.08); color:#c0392b; border:1px solid rgba(192,57,43,.15); }
-.hole-dot.future        { background:transparent; color:rgba(27,58,45,.15); border:1px solid rgba(27,58,45,.08); }
+.hole-dot.current { background:var(--gold-rule); color:var(--green-deep); font-weight:600; }
+.hole-dot.complete-good { background:rgba(196,164,86,.15); color:var(--gold-rule); border:1px solid rgba(196,164,86,.2); }
+.hole-dot.complete-par  { background:rgba(255,255,255,.08); color:rgba(255,255,255,.5); }
+.hole-dot.complete-bad  { background:rgba(192,57,43,.12); color:#c0392b; border:1px solid rgba(192,57,43,.2); }
+.hole-dot.future        { background:transparent; color:rgba(255,255,255,.2); border:1px solid rgba(255,255,255,.08); }
 
 /* ══════════════════════════════════════════
    SCORE ENTRY — The heart of it
@@ -1882,12 +1835,12 @@ body::before { display:none; }
 .score-grid { display:flex; flex-direction:column; gap:12px; }
 .score-row {
   position:relative;
-  background:#fff;
+  background:var(--green-augusta);
   border:none;
   border-radius:12px;
   overflow:hidden;
   display:flex; align-items:stretch;
-  box-shadow:0 2px 12px rgba(0,0,0,.06);
+  box-shadow:0 2px 8px rgba(0,0,0,.15);
   transition:box-shadow .15s;
 }
 /* Remove cream foil-stamp and inner highlight */
@@ -1899,22 +1852,22 @@ body::before { display:none; }
   display:flex; align-items:center; justify-content:center;
   width:54px; min-height:60px;
   background:transparent; border:none; cursor:pointer;
-  color:rgba(27,58,45,.5); font-size:24px;
+  color:rgba(255,255,255,.5); font-size:24px;
   font-family:var(--sans); font-weight:300;
   transition:background .1s, color .1s;
   -webkit-tap-highlight-color:transparent;
   position:relative; z-index:1;
 }
-.paddle-minus { border-right:1px solid rgba(27,58,45,.06); }
-.paddle-plus  { border-left:1px solid rgba(27,58,45,.06); }
-.paddle-minus:active { background:rgba(192,57,43,.08); color:#e74c3c; }
-.paddle-plus:active  { background:rgba(196,164,86,.08); color:var(--gold-rule); }
+.paddle-minus { border-right:1px solid rgba(255,255,255,.06); }
+.paddle-plus  { border-left:1px solid rgba(255,255,255,.06); }
+.paddle-minus:active { background:rgba(192,57,43,.12); color:#e74c3c; }
+.paddle-plus:active  { background:rgba(196,164,86,.1); color:var(--gold-rule); }
 .paddle-icon {
   display:flex; align-items:center; justify-content:center;
   width:36px; height:36px; border-radius:50%;
   border:none;
-  background:rgba(27,58,45,.08);
-  font-size:22px; line-height:1;
+  background:rgba(255,255,255,.08);
+  font-size:20px; line-height:1;
   color:inherit;
 }
 
@@ -1929,27 +1882,27 @@ body::before { display:none; }
 .score-hero { display:flex; flex-direction:column; align-items:center; min-width:52px; }
 .score-hero-val {
   font-family:var(--serif); font-size:56px; font-weight:500;
-  line-height:1; color:var(--green-deep);
+  line-height:1; color:#fff;
   transition:opacity .15s ease;
 }
 .score-hero-label {
-  font-family:var(--sans); font-size:8px; font-weight:700;
-  letter-spacing:2px; text-transform:uppercase;
-  color:rgba(27,58,45,.45); margin-top:2px;
+  font-family:var(--sans); font-size:7px; font-weight:600;
+  letter-spacing:2.5px; text-transform:uppercase;
+  color:rgba(255,255,255,.35); margin-top:2px;
   transition:opacity .15s ease;
 }
-/* Score coloring — light surface */
+/* Score coloring — dark surface */
 .score-hero-val.birdie { color:var(--gold-rule); }
 .score-hero-val.eagle  { color:var(--gold-rule); font-weight:700; }
 .score-hero-val.bogey  { color:#c0392b; }
 .score-hero-val.double { color:#c0392b; }
-.score-hero-val.at-par { color:var(--green-deep); }
+.score-hero-val.at-par { color:#fff; }
 /* Score label coloring */
 .score-row .score-hero-label.birdie-label,
 .score-row .score-hero-label.eagle-label { color:var(--gold-rule); }
 .score-row .score-hero-label.bogey-label,
 .score-row .score-hero-label.double-label { color:rgba(192,57,43,.7); }
-.score-row .score-hero-label.par-label { color:rgba(27,58,45,.3); }
+.score-row .score-hero-label.par-label { color:rgba(255,255,255,.35); }
 /* Pop animation */
 .score-hero-val.pop { animation:pop .18s ease; }
 
@@ -1957,22 +1910,22 @@ body::before { display:none; }
 .score-info { flex:1; min-width:0; }
 .score-player-line { display:flex; align-items:center; gap:4px; flex-wrap:wrap; }
 .score-player-name {
-  font-family:var(--serif); font-size:16px; font-weight:600;
-  color:var(--green-deep); letter-spacing:.1px;
+  font-family:var(--serif); font-size:14px; font-weight:500;
+  color:#fff; letter-spacing:.1px;
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
 }
 .score-meta {
-  font-family:var(--sans); font-size:11px; color:rgba(27,58,45,.55);
-  margin-top:3px; letter-spacing:.3px;
+  font-family:var(--sans); font-size:10px; color:rgba(255,255,255,.4);
+  margin-top:2px; letter-spacing:.3px;
 }
 
 /* ── POPS BADGE ── */
 .score-pops-badge {
   display:inline-flex; align-items:center; gap:3px;
-  font-family:var(--sans); font-size:10px; font-weight:700;
+  font-family:var(--sans); font-size:10px; font-weight:600;
   color:var(--gold-rule); letter-spacing:.3px; margin-left:6px;
-  padding:2px 8px; border-radius:8px;
-  background:rgba(196,164,86,.1); border:1px solid rgba(196,164,86,.2);
+  padding:1px 6px; border-radius:8px;
+  background:rgba(196,164,86,.12); border:1px solid rgba(196,164,86,.2);
 }
 .score-pops-pip {
   width:5px; height:5px; border-radius:50%; background:var(--gold-rule);
@@ -1980,15 +1933,16 @@ body::before { display:none; }
 
 /* ── INLINE MONEY ── */
 .score-money {
-  font-family:var(--sans); font-size:13px; font-weight:600;
-  margin-top:4px; letter-spacing:.3px;
-  color:rgba(27,58,45,.55);
+  font-family:var(--sans); font-size:11px; font-weight:500;
+  margin-top:3px; letter-spacing:.3px;
+  color:rgba(255,255,255,.5);
 }
-.score-money.positive { color:var(--gold-rule); font-weight:700; }
-.score-money.negative { color:#c0392b; font-weight:700; }
-.score-money.neutral  { color:rgba(27,58,45,.3); }
+.score-money.positive { color:var(--gold-rule); }
+.score-money.negative { color:#c0392b; }
+.score-money.neutral  { color:rgba(255,255,255,.3); }
 .score-money.leader {
   color:var(--gold-rule); font-weight:700;
+  text-shadow:0 0 8px rgba(196,164,86,.2);
 }
 
 /* Handicap dots (legacy compat) */
@@ -1998,19 +1952,19 @@ body::before { display:none; }
 /* ══════════════════════════════════════════
    HOLE OVERVIEW — Caddie notes (dark)
 ══════════════════════════════════════════ */
-.hole-overview { background:#fff; border:none;
+.hole-overview { background:var(--green-augusta); border:none;
   border-radius:10px; padding:14px 16px; margin-bottom:12px;
-  border-left:3px solid var(--gold-rule); box-shadow:0 2px 12px rgba(0,0,0,.06); }
+  border-left:3px solid var(--gold-rule); }
 .hole-overview-title { font-family:var(--sans); font-size:10px; font-weight:500;
   letter-spacing:3px; text-transform:uppercase; color:var(--gold-rule); margin-bottom:8px; }
 .hole-overview-desc { font-family:var(--serif); font-size:14px; font-style:italic;
-  color:rgba(27,58,45,.55); line-height:1.65; font-weight:400; }
+  color:rgba(255,255,255,.55); line-height:1.65; font-weight:400; }
 .hole-overview-stats { display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; }
-.hole-stat { text-align:center; padding:6px 12px; background:rgba(27,58,45,.03);
-  border:1px solid rgba(27,58,45,.08); border-radius:6px; }
-.hole-stat-val { font-family:var(--serif); font-size:18px; font-weight:500; color:var(--green-deep); }
+.hole-stat { text-align:center; padding:6px 12px; background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.08); border-radius:6px; }
+.hole-stat-val { font-family:var(--serif); font-size:18px; font-weight:500; color:#fff; }
 .hole-stat-label { font-family:var(--sans); font-size:9px; letter-spacing:1.5px;
-  text-transform:uppercase; color:rgba(27,58,45,.35); margin-top:2px; }
+  text-transform:uppercase; color:rgba(255,255,255,.35); margin-top:2px; }
 
 /* ══════════════════════════════════════════
    PRESS ALERT — dark surface
@@ -2029,8 +1983,8 @@ body::before { display:none; }
 .press-btn:active { transform:scale(.96); }
 
 /* ── MANUAL PRESS BTN ── */
-.manual-press-btn { background:transparent; border:1px solid rgba(255,255,255,.3);
-  color:rgba(255,255,255,.7); border-radius:8px; padding:6px 12px; font-family:var(--sans);
+.manual-press-btn { background:transparent; border:1px solid rgba(196,164,86,.35);
+  color:rgba(212,200,154,.75); border-radius:8px; padding:6px 12px; font-family:var(--sans);
   font-size:10px; font-weight:500; cursor:pointer; transition:all .12s;
   letter-spacing:1.5px; text-transform:uppercase; }
 
@@ -2044,7 +1998,7 @@ body::before { display:none; }
   flex-shrink:0; box-sizing:border-box;
 }
 .hole-nav-arrow {
-  background:none; border:none; color:rgba(255,255,255,.5);
+  background:none; border:none; color:rgba(255,255,255,.35);
   font-size:28px; padding:4px 6px; cursor:pointer; font-family:var(--sans);
   line-height:1; -webkit-tap-highlight-color:transparent;
   flex-shrink:0;
@@ -2054,7 +2008,7 @@ body::before { display:none; }
 .hole-header-center {
   display:flex; align-items:center; gap:10px; flex:1; cursor:pointer;
   -webkit-tap-highlight-color:transparent;
-  background:rgba(255,255,255,.08); border-radius:12px;
+  background:var(--green-augusta); border-radius:12px;
   padding:8px 14px;
 }
 .hole-header-hole {
@@ -2068,39 +2022,39 @@ body::before { display:none; }
   letter-spacing:1px; text-transform:uppercase; font-weight:500;
 }
 .hole-header-yards {
-  font-family:var(--sans); font-size:10px; color:rgba(255,255,255,.6);
+  font-family:var(--sans); font-size:10px; color:rgba(255,255,255,.5);
 }
 .hole-header-hcp {
-  font-family:var(--sans); font-size:9px; color:rgba(255,255,255,.45);
+  font-family:var(--sans); font-size:9px; color:rgba(255,255,255,.35);
   letter-spacing:1px; text-transform:uppercase;
 }
 .hole-header-right {
   display:flex; align-items:center; gap:6px;
-  background:rgba(255,255,255,.08); border-radius:12px;
+  background:var(--green-augusta); border-radius:12px;
   padding:8px 12px; margin-left:10px;
 }
 .hole-header-gear {
-  background:none; border:none; color:rgba(255,255,255,.4);
+  background:none; border:none; color:rgba(255,255,255,.3);
   font-size:16px; padding:4px 6px; cursor:pointer;
 }
-.hole-header-gear:active { color:rgba(255,255,255,.8); }
+.hole-header-gear:active { color:rgba(255,255,255,.7); }
 
-/* Progress bar — light */
+/* Progress bar — dark */
 .hole-progress-bar { display:flex; height:3px; flex-shrink:0; }
 .hole-progress-seg { flex:1; cursor:pointer; transition:background .2s; }
 .hole-progress-seg.good { background:var(--green-augusta); }
-.hole-progress-seg.par { background:rgba(27,58,45,.12); }
+.hole-progress-seg.par { background:rgba(255,255,255,.12); }
 .hole-progress-seg.bad { background:#c0392b; }
 .hole-progress-seg.current { background:var(--gold-rule); }
-.hole-progress-seg.future { background:rgba(27,58,45,.04); }
+.hole-progress-seg.future { background:rgba(255,255,255,.04); }
 
-/* Hole dots drawer — light */
-.hole-dots-drawer { background:#F8F8F8; border-bottom:1px solid rgba(27,58,45,.08); }
+/* Hole dots drawer — dark */
+.hole-dots-drawer { background:var(--green-deep); border-bottom:1px solid rgba(255,255,255,.06); }
 .hole-dots-drawer .hole-dots { background:transparent; border-bottom:none; }
 
-/* Press alert inline — light */
+/* Press alert inline — dark */
 .press-alert-inline {
-  background:rgba(196,164,86,.08); border:1px solid rgba(196,164,86,.2);
+  background:rgba(196,164,86,.1); border:1px solid rgba(196,164,86,.2);
   border-radius:10px; padding:8px 12px; margin-bottom:8px;
   display:flex; align-items:center; gap:8px;
 }
@@ -2109,69 +2063,39 @@ body::before { display:none; }
    NASSAU STANDINGS — BENTO GRID
 ══════════════════════════════════════════ */
 .standings-inline {
-  display:flex; flex-direction:column; gap:8px;
-  padding:14px 0 6px;
+  display:flex; gap:8px; padding:10px 0 4px; overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
 }
-.standings-inline:empty { padding:0; display:none; }
-.standings-row {
-  display:grid; grid-template-columns:repeat(auto-fit, minmax(100px, 1fr));
-  gap:8px;
-}
+.standings-inline::-webkit-scrollbar { display:none; }
+.standings-inline:empty { padding:0; }
 .standing-micro {
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-  gap:4px; padding:10px 12px; border-radius:12px;
+  display:flex; flex-direction:column; align-items:center;
+  gap:2px; padding:6px 12px; border-radius:10px;
   font-family:var(--sans); font-size:10px; font-weight:600;
-  letter-spacing:.5px; white-space:normal; text-align:center;
-  border:none; background:#fff;
-  color:rgba(27,58,45,.45);
-  box-shadow:0 2px 12px rgba(0,0,0,.06);
-  min-height:72px;
+  letter-spacing:.5px; white-space:nowrap; flex-shrink:0;
+  border:none; background:var(--green-augusta);
+  color:rgba(255,255,255,.4);
 }
 .standing-micro .standing-label {
-  font-size:8px; letter-spacing:2px; text-transform:uppercase;
-  color:rgba(27,58,45,.4); font-weight:700;
-  line-height:1.3;
+  font-size:7px; letter-spacing:2px; text-transform:uppercase;
+  color:rgba(255,255,255,.4);
 }
 .standing-micro .standing-value {
-  font-family:var(--serif); font-size:32px; font-style:italic;
-  font-weight:500; color:var(--green-deep); line-height:1.1;
+  font-size:13px; color:#fff;
 }
-.standing-micro.winning { background:rgba(196,164,86,.06); }
-.standing-micro.winning .standing-label { color:var(--gold-rule); }
+.standing-micro.winning { color:var(--gold-rule); }
 .standing-micro.winning .standing-value { color:var(--gold-rule); }
+.standing-micro.losing { color:#c0392b; }
 .standing-micro.losing .standing-value { color:#c0392b; }
-.standing-micro.losing .standing-label { color:rgba(192,57,43,.5); }
-.standing-micro.even .standing-value { color:rgba(27,58,45,.35); }
+.standing-micro.even { color:rgba(255,255,255,.35); }
 
-/* ── MERGED PLAYERS MONEY CELL ── */
-.sm-players-cell { width:100%; padding:10px 0 12px; }
-.sm-players-cell .standing-label { display:block; width:100%; text-align:center; margin-bottom:8px; }
-.sm-cols {
-  display:grid; grid-template-columns:repeat(4, 1fr); width:100%;
-}
-.sm-col {
-  display:flex; flex-direction:column; align-items:center; gap:4px;
-  padding:6px 4px; text-align:center;
-}
-.sm-col + .sm-col { border-left:1px solid rgba(27,58,45,.06); }
-.sm-name {
-  font-family:var(--sans); font-size:10px; font-weight:400;
-  color:rgba(27,58,45,.6); line-height:1.3;
-}
-.sm-money {
-  font-family:var(--sans); font-size:14px; font-weight:600; line-height:1;
-}
-.sm-money.sm-pos { color:var(--green-deep); }
-.sm-money.sm-neg { color:#c0392b; }
-.sm-money.sm-zero { color:rgba(27,58,45,.3); }
-
-/* Details drawer — light */
+/* Details drawer — dark */
 .details-drawer-toggle {
   display:flex; align-items:center; justify-content:center;
   padding:8px; cursor:pointer; gap:6px;
   font-family:var(--sans); font-size:9px; font-weight:700;
-  letter-spacing:2px; text-transform:uppercase; color:rgba(27,58,45,.3);
-  border-top:1px solid rgba(27,58,45,.06); margin-top:8px;
+  letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,.3);
+  border-top:1px solid rgba(255,255,255,.06); margin-top:8px;
   -webkit-tap-highlight-color:transparent;
 }
 .details-drawer-toggle .chevron {
@@ -2188,13 +2112,13 @@ body::before { display:none; }
 ══════════════════════════════════════════ */
 .bottom-nav-round {
   flex-shrink:0; padding:8px 12px calc(env(safe-area-inset-bottom, 8px) + 8px);
-  background:#fff; border-top:none;
-  box-shadow:0 -1px 0 rgba(0,0,0,.06);
+  background:var(--green-deep); border-top:none;
+  box-shadow:0 -1px 0 rgba(255,255,255,.06);
   display:flex; align-items:center; gap:8px;
 }
 .btn-next-hole {
   flex:1; padding:14px; background:transparent;
-  border:none; border-radius:0; color:var(--green-deep);
+  border:none; border-radius:0; color:var(--gold-rule);
   font-family:var(--sans); font-size:13px; font-weight:700;
   letter-spacing:1.5px; text-transform:uppercase; cursor:pointer;
   transition:opacity .1s; text-align:center;
@@ -2207,7 +2131,7 @@ body::before { display:none; }
 }
 .bottom-action-label {
   font-family:var(--sans); font-size:9px; font-weight:700;
-  letter-spacing:1.5px; text-transform:uppercase; color:rgba(27,58,45,.4);
+  letter-spacing:1.5px; text-transform:uppercase; color:rgba(255,255,255,.5);
 }
 
 /* ── SIDE BET MODAL ── */
@@ -2250,25 +2174,25 @@ body::before { display:none; }
 .sidebet-note-input:focus { border-color:var(--gold); }
 
 /* ── SIDE BET PILLS (in Running Money) ── */
-.sidebet-pills { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; padding-top:10px; border-top:1px solid rgba(27,58,45,.08); }
+.sidebet-pills { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; padding-top:10px; border-top:1px solid var(--rule); }
 .sidebet-pill { font-family:var(--sans); font-size:11px; padding:5px 10px; border-radius:20px;
-  border:1px solid rgba(27,58,45,.1); background:#fff; color:rgba(27,58,45,.5);
+  border:1px solid var(--rule); background:var(--cream-card); color:var(--ink-dim);
   cursor:pointer; white-space:nowrap; transition:all .15s; letter-spacing:.2px; }
 .sidebet-pill:active { transform:scale(.96); }
-.sidebet-pill.unresolved { border-color:rgba(196,164,86,.4); color:var(--gold-rule);
+.sidebet-pill.unresolved { border-color:rgba(138,109,47,.4); color:var(--gold);
   animation:pulse-gold 2s ease-in-out infinite; }
-.sidebet-pill.resolved { border-color:rgba(27,58,45,.15); background:rgba(27,58,45,.04); color:var(--green-deep); }
+.sidebet-pill.resolved { border-color:rgba(46,97,71,.3); background:var(--green-pale); color:var(--green-deep); }
 @keyframes pulse-gold { 0%,100%{box-shadow:0 0 0 0 rgba(138,109,47,0)} 50%{box-shadow:0 0 0 3px rgba(138,109,47,.15)} }
 
 /* ── RUNNING MONEY ── */
 .money-row { display:flex; justify-content:space-between; align-items:center;
-  padding:10px 0; border-bottom:1px solid rgba(27,58,45,.06); }
+  padding:10px 0; border-bottom:1px solid var(--rule); }
 .money-row:last-child { border-bottom:none; }
-.money-label { font-family:var(--serif); font-size:14px; color:var(--green-deep); font-weight:500; }
+.money-label { font-family:var(--serif); font-size:14px; color:var(--ink); font-weight:500; }
 .money-amount { font-family:var(--sans); font-size:14px; font-weight:600; }
-.money-amount.positive { color:var(--gold-rule); }
-.money-amount.negative { color:#c0392b; }
-.money-amount.neutral  { color:rgba(27,58,45,.25); }
+.money-amount.positive { color:var(--green-augusta); }
+.money-amount.negative { color:var(--score-bogey); }
+.money-amount.neutral  { color:var(--ink-muted); }
 
 /* ── BOTTOM NAV ── */
 .bottom-nav { flex-shrink:0; padding:10px 16px env(safe-area-inset-bottom, 12px);
@@ -2636,17 +2560,17 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
   box-shadow:0 -4px 32px rgba(15,31,20,.35);
 }
 .modal-handle {
-  width:36px; height:4px; background:rgba(27,58,45,.15); border-radius:2px;
+  width:36px; height:4px; background:rgba(138,109,47,.35); border-radius:2px;
   margin:12px auto 4px;
 }
 .modal-title {
   font-family:var(--serif); font-size:19px; font-weight:600;
-  color:var(--green-deep); padding:8px 20px 2px; letter-spacing:.3px;
+  color:var(--ink); padding:8px 20px 2px; letter-spacing:.3px;
 }
 .modal-subtitle {
-  font-family:var(--sans); font-size:11px; color:rgba(27,58,45,.4);
+  font-family:var(--sans); font-size:11px; color:var(--ink-muted);
   padding:4px 20px 12px; letter-spacing:.3px;
-  border-bottom:1px solid rgba(27,58,45,.06);
+  border-bottom:1px solid var(--rule);
 }
 .modal-row {
   display:flex; align-items:center; gap:12px; padding:14px 20px;
@@ -2754,54 +2678,53 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
 
 /* ── PLAYER SEARCH SHEET ── */
 .player-search-overlay {
-  position:fixed; inset:0; z-index:5000;
+  position:fixed; inset:0; z-index:1600;
   background:rgba(10,22,14,.72);
   display:none; align-items:flex-end;
   backdrop-filter:blur(2px); -webkit-backdrop-filter:blur(2px);
 }
 .player-search-overlay.open { display:flex; }
 .player-search-sheet {
-  width:100%; background:#fff; border-radius:12px 12px 0 0;
+  width:100%; background:var(--cream); border-radius:12px 12px 0 0;
   overflow:hidden; animation:slideUp .22s ease;
-  max-height:85vh; display:flex; flex-direction:column;
+  max-height:78vh; display:flex; flex-direction:column;
   box-shadow:0 -4px 32px rgba(15,31,20,.35);
 }
 .player-search-input-wrap {
-  padding:16px 16px 10px; border-bottom:1px solid rgba(27,58,45,.08);
-  background:#fff; position:sticky; top:0; z-index:1;
+  padding:16px 16px 10px; border-bottom:1px solid var(--rule);
+  background:var(--cream);
 }
 .player-search-input {
   width:100%; box-sizing:border-box;
-  padding:12px 14px; border:1px solid rgba(27,58,45,.12); border-radius:10px;
-  font-family:var(--sans); font-size:16px; background:#F8F8F8;
-  color:var(--green-deep); outline:none;
-  -webkit-appearance:none;
+  padding:10px 14px; border:1px solid var(--rule); border-radius:8px;
+  font-family:var(--sans); font-size:14px; background:var(--cream-card);
+  color:var(--ink); outline:none;
 }
-.player-search-input:focus { border-color:var(--gold-rule); }
-.player-search-results { overflow-y:auto; flex:1; -webkit-overflow-scrolling:touch; padding-bottom:80px; }
+.player-search-input:focus { border-color:var(--gold); }
+.player-search-results { overflow-y:auto; flex:1; }
 .player-search-row {
   display:flex; align-items:center; gap:12px;
-  padding:14px 16px; border-bottom:1px solid rgba(27,58,45,.06);
-  cursor:pointer; transition:background .1s; background:#fff;
+  padding:13px 16px; border-bottom:1px solid var(--rule);
+  cursor:pointer; transition:background .1s; background:var(--cream-card);
 }
-.player-search-row:active { background:rgba(27,58,45,.04); }
+.player-search-row:active { background:var(--green-pale); }
 .player-search-av {
-  width:40px; height:40px; border-radius:50%; flex-shrink:0;
-  background:rgba(27,58,45,.06); border:none;
+  width:36px; height:36px; border-radius:50%; flex-shrink:0;
+  background:rgba(138,109,47,.12); border:1px solid rgba(196,164,86,.3);
   display:flex; align-items:center; justify-content:center;
-  font-family:var(--serif); font-size:14px; font-weight:600; color:var(--green-deep);
+  font-family:var(--serif); font-size:14px; font-weight:600; color:var(--gold);
 }
-.player-search-name { font-family:var(--serif); font-size:15px; font-weight:600; color:var(--green-deep); }
-.player-search-meta { font-family:var(--sans); font-size:11px; color:rgba(27,58,45,.4); margin-top:1px; }
+.player-search-name { font-family:var(--serif); font-size:15px; font-weight:600; color:var(--ink); }
+.player-search-meta { font-family:var(--sans); font-size:11px; color:var(--ink-muted); margin-top:1px; }
 .player-search-friend-badge {
   margin-left:auto; font-family:var(--sans); font-size:9px; font-weight:700;
-  letter-spacing:1.5px; text-transform:uppercase; color:var(--gold-rule);
-  border:1px solid rgba(196,164,86,.3); border-radius:10px; padding:2px 7px;
+  letter-spacing:1.5px; text-transform:uppercase; color:var(--gold);
+  border:1px solid rgba(196,164,86,.4); border-radius:10px; padding:2px 7px;
   flex-shrink:0;
 }
 .player-search-empty {
   padding:32px 20px; text-align:center;
-  font-family:var(--sans); font-size:13px; color:rgba(27,58,45,.35);
+  font-family:var(--sans); font-size:13px; color:var(--ink-muted);
 }
 /* ── PROFILE SETUP MODAL ── */
 .profile-setup-overlay {
@@ -3598,16 +3521,16 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
   color: var(--saddle-brown);
 }
 
-/* ── screen-round light surface — white with green accents ── */
-#screen-round { background:#F8F8F8; }
-#screen-round .body { background:#F8F8F8; color:var(--green-deep); }
+/* ── screen-round dark surface — override condor design system ── */
+#screen-round { background:var(--green-deep); }
+#screen-round .body { background:var(--green-deep); color:#fff; }
 #screen-round .score-hero-val.birdie,
 #screen-round .score-hero-val.eagle { color:var(--gold-rule); }
-#screen-round .score-hero-val.at-par { color:var(--green-deep); }
+#screen-round .score-hero-val.at-par { color:#fff; }
 #screen-round .score-hero-val.bogey,
 #screen-round .score-hero-val.double { color:#c0392b; }
-#screen-round .score-player-name { color:var(--green-deep); }
-#screen-round .card { background:#fff; border:none; color:rgba(27,58,45,.55); box-shadow:0 2px 12px rgba(0,0,0,.06); }
+#screen-round .score-player-name { color:#fff; }
+#screen-round .card { background:var(--green-augusta); border:none; color:rgba(255,255,255,.55); }
 
 /* ── screen-settlement ── */
 #screen-settlement .debt-amount {
@@ -4084,6 +4007,188 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
   border-radius: 0 0 14px 14px !important;
   padding: 14px 18px 16px !important;
 }
+
+/* ── BIRDHOUSE ADDITIONS (scoped — all rules prefixed) ── */
+#screen-birdhouse .bh-section { margin: 16px 16px 0; }
+#screen-birdhouse .bh-label {
+  font-family: var(--sans); font-size: 9px; font-weight: 700;
+  letter-spacing: 3px; text-transform: uppercase;
+  color: var(--gold-rule); margin-bottom: 8px;
+}
+#screen-birdhouse .bh-label.bh-white { color: rgba(255,255,255,0.4); }
+#screen-birdhouse .bh-cell {
+  background: var(--green-augusta); border-radius: 12px; padding: 14px;
+}
+#screen-birdhouse .bh-skeleton {
+  height: 120px; background: rgba(255,255,255,0.04);
+  border-radius: 8px; animation: bh-pulse 1.5s ease infinite;
+}
+@keyframes bh-pulse { 0%,100%{opacity:.4} 50%{opacity:.8} }
+#screen-birdhouse .bh-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+#screen-birdhouse .bh-row:last-child { border-bottom: none; }
+#screen-birdhouse .bh-row.bh-rank1 { background: rgba(196,164,86,0.08); border-radius: 6px; padding: 8px 6px; }
+#screen-birdhouse .bh-rank {
+  font-family: var(--sans); font-size: 11px;
+  color: rgba(255,255,255,0.35); width: 16px; text-align: center;
+}
+#screen-birdhouse .bh-avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--green-mid); display: flex; align-items: center;
+  justify-content: center; font-family: var(--sans); font-size: 10px;
+  color: var(--cream); font-weight: 600; flex-shrink: 0; overflow: hidden;
+}
+#screen-birdhouse .bh-avatar img { width:100%; height:100%; object-fit:cover; }
+#screen-birdhouse .bh-name { font-family: var(--sans); font-size: 12px; color: #fff; flex: 1; }
+#screen-birdhouse .bh-sub { font-family: var(--sans); font-size: 10px; color: rgba(255,255,255,0.4); }
+#screen-birdhouse .bh-money-pos { font-family: var(--sans); font-size: 13px; color: var(--gold-rule); }
+#screen-birdhouse .bh-money-neg { font-family: var(--sans); font-size: 13px; color: #c0392b; }
+#screen-birdhouse .bh-money-zero { font-family: var(--sans); font-size: 13px; color: rgba(255,255,255,0.3); }
+#screen-birdhouse .bh-scroll-row {
+  display: flex; gap: 10px; overflow-x: auto; padding-bottom: 4px;
+  -webkit-overflow-scrolling: touch; scrollbar-width: none;
+}
+#screen-birdhouse .bh-scroll-row::-webkit-scrollbar { display: none; }
+#screen-birdhouse .bh-spotlight {
+  background: var(--green-augusta); border: 1px solid rgba(196,164,86,0.3);
+  border-radius: 12px; width: 120px; min-width: 120px; height: 140px;
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 6px; padding: 12px;
+}
+#screen-birdhouse .bh-spotlight-name {
+  font-family: var(--serif); font-style: italic; font-size: 15px;
+  color: #fff; text-align: center;
+}
+#screen-birdhouse .bh-spotlight-sub {
+  font-family: var(--sans); font-size: 9px;
+  color: rgba(255,255,255,0.4); text-align: center;
+}
+#screen-birdhouse .bh-spotlight-num {
+  font-family: var(--sans); font-size: 8px;
+  color: var(--gold-rule); letter-spacing: 2px;
+}
+#screen-birdhouse .bh-search-wrap {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--green-augusta); border-radius: 10px;
+  padding: 10px 14px; margin-bottom: 8px;
+}
+#screen-birdhouse .bh-search-icon { color: rgba(255,255,255,0.3); font-size: 16px; }
+#screen-birdhouse .bh-search {
+  background: none; border: none; outline: none;
+  font-family: var(--sans); font-size: 13px; color: #fff; width: 100%;
+}
+#screen-birdhouse .bh-search::placeholder { color: rgba(255,255,255,0.3); }
+#screen-birdhouse .bh-member-list { display: flex; flex-direction: column; }
+#screen-birdhouse .bh-member-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer;
+}
+#screen-birdhouse .bh-member-row:last-child { border-bottom: none; }
+#screen-birdhouse .bh-member-row:active { opacity: 0.7; }
+#screen-birdhouse .bh-mr-info { flex: 1; }
+#screen-birdhouse .bh-mr-name { font-family: var(--sans); font-size: 13px; color: #fff; }
+#screen-birdhouse .bh-mr-course { font-family: var(--sans); font-size: 10px; color: rgba(255,255,255,0.3); margin-top: 2px; }
+#screen-birdhouse .bh-mr-hcp { font-family: var(--sans); font-size: 11px; color: rgba(255,255,255,0.4); }
+#screen-birdhouse .bh-bulletin-content {
+  font-family: var(--serif); font-size: 14px;
+  color: rgba(255,255,255,0.85); line-height: 1.75; white-space: pre-wrap;
+}
+#screen-birdhouse .bh-bulletin-headline {
+  font-family: var(--serif); font-style: italic; font-size: 20px;
+  color: #fff; margin-bottom: 12px;
+}
+#screen-birdhouse .bh-bulletin-meta {
+  font-family: var(--sans); font-size: 8px; color: rgba(255,255,255,0.4);
+  letter-spacing: 2px; text-transform: uppercase;
+  display: flex; justify-content: space-between; margin-bottom: 12px;
+}
+#screen-birdhouse .bh-rule {
+  border: none; border-top: 1px solid var(--gold-rule); opacity: 0.3; margin: 12px 0;
+}
+#screen-birdhouse .bh-bulletin-btn {
+  display: block; width: 100%; margin-top: 12px; background: transparent;
+  border: 1px solid var(--gold-rule); color: var(--gold-rule);
+  font-family: var(--sans); font-size: 10px; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase; padding: 12px;
+  border-radius: 8px; cursor: pointer;
+}
+#screen-birdhouse .bh-bulletin-btn:disabled { opacity: 0.4; cursor: default; }
+#screen-birdhouse .bh-bulletin-actions {
+  margin-top: 12px; padding-top: 10px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  display: flex; justify-content: space-between; align-items: center;
+}
+#screen-birdhouse .bh-bulletin-share {
+  background: transparent; border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.6); font-family: var(--sans); font-size: 9px;
+  letter-spacing: 2px; text-transform: uppercase; padding: 8px 16px;
+  border-radius: 4px; cursor: pointer;
+}
+#screen-birdhouse .bh-bulletin-prev {
+  font-family: var(--sans); font-size: 9px; color: rgba(255,255,255,0.35);
+  letter-spacing: 1px; text-transform: uppercase; cursor: pointer;
+  background: none; border: none; text-decoration: underline;
+}
+#screen-birdhouse .bh-placeholder {
+  font-family: var(--sans); font-size: 11px; color: rgba(255,255,255,0.4);
+  font-style: italic; text-align: center; padding: 20px 0;
+}
+.bh-bottom-sheet {
+  position: fixed; bottom: -100%; left: 0; right: 0;
+  background: var(--green-deep); border-radius: 16px 16px 0 0;
+  z-index: 5100; transition: bottom .3s ease;
+  max-height: 80vh; overflow-y: auto; padding: 0 16px 32px;
+}
+.bh-bottom-sheet.open { bottom: 0; }
+.bh-sheet-handle {
+  width: 36px; height: 4px; background: rgba(255,255,255,0.2);
+  border-radius: 2px; margin: 12px auto 16px;
+}
+.bh-sheet-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.5); z-index: 5099;
+}
+.bh-sheet-overlay.open { display: block; }
+.bh-ms-name {
+  font-family: var(--serif); font-size: 24px; font-style: italic;
+  color: #fff; text-align: center; margin-bottom: 4px;
+}
+.bh-ms-id {
+  font-family: var(--sans); font-size: 9px; color: var(--gold-rule);
+  letter-spacing: 2px; text-align: center; margin-bottom: 6px;
+}
+.bh-ms-course {
+  font-family: var(--sans); font-size: 11px; color: rgba(255,255,255,0.4);
+  text-align: center; margin-bottom: 4px;
+}
+.bh-ms-hcp {
+  font-family: var(--font-display); font-size: 42px; font-weight: 500;
+  color: var(--gold-rule); text-align: center; margin: 16px 0 20px;
+}
+.bh-ms-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+.bh-ms-stat {
+  background: var(--green-augusta); border-radius: 10px;
+  padding: 14px 10px; text-align: center;
+}
+.bh-ms-stat-val {
+  font-family: var(--font-display); font-size: 20px; font-weight: 500; color: #fff;
+}
+.bh-ms-stat-label {
+  font-family: var(--sans); font-size: 8px; color: rgba(255,255,255,0.4);
+  letter-spacing: 1.5px; text-transform: uppercase; margin-top: 4px;
+}
+.bh-prev-edition {
+  padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.06); cursor: pointer;
+}
+.bh-prev-edition:last-child { border-bottom: none; }
+.bh-prev-headline {
+  font-family: var(--serif); font-size: 16px; font-style: italic; color: #fff;
+}
+.bh-prev-date {
+  font-family: var(--sans); font-size: 9px; color: rgba(255,255,255,0.4); margin-top: 4px;
+}
 </style>
 
 </head>
@@ -4139,7 +4244,7 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
           <div class="condor-card-inner">
 
             <div class="card-top-row">
-              <span class="card-wordmark">Condor Card</span>
+              <span class="card-wordmark">Condor Golf Society</span>
               <span class="card-id" id="cc-member-id">№ ——</span>
             </div>
 
@@ -4181,8 +4286,24 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
             </div>
 
             <div class="card-qr-row">
-              <!-- Condor logo mark -->
-              <img src="condor-logo.png" alt="Condor" style="height:48px;width:auto;background:none;border:none;box-shadow:none;mix-blend-mode:screen;opacity:0.5;">
+              <!-- QR code — SVG approximation -->
+              <svg class="card-qr" viewBox="0 0 44 44" fill="none">
+                <rect x="2" y="2" width="14" height="14" rx="2" stroke="rgba(244,241,230,0.6)" stroke-width="1.2" fill="none"/>
+                <rect x="5" y="5" width="8" height="8" rx="1" fill="rgba(244,241,230,0.55)"/>
+                <rect x="28" y="2" width="14" height="14" rx="2" stroke="rgba(244,241,230,0.6)" stroke-width="1.2" fill="none"/>
+                <rect x="31" y="5" width="8" height="8" rx="1" fill="rgba(244,241,230,0.55)"/>
+                <rect x="2" y="28" width="14" height="14" rx="2" stroke="rgba(244,241,230,0.6)" stroke-width="1.2" fill="none"/>
+                <rect x="5" y="31" width="8" height="8" rx="1" fill="rgba(244,241,230,0.55)"/>
+                <rect x="20" y="20" width="4" height="4" fill="rgba(244,241,230,0.4)"/>
+                <rect x="26" y="20" width="4" height="4" fill="rgba(244,241,230,0.4)"/>
+                <rect x="32" y="20" width="4" height="4" fill="rgba(244,241,230,0.4)"/>
+                <rect x="38" y="20" width="4" height="4" fill="rgba(244,241,230,0.4)"/>
+                <rect x="20" y="26" width="4" height="4" fill="rgba(244,241,230,0.4)"/>
+                <rect x="26" y="26" width="4" height="4" fill="rgba(244,241,230,0.3)"/>
+                <rect x="32" y="32" width="4" height="4" fill="rgba(244,241,230,0.4)"/>
+                <rect x="20" y="32" width="4" height="4" fill="rgba(244,241,230,0.4)"/>
+                <rect x="38" y="38" width="4" height="4" fill="rgba(244,241,230,0.4)"/>
+              </svg>
               <div class="card-season-note">
                 <span class="card-season-val" id="cc-season-net">—</span>
                 <span class="card-season-label">Season · 2026</span>
@@ -4238,56 +4359,110 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
         <span class="play-subtitle">Saturday, 7am</span>
       </div>
 
-      <!-- ACTIVE ROUND (hidden by default, shown by syncActiveRoundCard) -->
-      <div class="active-round-card" onclick="if(_roundInProgress && state.currentHole > 0){ enterEngineFlow('screen-round'); renderRound(); }">
-        <div class="arc-eyebrow">Round In Progress</div>
-        <div class="arc-course"></div>
+      <!-- ACTIVE ROUND -->
+      <div class="active-round-card">
+        <div class="arc-eyebrow">Round In Progress · Nassau Active</div>
+        <div class="arc-course">Augusta National GC</div>
         <div class="arc-progress">
-          <span class="arc-hole-info"></span>
+          <span class="arc-hole-info">Hole 9 of 18 · Par 4</span>
           <div class="arc-score-display">
-            <span class="arc-score-num"></span>
-            <span class="arc-score-par"></span>
+            <span class="arc-score-num">−2</span>
+            <span class="arc-score-par">thru 8</span>
           </div>
         </div>
         <div class="hole-progress">
-          <div class="hole-dot"></div><div class="hole-dot"></div>
-          <div class="hole-dot"></div><div class="hole-dot"></div>
-          <div class="hole-dot"></div><div class="hole-dot"></div>
-          <div class="hole-dot"></div><div class="hole-dot"></div>
-          <div class="hole-dot"></div><div class="hole-dot"></div>
+          <div class="hole-dot done"></div><div class="hole-dot done"></div>
+          <div class="hole-dot done"></div><div class="hole-dot done"></div>
+          <div class="hole-dot done"></div><div class="hole-dot done"></div>
+          <div class="hole-dot done"></div><div class="hole-dot done"></div>
+          <div class="hole-dot current"></div><div class="hole-dot"></div>
           <div class="hole-dot"></div><div class="hole-dot"></div>
           <div class="hole-dot"></div><div class="hole-dot"></div>
           <div class="hole-dot"></div><div class="hole-dot"></div>
           <div class="hole-dot"></div><div class="hole-dot"></div>
         </div>
         <div class="arc-players">
-          <div class="arc-player-chip"><span class="arc-player-name"></span><span class="arc-player-score"></span></div>
-          <div class="arc-player-chip"><span class="arc-player-name"></span><span class="arc-player-score"></span></div>
-          <div class="arc-player-chip"><span class="arc-player-name"></span><span class="arc-player-score"></span></div>
-          <div class="arc-player-chip"><span class="arc-player-name"></span><span class="arc-player-score"></span></div>
-        </div>
-      </div>
-
-      <!-- PREVIOUS ROUND (shown when no round in progress) -->
-      <div class="play-prev-round" id="play-last-round" style="display:none">
-        <div class="arc-eyebrow" id="plr-eyebrow">Last Round</div>
-        <div class="arc-course" id="plr-course"></div>
-        <div class="arc-progress">
-          <span class="arc-hole-info" id="plr-date"></span>
-          <div class="arc-score-display">
-            <span class="arc-score-num" id="plr-score"></span>
-            <span class="arc-score-par" id="plr-par-label"></span>
+          <div class="arc-player-chip">
+            <span class="arc-player-name">You</span>
+            <span class="arc-player-score" style="color:var(--antique-gold)">−2</span>
+          </div>
+          <div class="arc-player-chip">
+            <span class="arc-player-name">Harrington</span>
+            <span class="arc-player-score">E</span>
+          </div>
+          <div class="arc-player-chip">
+            <span class="arc-player-name">Whitmore</span>
+            <span class="arc-player-score">+1</span>
+          </div>
+          <div class="arc-player-chip">
+            <span class="arc-player-name">Osei</span>
+            <span class="arc-player-score">+3</span>
           </div>
         </div>
-        <div class="arc-players" id="plr-players"></div>
-        <div class="plr-money" id="plr-money"></div>
-        <div class="plr-play-again" id="plr-play-again" onclick="playAgainLastRound()">Play Again →</div>
       </div>
 
-      <!-- START ROUND CTA -->
-      <button class="start-cta" onclick="enterEngineFlow('screen-course')">
-        <span class="start-cta-text">Start Round</span>
-      </button>
+      <!-- NEW ROUND -->
+      <div class="play-new-section">
+        <div class="play-new-eyebrow">New Round</div>
+
+        <!-- Format pills -->
+        <div class="format-pills">
+          <div class="format-pill selected" onclick="selectFormat(this)">
+            <span class="format-pill-name">Nassau</span>
+            <span class="format-pill-sub">Front · Back · Match</span>
+          </div>
+          <div class="format-pill" onclick="selectFormat(this)">
+            <span class="format-pill-name">Skins</span>
+            <span class="format-pill-sub">Hole by hole</span>
+          </div>
+          <div class="format-pill" onclick="selectFormat(this)">
+            <span class="format-pill-name">Wolf</span>
+            <span class="format-pill-sub">Rotating</span>
+          </div>
+        </div>
+
+        <!-- Bet — the one visible control -->
+        <div class="bet-control">
+          <span class="bet-label">Bet per nine</span>
+          <div class="stepper">
+            <button class="stepper-btn" onclick="adjustBet(-5)">−</button>
+            <span class="stepper-val" id="bet-val">$20</span>
+            <button class="stepper-btn" onclick="adjustBet(5)">+</button>
+          </div>
+        </div>
+
+        <!-- Advanced disclosure -->
+        <button class="advanced-toggle" onclick="toggleAdvanced(this)">
+          <span class="advanced-toggle-label">Advanced options</span>
+          <span class="advanced-toggle-icon" id="adv-icon">▾</span>
+        </button>
+
+        <!-- Collapsed config -->
+        <div class="nassau-config" id="nassau-config">
+          <div class="nc-row">
+            <span class="nc-label">Auto Press</span>
+            <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="nc-row">
+            <span class="nc-label">Stroke play handicaps</span>
+            <div class="toggle" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="nc-row">
+            <span class="nc-label">Skins alongside</span>
+            <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="nc-row">
+            <span class="nc-label">Players</span>
+            <span class="nc-value">4 selected</span>
+          </div>
+        </div>
+
+        <!-- The singular CTA -->
+        <button class="start-cta" onclick="enterEngineFlow('screen-course')">
+          <span class="start-cta-text">Start Round</span>
+        </button>
+
+      </div><!-- end play-new-section -->
 
       <div class="bottom-pad"></div>
     </div>
@@ -4415,12 +4590,52 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
         <span class="flock-arrow">→</span>
       </div>
 
+      <!-- SECTION 1: SEASON LEADERBOARD -->
+      <div class="bh-section">
+        <div class="bh-label">Season Leaderboard · 2026</div>
+        <div class="bh-cell" id="bh-leaderboard">
+          <div class="bh-skeleton" id="bh-leaderboard-loader"></div>
+        </div>
+      </div>
+
+      <!-- SECTION 2: NEW MEMBERS -->
+      <div class="bh-section" id="bh-newmembers-section" style="display:none">
+        <div class="bh-label">New to the Club</div>
+        <div class="bh-scroll-row" id="bh-newmembers"></div>
+      </div>
+
+      <!-- SECTION 3: MEMBERS DIRECTORY -->
+      <div class="bh-section">
+        <div class="bh-label bh-white">Members</div>
+        <div class="bh-search-wrap">
+          <span class="bh-search-icon">⌕</span>
+          <input class="bh-search" id="bh-member-search" type="text" placeholder="Search members" oninput="bhFilterMembers(this.value)">
+        </div>
+        <div class="bh-member-list" id="bh-member-list"></div>
+      </div>
+
+      <!-- SECTION 4: CONDOR BULLETIN -->
+      <div class="bh-section">
+        <div class="bh-label">The Condor Bulletin</div>
+        <div class="bh-cell" id="bh-bulletin">
+          <div id="bh-bulletin-content"></div>
+          <button class="bh-bulletin-btn" id="bh-generate-btn" style="display:none" onclick="bhGenerateBulletin(this)">Generate This Week's Bulletin</button>
+        </div>
+      </div>
+
       <div class="bottom-pad"></div>
     </div>
 
   </div>
 
 </div><!-- end .app -->
+
+<!-- BIRDHOUSE PROFILE SHEET -->
+<div class="bh-sheet-overlay" id="bh-sheet-overlay" onclick="bhCloseSheet()"></div>
+<div class="bh-bottom-sheet" id="bh-profile-sheet">
+  <div class="bh-sheet-handle"></div>
+  <div id="bh-sheet-body"></div>
+</div>
 
 <!-- ═══ FLOCK BOTTOM SHEET ═══ -->
 <div class="sheet-overlay" id="sheet-overlay" onclick="closeFlockSheet()"></div>
@@ -5244,10 +5459,10 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
     <div class="press-alert-inline" id="press-alert" style="display:none">
       <div style="flex:1;display:flex;align-items:center;gap:8px">
         <span style="font-family:var(--serif);font-weight:600;color:var(--gold);font-style:italic;font-size:13px">Press</span>
-        <span class="press-alert-text" id="press-alert-text" style="font-family:var(--sans);font-size:12px;color:var(--green-deep)">Press available</span>
+        <span class="press-alert-text" id="press-alert-text" style="font-family:var(--sans);font-size:12px;color:var(--ink)">Press available</span>
       </div>
       <button class="press-btn" onclick="acceptPress()" style="padding:5px 12px;font-size:11px">Press</button>
-      <button class="press-btn" onclick="declinePress()" style="background:rgba(27,58,45,.2);margin-left:4px;padding:5px 10px;font-size:11px">Skip</button>
+      <button class="press-btn" onclick="declinePress()" style="background:var(--ink-muted);margin-left:4px;padding:5px 10px;font-size:11px">Skip</button>
     </div>
 
     <!-- Score grid (primary content) -->
@@ -5264,14 +5479,14 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
     <div class="details-drawer-body" id="details-drawer-body">
 
       <div id="side-games-section" style="display:none">
-        <div style="font-family:var(--sans);font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:rgba(27,58,45,.35);margin-bottom:10px;padding-top:8px">Side Games — Hole <span id="sg-hole-label">1</span></div>
+        <div style="font-family:var(--sans);font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:10px;padding-top:8px">Side Games — Hole <span id="sg-hole-label">1</span></div>
         <div class="card" style="padding:12px 16px">
           <div id="side-games-grid"></div>
         </div>
       </div>
 
       <div style="display:flex;align-items:center;justify-content:space-between;margin:12px 0 8px">
-        <div style="font-family:var(--sans);font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:rgba(27,58,45,.35)">Running Money</div>
+        <div style="font-family:var(--sans);font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.4)">Running Money</div>
         <button onclick="addHoleSideWager()" style="font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);background:none;border:1px solid rgba(181,154,99,0.3);border-radius:8px;padding:4px 10px;cursor:pointer">+ Side Bet</button>
       </div>
       <div class="card" style="padding:12px 16px">
@@ -6800,19 +7015,6 @@ function getEntityShortName(idx) {
   return members.map(pi => state.players[pi].name.split(' ')[0]).join(' & ');
 }
 
-// Standings cell name — team name → initials → first name
-function getEntityStandingsName(idx) {
-  // Individual format — first name only
-  if (!state.teams) return state.players[idx].name.split(' ')[0];
-  // Team format — check for custom team name first
-  const custom = state.teamNames && state.teamNames[idx];
-  const hasCustom = custom && custom.trim() && custom !== 'Team A' && custom !== 'Team B' && custom !== 'Team C';
-  if (hasCustom) return custom.trim();
-  // No custom name — first initials with ampersand
-  const members = state.teams[idx];
-  return members.map(function(pi) { return state.players[pi].name.charAt(0).toUpperCase(); }).join(' & ');
-}
-
 // Recalculate front/back/match for entity A vs entity B from scratch
 function calcSideScores(aIdx, bIdx) {
   let frontA=0,frontB=0,backA=0,backB=0;
@@ -7725,16 +7927,16 @@ async function searchPlayers(query) {
 
   if (!players || !players.length) return [];
 
-  // Friends table may not exist yet — skip friend ranking silently
+  // Try to fetch accepted friends to rank them first
   let friendIds = new Set();
   try {
-    const { data: friends, error: fErr } = await sb
+    const { data: friends } = await sb
       .from('friends')
       .select('friend_id')
       .eq('player_id', userId)
       .eq('status', 'accepted');
-    if (!fErr && friends) friends.forEach(f => friendIds.add(f.friend_id));
-  } catch(e) { /* degrade gracefully */ }
+    (friends || []).forEach(f => friendIds.add(f.friend_id));
+  } catch(e) { /* friends table may not exist yet — degrade gracefully */ }
 
   return players
     .map(p => ({ ...p, isFriend: friendIds.has(p.id) }))
@@ -7754,8 +7956,8 @@ function openPlayerSearch() {
     const input = document.getElementById('player-search-input');
     if (input) { input.value = ''; input.focus(); }
     document.getElementById('player-search-results').innerHTML =
-      '<div class="player-search-empty">Type a name to search members or add a guest</div>';
-  }, 150);
+      '<div class="player-search-empty">Start typing to search members</div>';
+  }, 80);
 }
 
 function closePlayerSearch(e) {
@@ -7809,8 +8011,8 @@ function renderPlayerSearchResults(players, query) {
   // Always show "Add as Guest" row at bottom
   const guestName = query.charAt(0).toUpperCase() + query.slice(1);
   html += `<div class="player-search-row" onclick="addSearchedPlayer(null,'${guestName.replace(/'/g,"\\'")}',0,true)"
-    style="background:rgba(27,58,45,.02)">
-    <div class="player-search-av" style="font-size:18px;background:none;border:1px dashed rgba(27,58,45,.15);color:var(--green-deep)">+</div>
+    style="opacity:.8">
+    <div class="player-search-av" style="font-size:18px;background:none;border:1px dashed rgba(196,164,86,.35);">+</div>
     <div style="flex:1">
       <div class="player-search-name">Add "${guestName}" as Guest</div>
       <div class="player-search-meta">Will not be linked to a Condor account</div>
@@ -9362,13 +9564,7 @@ function renderRound() {
 // ═══════════════════════════════════════════════════════════════════
 function renderStandingsStrip() {
   var strip = document.getElementById('standings-strip');
-  var gameCells = [];
-  var moneyCells = [];
-  var extraCells = [];
-
-  function cell(label, value, cls) {
-    return '<div class="standing-micro '+cls+'"><span class="standing-label">'+label+'</span><span class="standing-value">'+value+'</span></div>';
-  }
+  var pills = [];
 
   if (state.games.nassau) {
     var sides = [
@@ -9379,18 +9575,18 @@ function renderStandingsStrip() {
     sides.forEach(function(item) {
       if (item.stake <= 0) return;
       var isEven = item.s.leader < 0;
-      var lname = !isEven ? getEntityStandingsName(item.s.leader) : null;
+      var lname = !isEven ? getEntityFullLabel(item.s.leader) : null;
       var cls = isEven ? 'even' : 'winning';
       var valText = isEven ? 'Even' : lname + ' +' + item.s.holesUp;
-      gameCells.push(cell(item.label, valText, cls));
+      pills.push('<div class="standing-micro '+cls+'">'+item.label+': '+valText+'</div>');
     });
 
     state.nassau.presses.filter(function(p){return !p.resolved && !p.declined;}).forEach(function(p, i) {
-      gameCells.push(cell('Press '+(i+1), p.leader<0?'Even':'+'+p.holesUp, 'winning'));
+      pills.push('<div class="standing-micro" style="border-color:rgba(196,164,86,.4);color:var(--gold)">Press '+(i+1)+': '+(p.leader<0?'Even':'+'+p.holesUp)+'</div>');
     });
   }
 
-  // ── MATCH PLAY ──
+  // ── MATCH PLAY PILL ──
   if (state.games.matchplay && state.players.length >= 2) {
     var mpStake = parseFloat(state.stakes.matchplay)||0;
     if (mpStake > 0) {
@@ -9413,11 +9609,11 @@ function renderStandingsStrip() {
       else if (mpIsClosed) { mpValText = mpLeaderName + ' ' + mpUp + '&' + mpRemain; }
       else if (mpIsDormie) { mpValText = mpLeaderName + ' Dormie'; }
       else { mpValText = mpLeaderName + ' ' + mpUp + ' UP'; }
-      gameCells.push(cell('Match', mpValText, mpCls));
+      pills.push('<div class="standing-micro '+mpCls+'">Match: '+mpValText+'</div>');
     }
   }
 
-  // ── STROKE PLAY ──
+  // ── STROKE PLAY PILL ──
   if (state.games.stroke && state.players.length >= 2) {
     var spStake = parseFloat(state.stakes.stroke)||0;
     if (spStake > 0) {
@@ -9438,13 +9634,13 @@ function renderStandingsStrip() {
       var spLeaderName = spLeaderIdx >= 0 ? state.players[spLeaderIdx].name.split(' ')[0] : null;
       var spBy = spIsEven ? 0 : spTotals.sort(function(a,b){return a-b;})[1] - spMin;
       var spValText = spIsEven ? 'Tied' : spLeaderName + ' −' + spBy;
-      gameCells.push(cell('Stroke', spValText, spIsEven?'even':'winning'));
+      pills.push('<div class="standing-micro '+(spIsEven?'even':'winning')+'">Stroke: '+spValText+'</div>');
     }
   }
 
   if (state.games.skins) {
     var pot = state.skins.carryover + (parseFloat(state.stakes.skins)||0);
-    extraCells.push(cell('Skins', '$'+pot, 'winning'));
+    pills.push('<div class="standing-micro" style="color:var(--gold);border-color:rgba(196,164,86,.3)">Skins: $'+pot+'</div>');
   }
 
   if (state.games.wolf) {
@@ -9452,27 +9648,18 @@ function renderStandingsStrip() {
     var wolfIdx2 = getWolfIdx(state.currentHole);
     var wolfName = state.players[wolfIdx2].name.split(' ')[0];
     var wolfVal = ws2 ? ws2.decLabel : 'Deciding';
-    extraCells.push(cell('\uD83D\uDC3A Wolf', wolfName + ' · ' + wolfVal, 'winning'));
+    pills.push('<div class="standing-micro" style="color:var(--gold);border-color:rgba(196,164,86,.3)">\uD83D\uDC3A '+wolfName+': '+wolfVal+'</div>');
   }
 
-  // Running money — merged players cell with horizontal columns
+  // Running money micro-pills
   var money = getRunningMoney();
-  var playersCell = '';
-  if (money.length) {
-    var cols = money.map(function(m, i) {
-      var sign = m > 0 ? '+' : m < 0 ? '\u2212' : '';
-      var valCls = m > 0 ? 'sm-pos' : m < 0 ? 'sm-neg' : 'sm-zero';
-      return '<div class="sm-col"><span class="sm-name">' + state.players[i].name.split(' ')[0] + '</span><span class="sm-money ' + valCls + '">' + sign + '$' + Math.abs(m).toFixed(0) + '</span></div>';
-    }).join('');
-    playersCell = '<div class="standing-micro sm-players-cell"><span class="standing-label">Players</span><div class="sm-cols">' + cols + '</div></div>';
-  }
+  money.forEach(function(m, i) {
+    var sign = m > 0 ? '+' : '';
+    var cls  = m > 0 ? 'winning' : m < 0 ? 'losing' : 'even';
+    pills.push('<div class="standing-micro '+cls+'">'+state.players[i].name.split(' ')[0]+': '+sign+'$'+Math.abs(m).toFixed(0)+'</div>');
+  });
 
-  // Build rows
-  var html = '';
-  if (gameCells.length) html += '<div class="standings-row">' + gameCells.join('') + '</div>';
-  if (playersCell) html += '<div class="standings-row">' + playersCell + '</div>';
-  if (extraCells.length) html += '<div class="standings-row">' + extraCells.join('') + '</div>';
-  strip.innerHTML = html;
+  strip.innerHTML = pills.join('');
 }
 
 // ═══════════════════════════════════════════════════════════════════
@@ -12737,7 +12924,6 @@ async function condorNavigate(tab) {
   document.getElementById('engine-overlay').classList.remove('visible');
   if (tab === 'play') {
     syncActiveRoundCard();
-    populatePlayLastRound();
   }
   if (tab === 'card') {
     populateCondorCard();
@@ -12746,6 +12932,10 @@ async function condorNavigate(tab) {
     populateFlightBoard();
     populateFlightLog();
     populateFlockPills();
+    bhLoadLeaderboard();
+    bhLoadNewMembers();
+    bhLoadDirectory();
+    bhLoadBulletin();
   }
 }
 
@@ -12773,7 +12963,7 @@ async function populateCondorCard() {
     // Player identity (same query as populateCondorCard)
     const { data: player } = await sb
       .from('players')
-      .select('username, hdcp_index, home_course, city, avatar_url, created_at')
+      .select('username, hdcp_index, home_course, city, avatar_url')
       .eq('id', session.user.id)
       .maybeSingle();
 
@@ -12799,21 +12989,9 @@ async function populateCondorCard() {
       }
     }
 
-    // Member ID — sequential rank from players table
-    try {
-      if (player && player.created_at) {
-        const { count } = await sb
-          .from('players')
-          .select('*', { count: 'exact', head: true })
-          .lt('created_at', player.created_at);
-        var memberNumber = String((count != null ? count : 0) + 1).padStart(4, '0');
-        document.getElementById('cc-member-id').textContent = '№ C' + memberNumber;
-      } else {
-        document.getElementById('cc-member-id').textContent = '№ C????';
-      }
-    } catch(e) {
-      document.getElementById('cc-member-id').textContent = '№ C????';
-    }
+    // Member ID — last 4 of Supabase user ID
+    var uid = session.user.id || '';
+    document.getElementById('cc-member-id').textContent = '№ ' + uid.slice(-4).toUpperCase();
 
     // Stats (same query as populateCondorCard stats block)
     const { data: myRounds } = await sb
@@ -12976,13 +13154,11 @@ function syncActiveRoundCard() {
     && _roundInProgress
     && state.scores
     && state.currentHole > 0;
-  const lastRoundCard = document.getElementById('play-last-round');
   if (!inProgress) {
     card.style.display = 'none';
     return;
   }
   card.style.display = '';
-  if (lastRoundCard) lastRoundCard.style.display = 'none';
   const courseName = state.course?.name || '';
   const holeNum = state.currentHole || 1;
   const par = state.course?.holes?.[holeNum - 1]?.par || 4;
@@ -13014,110 +13190,6 @@ function syncActiveRoundCard() {
     chips[i].querySelector('.arc-player-score').textContent =
       pt === 0 ? 'E' : (pt > 0 ? '+' + pt : pt);
   });
-}
-
-// ─── PLAY TAB — LAST ROUND CARD ───
-async function populatePlayLastRound() {
-  const card = document.getElementById('play-last-round');
-  if (!card) return;
-
-  // Don't show if round in progress
-  if (_roundInProgress && state.currentHole > 0) {
-    card.style.display = 'none';
-    return;
-  }
-
-  try {
-    const rounds = await getMyRounds(1);
-    if (!rounds || !rounds.length) {
-      card.style.display = 'none';
-      return;
-    }
-
-    const r = rounds[0];
-    const rd = r.rounds;
-    const course = rd?.course_name || 'Unknown Course';
-    const playedAt = rd?.played_at ? new Date(rd.played_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
-    const games = Array.isArray(rd?.games_played) ? rd.games_played.join(' \u00b7 ') : '';
-    const par = 72;
-    const diff = r.to_par != null ? r.to_par : ((r.gross_score || 0) - par);
-    const scoreStr = diff === 0 ? 'E' : (diff > 0 ? '+' + diff : '' + diff);
-    const money = r.money_result || 0;
-
-    document.getElementById('plr-eyebrow').textContent = games ? 'Last Round \u00b7 ' + games : 'Last Round';
-    document.getElementById('plr-course').textContent = course;
-    document.getElementById('plr-date').textContent = playedAt;
-    document.getElementById('plr-score').textContent = r.gross_score || scoreStr;
-    document.getElementById('plr-par-label').textContent = scoreStr === 'E' ? 'Even' : scoreStr;
-
-    // Money result
-    const moneyEl = document.getElementById('plr-money');
-    if (money !== 0) {
-      const sign = money > 0 ? '+' : '\u2212';
-      moneyEl.textContent = sign + '$' + Math.abs(money);
-      moneyEl.className = 'plr-money' + (money < 0 ? ' negative' : '');
-      moneyEl.style.display = '';
-    } else {
-      moneyEl.textContent = 'Even';
-      moneyEl.className = 'plr-money even';
-    }
-
-    // Populate players if we have round_id
-    const playersEl = document.getElementById('plr-players');
-    if (r.round_id) {
-      try {
-        const rp = await getRoundPlayers(r.round_id);
-        if (rp && rp.length) {
-          playersEl.innerHTML = rp.map(function(p) {
-            const name = p.players?.username?.split(' ')[0] || 'Player';
-            const pt = p.to_par != null ? p.to_par : 0;
-            const ptStr = pt === 0 ? 'E' : (pt > 0 ? '+' + pt : '' + pt);
-            return '<div class="arc-player-chip"><span class="arc-player-name">' + name +
-              '</span><span class="arc-player-score">' + ptStr + '</span></div>';
-          }).join('');
-        }
-      } catch(e) { /* skip player chips on error */ }
-    }
-
-    card.style.display = '';
-  } catch(e) {
-    card.style.display = 'none';
-  }
-}
-
-// ─── PLAY AGAIN — pre-populate from last round ───
-async function playAgainLastRound() {
-  try {
-    const rounds = await getMyRounds(1);
-    if (!rounds || !rounds.length) { enterEngineFlow('screen-course'); return; }
-    const r = rounds[0];
-    const rd = r.rounds;
-
-    // Pre-populate course name for search
-    if (rd?.course_name) {
-      window._playAgainCourse = rd.course_name;
-    }
-
-    // Pre-populate players from full_state if available
-    if (rd?.full_state?.players && rd.full_state.players.length > 1) {
-      window._playAgainPlayers = rd.full_state.players;
-    }
-
-    enterEngineFlow('screen-course');
-
-    // Auto-fill course search after a tick
-    if (window._playAgainCourse) {
-      setTimeout(function() {
-        const input = document.getElementById('course-search');
-        if (input) {
-          input.value = window._playAgainCourse;
-          input.dispatchEvent(new Event('input'));
-        }
-      }, 300);
-    }
-  } catch(e) {
-    enterEngineFlow('screen-course');
-  }
 }
 
 // ─── POPULATE LAST ROUND ───
@@ -13510,6 +13582,398 @@ function switchFlock(pill, groupId) {
   });
   document.getElementById('engine-overlay').classList.add('visible');
   openGroupDetail(groupId);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// BIRDHOUSE — ADDITIVE SECTIONS
+// ═══════════════════════════════════════════════════════════════
+
+var _bhAllMembers = null;
+var BH_ADMIN_ID = 'c180643a-1d14-4b8f-bb92-49744a0289f0';
+
+// ── Helpers ──
+function bhInitials(name) {
+  if (!name) return '?';
+  return name.split(/\s+/).map(function(w){return w[0]}).join('').toUpperCase().substring(0,2);
+}
+function bhAvatarHtml(url, name) {
+  if (url) return '<img src="' + url + '">';
+  return bhInitials(name);
+}
+
+// ── SECTION 1: SEASON LEADERBOARD ──
+async function bhLoadLeaderboard() {
+  var el = document.getElementById('bh-leaderboard');
+  if (!el) return;
+  el.innerHTML = '<div class="bh-skeleton"></div>';
+  try {
+    var { data: { session } } = await sb.auth.getSession();
+    if (!session) return;
+    var { data: rp, error } = await sb
+      .from('round_players')
+      .select('player_id, money_result, rounds!inner(played_at)')
+      .gte('rounds.played_at', '2026-01-01');
+    if (error) throw error;
+    if (!rp || !rp.length) {
+      el.innerHTML = '<div class="bh-placeholder">No rounds this season</div>';
+      return;
+    }
+    var agg = {};
+    rp.forEach(function(r) {
+      if (!agg[r.player_id]) agg[r.player_id] = { total: 0, rounds: 0 };
+      agg[r.player_id].total += (r.money_result || 0);
+      agg[r.player_id].rounds++;
+    });
+    var ids = Object.keys(agg);
+    var { data: players } = await sb.from('players').select('id, username, avatar_url').in('id', ids);
+    var pm = {};
+    (players || []).forEach(function(p) { pm[p.id] = p; });
+    var sorted = ids.map(function(id) {
+      return { id: id, total: agg[id].total, rounds: agg[id].rounds, p: pm[id] || {} };
+    }).sort(function(a, b) { return b.total - a.total; }).slice(0, 10);
+
+    el.innerHTML = sorted.map(function(item, i) {
+      var mc = item.total > 0 ? 'bh-money-pos' : item.total < 0 ? 'bh-money-neg' : 'bh-money-zero';
+      var ms = item.total > 0 ? '+$' : item.total < 0 ? '\u2212$' : '$';
+      var rc = i === 0 ? 'bh-row bh-rank1' : 'bh-row';
+      return '<div class="' + rc + '">' +
+        '<span class="bh-rank">' + (i+1) + '</span>' +
+        '<div class="bh-avatar">' + bhAvatarHtml(item.p.avatar_url, item.p.username) + '</div>' +
+        '<span class="bh-name">' + (item.p.username || 'Unknown') + '</span>' +
+        '<span class="bh-sub">' + item.rounds + ' rds</span>' +
+        '<span class="' + mc + '">' + ms + Math.abs(item.total) + '</span>' +
+        '</div>';
+    }).join('');
+  } catch(e) {
+    console.error('BH leaderboard:', e);
+    el.innerHTML = '<div class="bh-placeholder">Could not load leaderboard</div>';
+  }
+}
+
+// ── SECTION 2: NEW MEMBERS ──
+async function bhLoadNewMembers() {
+  var section = document.getElementById('bh-newmembers-section');
+  var el = document.getElementById('bh-newmembers');
+  if (!section || !el) return;
+  try {
+    var cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - 30);
+    var { data: np, error } = await sb
+      .from('players')
+      .select('id, username, home_course, avatar_url, created_at')
+      .gte('created_at', cutoff.toISOString())
+      .order('created_at', { ascending: false });
+    if (error) throw error;
+    if (!np || !np.length) { section.style.display = 'none'; return; }
+    section.style.display = '';
+    var html = '';
+    for (var i = 0; i < np.length; i++) {
+      var p = np[i];
+      var num = 'C????';
+      try {
+        var { count } = await sb.from('players').select('*', { count: 'exact', head: true }).lt('created_at', p.created_at);
+        num = 'C' + String((count != null ? count : 0) + 1).padStart(4, '0');
+      } catch(e) {}
+      html += '<div class="bh-spotlight">' +
+        '<div class="bh-avatar" style="width:40px;height:40px;font-size:14px;">' + bhAvatarHtml(p.avatar_url, p.username) + '</div>' +
+        '<div class="bh-spotlight-name">' + (p.username || 'New Member') + '</div>' +
+        '<div class="bh-spotlight-sub">' + (p.home_course || '') + '</div>' +
+        '<div class="bh-spotlight-num">' + num + '</div>' +
+        '</div>';
+    }
+    el.innerHTML = html;
+  } catch(e) {
+    console.error('BH new members:', e);
+    section.style.display = 'none';
+  }
+}
+
+// ── SECTION 3: MEMBERS DIRECTORY ──
+async function bhLoadDirectory() {
+  var el = document.getElementById('bh-member-list');
+  if (!el) return;
+  el.innerHTML = '<div class="bh-skeleton" style="height:80px"></div>';
+  try {
+    var { data: players, error } = await sb
+      .from('players')
+      .select('id, username, hdcp_index, home_course, avatar_url, created_at')
+      .order('created_at', { ascending: true });
+    if (error) throw error;
+    _bhAllMembers = players || [];
+    bhRenderMembers(_bhAllMembers);
+  } catch(e) {
+    console.error('BH directory:', e);
+    el.innerHTML = '<div class="bh-placeholder">Could not load members</div>';
+  }
+}
+
+function bhRenderMembers(list) {
+  var el = document.getElementById('bh-member-list');
+  if (!el) return;
+  if (!list || !list.length) {
+    el.innerHTML = '<div class="bh-placeholder">No members found</div>';
+    return;
+  }
+  el.innerHTML = list.map(function(p) {
+    var hcp = p.hdcp_index != null ? p.hdcp_index : '\u2014';
+    return '<div class="bh-member-row" onclick="bhOpenProfile(\'' + p.id + '\')">' +
+      '<div class="bh-avatar" style="width:36px;height:36px;font-size:12px;">' + bhAvatarHtml(p.avatar_url, p.username) + '</div>' +
+      '<div class="bh-mr-info">' +
+        '<div class="bh-mr-name">' + (p.username || 'Unknown') + '</div>' +
+        '<div class="bh-mr-course">' + (p.home_course || '') + '</div>' +
+      '</div>' +
+      '<span class="bh-mr-hcp">' + hcp + '</span>' +
+      '</div>';
+  }).join('');
+}
+
+function bhFilterMembers(q) {
+  if (!_bhAllMembers) return;
+  q = q.toLowerCase().trim();
+  if (!q) { bhRenderMembers(_bhAllMembers); return; }
+  bhRenderMembers(_bhAllMembers.filter(function(p) {
+    return (p.username || '').toLowerCase().indexOf(q) >= 0;
+  }));
+}
+
+// ── Member profile sheet ──
+function bhOpenSheet(html) {
+  document.getElementById('bh-sheet-body').innerHTML = html;
+  document.getElementById('bh-profile-sheet').classList.add('open');
+  document.getElementById('bh-sheet-overlay').classList.add('open');
+}
+function bhCloseSheet() {
+  document.getElementById('bh-profile-sheet').classList.remove('open');
+  document.getElementById('bh-sheet-overlay').classList.remove('open');
+}
+
+async function bhOpenProfile(playerId) {
+  bhOpenSheet('<div class="bh-placeholder">Loading...</div>');
+  try {
+    var { data: player } = await sb
+      .from('players')
+      .select('username, hdcp_index, home_course, city, created_at')
+      .eq('id', playerId).maybeSingle();
+    if (!player) { bhCloseSheet(); return; }
+
+    var memberNum = 'C????';
+    try {
+      var { count } = await sb.from('players').select('*', { count: 'exact', head: true }).lt('created_at', player.created_at);
+      memberNum = 'C' + String((count != null ? count : 0) + 1).padStart(4, '0');
+    } catch(e) {}
+
+    var { data: rounds } = await sb.from('round_players').select('finish_position, money_result').eq('player_id', playerId);
+    var total = (rounds || []).length;
+    var wins = (rounds || []).filter(function(r) { return r.finish_position === 1; }).length;
+    var money = (rounds || []).reduce(function(s, r) { return s + (r.money_result || 0); }, 0);
+    var winPct = total > 0 ? Math.round((wins / total) * 100) : 0;
+    var moneyStr = (money >= 0 ? '+$' : '\u2212$') + Math.abs(money);
+    var courseCity = [player.home_course, player.city].filter(Boolean).join(' \u00b7 ');
+
+    bhOpenSheet(
+      '<div class="bh-ms-name">' + (player.username || 'Unknown') + '</div>' +
+      '<div class="bh-ms-id">\u2116 ' + memberNum + '</div>' +
+      '<div class="bh-ms-course">' + courseCity + '</div>' +
+      '<div class="bh-ms-hcp">' + (player.hdcp_index != null ? player.hdcp_index : '\u2014') + '</div>' +
+      '<div class="bh-ms-stats">' +
+        '<div class="bh-ms-stat"><div class="bh-ms-stat-val">' + total + '</div><div class="bh-ms-stat-label">Rounds</div></div>' +
+        '<div class="bh-ms-stat"><div class="bh-ms-stat-val">' + moneyStr + '</div><div class="bh-ms-stat-label">Winnings</div></div>' +
+        '<div class="bh-ms-stat"><div class="bh-ms-stat-val">' + winPct + '%</div><div class="bh-ms-stat-label">Win Rate</div></div>' +
+      '</div>'
+    );
+  } catch(e) {
+    console.error('BH profile:', e);
+    bhCloseSheet();
+  }
+}
+
+// ── SECTION 4: CONDOR BULLETIN ──
+function bhLoadBulletin() {
+  var contentEl = document.getElementById('bh-bulletin-content');
+  var genBtn = document.getElementById('bh-generate-btn');
+  if (!contentEl) return;
+
+  sb.auth.getSession().then(function(res) {
+    var session = res.data.session;
+    var isAdmin = session && session.user.id === BH_ADMIN_ID;
+
+    var stored = localStorage.getItem('condor_bulletin_latest');
+    if (stored) {
+      try {
+        var b = JSON.parse(stored);
+        bhRenderBulletin(b, isAdmin);
+        return;
+      } catch(e) {}
+    }
+
+    if (isAdmin) {
+      contentEl.innerHTML = '';
+      genBtn.style.display = '';
+    } else {
+      contentEl.innerHTML = '<div class="bh-placeholder">Bulletin coming soon</div>';
+      genBtn.style.display = 'none';
+    }
+  });
+}
+
+function bhRenderBulletin(b, isAdmin) {
+  var el = document.getElementById('bh-bulletin-content');
+  var genBtn = document.getElementById('bh-generate-btn');
+  var lines = (b.text || '').split('\n').filter(function(l) { return l.trim(); });
+  var headline = lines.length > 0 ? lines[0] : 'The Condor Bulletin';
+  var body = lines.slice(1).join('\n');
+  var edition = b.edition || 1;
+  var dateStr = b.date || new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+
+  el.innerHTML =
+    '<div class="bh-bulletin-meta">' +
+      '<span>EDITION NO. ' + String(edition).padStart(3, '0') + '</span>' +
+      '<span>' + dateStr + '</span>' +
+    '</div>' +
+    '<div class="bh-bulletin-headline">' + headline + '</div>' +
+    '<hr class="bh-rule">' +
+    '<div class="bh-bulletin-content">' + body + '</div>' +
+    '<div class="bh-bulletin-actions">' +
+      '<button class="bh-bulletin-share" onclick="bhShareBulletin()">Share Bulletin</button>' +
+      '<button class="bh-bulletin-prev" onclick="bhShowPrevEditions()">Previous Editions</button>' +
+    '</div>';
+
+  if (isAdmin) {
+    genBtn.style.display = '';
+    genBtn.textContent = 'Regenerate';
+  } else {
+    genBtn.style.display = 'none';
+  }
+}
+
+async function bhGenerateBulletin(btn) {
+  btn.disabled = true;
+  btn.textContent = 'Generating\u2026';
+  try {
+    var { data: { session } } = await sb.auth.getSession();
+    if (!session) return;
+
+    var weekAgo = new Date();
+    weekAgo.setDate(weekAgo.getDate() - 7);
+    var cutoff = weekAgo.toISOString().split('T')[0];
+
+    var { data: rp } = await sb
+      .from('round_players')
+      .select('player_id, gross_score, to_par, money_result, finish_position, rounds!inner(course_name, played_at, games_played, full_state)')
+      .gte('rounds.played_at', cutoff);
+
+    var { data: allP } = await sb.from('players').select('id, username');
+    var pm = {};
+    (allP || []).forEach(function(p) { pm[p.id] = p.username || 'Unknown'; });
+
+    var { data: newM } = await sb.from('players').select('username').gte('created_at', weekAgo.toISOString());
+
+    var ctx = 'ROUND DATA (Last 7 Days):\n';
+    if (rp && rp.length) {
+      rp.forEach(function(r) {
+        var rd = r.rounds;
+        ctx += '- ' + (pm[r.player_id] || '?') + ' at ' + (rd.course_name || '?') +
+          ' on ' + rd.played_at + ': Gross ' + (r.gross_score || '?') +
+          ', To Par ' + (r.to_par != null ? r.to_par : '?') +
+          ', Money $' + (r.money_result || 0) +
+          ', Finish ' + (r.finish_position || '?') + '\n';
+      });
+      var lowG = rp.reduce(function(b, r) {
+        return (r.gross_score && (!b || r.gross_score < b.gross_score)) ? r : b;
+      }, null);
+      if (lowG) ctx += '\nLOW GROSS: ' + pm[lowG.player_id] + ' with ' + lowG.gross_score + '\n';
+      var bigW = rp.reduce(function(b, r) {
+        return (r.money_result && (!b || r.money_result > b.money_result)) ? r : b;
+      }, null);
+      if (bigW) ctx += 'BIGGEST WINNER: ' + pm[bigW.player_id] + ' +$' + bigW.money_result + '\n';
+      var eagles = rp.filter(function(r) { return r.to_par != null && r.to_par <= -2; });
+      if (eagles.length) ctx += 'EAGLES: ' + eagles.map(function(r) { return pm[r.player_id] + ' (' + r.to_par + ')'; }).join(', ') + '\n';
+    } else {
+      ctx += 'No rounds recorded this week.\n';
+    }
+    if (newM && newM.length) ctx += '\nNEW MEMBERS: ' + newM.map(function(m) { return m.username; }).join(', ') + '\n';
+
+    var apiKey = prompt('Enter Anthropic API key:');
+    if (!apiKey) { btn.disabled = false; btn.textContent = 'Generate This Week\'s Bulletin'; return; }
+
+    var resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 600,
+        system: 'You are the editorial voice of Condor, a private golf scoring and wagering app. Write a weekly club bulletin in the style of a dry, witty, private members club circular. Think Augusta National annual report meets The Economist. No exclamation marks. No startup language. No emojis. Structure: one headline, three to four short sections (Low Round, Money Report, Notable Shots, New Members if any), one closing line. Under 300 words. Plain text only, no markdown.',
+        messages: [{ role: 'user', content: ctx }]
+      })
+    });
+
+    var result = await resp.json();
+    if (!resp.ok) throw new Error(result.error?.message || 'API error');
+    var text = result.content[0].text;
+
+    var history = JSON.parse(localStorage.getItem('condor_bulletin_history') || '[]');
+    var edition = history.length + 1;
+    var bulletin = {
+      text: text, edition: edition,
+      date: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
+      timestamp: Date.now()
+    };
+    localStorage.setItem('condor_bulletin_latest', JSON.stringify(bulletin));
+    history.push(bulletin);
+    if (history.length > 4) history = history.slice(-4);
+    localStorage.setItem('condor_bulletin_history', JSON.stringify(history));
+    bhRenderBulletin(bulletin, true);
+  } catch(e) {
+    console.error('Bulletin error:', e);
+    btn.disabled = false;
+    btn.textContent = 'Generate This Week\'s Bulletin';
+    alert('Failed: ' + e.message);
+  }
+}
+
+async function bhShareBulletin() {
+  try {
+    var cell = document.getElementById('bh-bulletin');
+    var canvas = await html2canvas(cell, { scale: 3, backgroundColor: '#234B37' });
+    canvas.toBlob(async function(blob) {
+      var file = new File([blob], 'condor-bulletin.png', { type: 'image/png' });
+      if (navigator.share && navigator.canShare({ files: [file] })) {
+        await navigator.share({ title: 'The Condor Bulletin', files: [file] });
+      } else {
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a'); a.href = url; a.download = 'condor-bulletin.png'; a.click();
+        URL.revokeObjectURL(url);
+      }
+    }, 'image/png');
+  } catch(e) { console.error('Share bulletin:', e); }
+}
+
+function bhShowPrevEditions() {
+  var history = JSON.parse(localStorage.getItem('condor_bulletin_history') || '[]');
+  if (!history.length) { alert('No previous editions.'); return; }
+  var html = '<div style="font-family:var(--sans);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-rule);margin-bottom:16px;">Previous Editions</div>';
+  history.slice().reverse().forEach(function(b, i) {
+    var idx = history.length - 1 - i;
+    html += '<div class="bh-prev-edition" onclick="bhViewPastBulletin(' + idx + ')">' +
+      '<div class="bh-prev-headline">' + (b.text.split('\n')[0] || 'Edition ' + b.edition) + '</div>' +
+      '<div class="bh-prev-date">' + b.date + '</div></div>';
+  });
+  bhOpenSheet(html);
+}
+
+function bhViewPastBulletin(idx) {
+  var history = JSON.parse(localStorage.getItem('condor_bulletin_history') || '[]');
+  if (!history[idx]) return;
+  bhCloseSheet();
+  sb.auth.getSession().then(function(res) {
+    var isAdmin = res.data.session && res.data.session.user.id === BH_ADMIN_ID;
+    bhRenderBulletin(history[idx], isAdmin);
+  });
 }
 </script>
 
