@@ -930,6 +930,257 @@ html, body {
 .new-round-label { display: none; }
 
 /* ═══════════════════════════════════════
+   BENTO PLAY SCREEN (NEW)
+═══════════════════════════════════════ */
+#screen-play { background:#F8F8F8 !important; }
+#screen-play .scroll-body { padding:0 16px 96px; }
+.bento-play-header {
+  padding:16px 0 20px;
+  display:flex; align-items:baseline; justify-content:space-between;
+}
+.bento-play-title {
+  font-family:var(--font-display); font-size:28px; font-weight:400;
+  color:var(--condor-green); letter-spacing:-0.02em;
+}
+.bento-play-sub {
+  font-family:var(--font-editorial); font-size:14px; font-weight:400;
+  font-style:italic; color:rgba(27,58,45,.4);
+}
+.bento-cell {
+  background:#FFFFFF; border-radius:12px;
+  box-shadow:0 2px 12px rgba(0,0,0,.06);
+  padding:20px; margin-bottom:12px;
+}
+.bento-label {
+  font-family:var(--sans); font-size:8px; font-weight:500;
+  letter-spacing:3px; text-transform:uppercase;
+  color:rgba(27,58,45,.4); margin-bottom:14px;
+}
+
+/* Players 2x2 grid */
+.bento-players-grid {
+  display:grid; grid-template-columns:1fr 1fr; gap:10px;
+}
+.bento-player-slot {
+  height:64px; border-radius:10px; display:flex;
+  flex-direction:column; align-items:center; justify-content:center;
+  cursor:pointer; transition:all .15s; position:relative;
+}
+.bento-player-slot.empty {
+  background:#F8F8F8; border:1px dashed rgba(27,58,45,.15);
+}
+.bento-player-slot.empty .bento-slot-plus {
+  font-size:22px; color:rgba(27,58,45,.25); line-height:1;
+}
+.bento-player-slot.filled {
+  background:rgba(27,58,45,.04); border:1px solid rgba(27,58,45,.08);
+}
+.bento-player-avatar {
+  width:28px; height:28px; border-radius:50%;
+  background:var(--condor-green); color:#fff;
+  font-family:var(--sans); font-size:10px; font-weight:500;
+  display:flex; align-items:center; justify-content:center;
+  margin-bottom:4px; overflow:hidden;
+}
+.bento-player-avatar img { width:100%; height:100%; object-fit:cover; }
+.bento-player-name {
+  font-family:var(--sans); font-size:10px; font-weight:400;
+  color:var(--condor-green);
+}
+.bento-slot-remove {
+  position:absolute; top:4px; right:6px;
+  width:16px; height:16px; border-radius:50%;
+  background:rgba(27,58,45,.08); border:none; cursor:pointer;
+  font-size:9px; color:rgba(27,58,45,.4); line-height:16px;
+  text-align:center; padding:0; display:flex; align-items:center; justify-content:center;
+}
+.bento-player-slot.locked .bento-slot-remove { display:none; }
+.bento-slot-lock {
+  position:absolute; top:4px; right:6px;
+  font-size:9px; color:rgba(27,58,45,.2);
+}
+
+/* Course cell */
+.bento-course-search {
+  display:flex; align-items:center; gap:8px;
+  padding-bottom:10px; border-bottom:1px solid rgba(27,58,45,.10);
+}
+.bento-course-search svg {
+  width:16px; height:16px; stroke:rgba(27,58,45,.3);
+  fill:none; stroke-width:2; flex-shrink:0;
+}
+.bento-course-input {
+  border:none; outline:none; background:transparent;
+  font-family:var(--sans); font-size:13px; font-weight:400;
+  color:var(--condor-green); width:100%;
+}
+.bento-course-input::placeholder { color:rgba(27,58,45,.3); }
+.bento-course-results {
+  max-height:160px; overflow-y:auto; margin-top:8px;
+}
+.bento-course-result {
+  padding:10px 0; border-bottom:1px solid rgba(27,58,45,.06);
+  cursor:pointer; display:flex; align-items:center; gap:8px;
+  transition:background .1s;
+}
+.bento-course-result:active { background:rgba(27,58,45,.03); }
+.bento-course-flag { color:var(--gold-rule); font-size:12px; }
+.bento-course-name {
+  font-family:var(--sans); font-size:13px; font-weight:500;
+  color:var(--condor-green);
+}
+.bento-course-date {
+  font-family:var(--sans); font-size:10px;
+  color:rgba(27,58,45,.4); margin-left:auto;
+}
+.bento-course-selected {
+  border-left:3px solid var(--condor-green);
+  padding-left:10px; margin-top:10px;
+  display:flex; align-items:center; gap:8px;
+}
+.bento-course-selected .bento-course-name { font-weight:500; }
+.bento-course-clear {
+  margin-left:auto; background:none; border:none;
+  font-size:14px; color:rgba(27,58,45,.3); cursor:pointer;
+}
+
+/* Format pills */
+.bento-format-pills {
+  display:flex; gap:8px; flex-wrap:wrap;
+}
+.bento-format-pill {
+  padding:8px 16px; border-radius:20px;
+  font-family:var(--sans); font-size:10px; font-weight:400;
+  letter-spacing:2px; text-transform:uppercase;
+  cursor:pointer; transition:all .15s; border:1px solid rgba(27,58,45,.15);
+  background:#F8F8F8; color:var(--condor-green);
+}
+.bento-format-pill.active {
+  background:var(--condor-green); color:#fff; border-color:var(--condor-green);
+}
+
+/* Team assignment */
+.bento-teams {
+  margin-top:14px; display:flex; flex-wrap:wrap; gap:8px;
+}
+.bento-team-chip {
+  display:flex; align-items:center; gap:6px;
+  padding:6px 12px; border-radius:16px; cursor:pointer;
+  font-family:var(--sans); font-size:10px; font-weight:400;
+  transition:all .15s;
+}
+.bento-team-chip.team-a {
+  background:var(--condor-green); color:#fff;
+}
+.bento-team-chip.team-b {
+  background:rgba(27,58,45,.08); color:var(--condor-green);
+}
+.bento-team-label {
+  font-size:8px; letter-spacing:1px; text-transform:uppercase;
+  color:var(--gold-rule); font-weight:500;
+}
+
+/* CTA */
+.bento-cta {
+  position:fixed; bottom:72px; left:16px; right:16px;
+  height:52px; border-radius:12px;
+  background:var(--condor-green); color:#fff;
+  font-family:var(--sans); font-size:11px; font-weight:400;
+  letter-spacing:3px; text-transform:uppercase;
+  border:none; cursor:pointer; transition:all .15s;
+  z-index:3999;
+  padding-bottom:env(safe-area-inset-bottom);
+}
+.bento-cta:active { opacity:.85; }
+.bento-cta:disabled {
+  background:rgba(27,58,45,.25); cursor:default;
+}
+
+/* Player search bottom sheet */
+.bento-sheet-overlay {
+  position:fixed; inset:0; background:rgba(0,0,0,.4);
+  z-index:5000; opacity:0; pointer-events:none;
+  transition:opacity .2s;
+}
+.bento-sheet-overlay.open { opacity:1; pointer-events:auto; }
+.bento-sheet {
+  position:fixed; bottom:0; left:0; right:0;
+  background:#FFFFFF; border-radius:16px 16px 0 0;
+  max-height:70vh; z-index:5001;
+  transform:translateY(100%); transition:transform .25s ease;
+  display:flex; flex-direction:column;
+}
+.bento-sheet-overlay.open .bento-sheet { transform:translateY(0); }
+.bento-sheet-handle {
+  width:36px; height:4px; border-radius:2px;
+  background:rgba(27,58,45,.15); margin:10px auto 0;
+}
+.bento-sheet-header {
+  padding:16px 20px 12px;
+  display:flex; align-items:center; gap:10px;
+}
+.bento-sheet-search {
+  flex:1; border:none; outline:none;
+  background:rgba(27,58,45,.05); border-radius:8px;
+  padding:10px 14px;
+  font-family:var(--sans); font-size:14px; color:var(--condor-green);
+}
+.bento-sheet-search::placeholder { color:rgba(27,58,45,.3); }
+.bento-sheet-results {
+  flex:1; overflow-y:auto; padding:0 20px 20px;
+}
+.bento-sheet-row {
+  display:flex; align-items:center; gap:12px;
+  padding:12px 0; border-bottom:1px solid rgba(27,58,45,.06);
+  cursor:pointer;
+}
+.bento-sheet-row:active { background:rgba(27,58,45,.03); }
+.bento-sheet-avatar {
+  width:36px; height:36px; border-radius:50%;
+  background:var(--condor-green); color:#fff;
+  font-family:var(--sans); font-size:12px; font-weight:500;
+  display:flex; align-items:center; justify-content:center;
+  overflow:hidden; flex-shrink:0;
+}
+.bento-sheet-avatar img { width:100%; height:100%; object-fit:cover; }
+.bento-sheet-info { flex:1; }
+.bento-sheet-name {
+  font-family:var(--sans); font-size:14px; font-weight:500;
+  color:var(--condor-green);
+}
+.bento-sheet-hdcp {
+  font-family:var(--sans); font-size:11px;
+  color:rgba(27,58,45,.4);
+}
+.bento-sheet-guest-btn {
+  display:block; width:100%; margin-top:8px; padding:12px;
+  background:rgba(27,58,45,.04); border:1px dashed rgba(27,58,45,.15);
+  border-radius:10px; cursor:pointer;
+  font-family:var(--sans); font-size:12px; color:rgba(27,58,45,.5);
+  text-align:center; transition:background .15s;
+}
+.bento-sheet-guest-btn:active { background:rgba(27,58,45,.08); }
+
+/* Light tab bar override for play screen */
+.condor-tab-bar.tab-bar-light {
+  background:#FFFFFF !important;
+  box-shadow:0 -1px 0 rgba(0,0,0,.06) !important;
+  backdrop-filter:none !important; -webkit-backdrop-filter:none !important;
+}
+.condor-tab-bar.tab-bar-light .condor-tab svg {
+  stroke:rgba(27,58,45,.35) !important;
+}
+.condor-tab-bar.tab-bar-light .condor-tab span {
+  color:rgba(27,58,45,.35) !important;
+}
+.condor-tab-bar.tab-bar-light .condor-tab.active svg {
+  stroke:var(--condor-green) !important;
+}
+.condor-tab-bar.tab-bar-light .condor-tab.active span {
+  color:var(--condor-green) !important;
+}
+
+/* ═══════════════════════════════════════
    SCREEN 3: BIRDHOUSE
 ═══════════════════════════════════════ */
 
@@ -2174,25 +2425,25 @@ body::before { display:none; }
 .sidebet-note-input:focus { border-color:var(--gold); }
 
 /* ── SIDE BET PILLS (in Running Money) ── */
-.sidebet-pills { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; padding-top:10px; border-top:1px solid var(--rule); }
+.sidebet-pills { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; padding-top:10px; border-top:1px solid rgba(255,255,255,.06); }
 .sidebet-pill { font-family:var(--sans); font-size:11px; padding:5px 10px; border-radius:20px;
-  border:1px solid var(--rule); background:var(--cream-card); color:var(--ink-dim);
+  border:1px solid rgba(255,255,255,.1); background:rgba(255,255,255,.05); color:rgba(255,255,255,.5);
   cursor:pointer; white-space:nowrap; transition:all .15s; letter-spacing:.2px; }
 .sidebet-pill:active { transform:scale(.96); }
-.sidebet-pill.unresolved { border-color:rgba(138,109,47,.4); color:var(--gold);
+.sidebet-pill.unresolved { border-color:rgba(196,164,86,.4); color:var(--gold-rule);
   animation:pulse-gold 2s ease-in-out infinite; }
-.sidebet-pill.resolved { border-color:rgba(46,97,71,.3); background:var(--green-pale); color:var(--green-deep); }
+.sidebet-pill.resolved { border-color:rgba(196,164,86,.25); background:rgba(196,164,86,.1); color:var(--gold-rule); }
 @keyframes pulse-gold { 0%,100%{box-shadow:0 0 0 0 rgba(138,109,47,0)} 50%{box-shadow:0 0 0 3px rgba(138,109,47,.15)} }
 
 /* ── RUNNING MONEY ── */
 .money-row { display:flex; justify-content:space-between; align-items:center;
-  padding:10px 0; border-bottom:1px solid var(--rule); }
+  padding:10px 0; border-bottom:1px solid rgba(255,255,255,.06); }
 .money-row:last-child { border-bottom:none; }
-.money-label { font-family:var(--serif); font-size:14px; color:var(--ink); font-weight:500; }
+.money-label { font-family:var(--serif); font-size:14px; color:rgba(255,255,255,.7); font-weight:500; }
 .money-amount { font-family:var(--sans); font-size:14px; font-weight:600; }
-.money-amount.positive { color:var(--green-augusta); }
-.money-amount.negative { color:var(--score-bogey); }
-.money-amount.neutral  { color:var(--ink-muted); }
+.money-amount.positive { color:var(--gold-rule); }
+.money-amount.negative { color:#c0392b; }
+.money-amount.neutral  { color:rgba(255,255,255,.3); }
 
 /* ── BOTTOM NAV ── */
 .bottom-nav { flex-shrink:0; padding:10px 16px env(safe-area-inset-bottom, 12px);
@@ -4172,119 +4423,99 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
     <div class="status-bar"></div>
     <div class="scroll-body">
 
-      <div class="play-header" style="position:relative;">
-        <div class="play-title">Play</div>
-        <span class="play-subtitle">Saturday, 7am</span>
+      <div class="bento-play-header">
+        <div class="bento-play-title">Play</div>
+        <span class="bento-play-sub" id="bento-play-date"></span>
       </div>
 
-      <!-- ACTIVE ROUND -->
-      <div class="active-round-card">
-        <div class="arc-eyebrow">Round In Progress · Nassau Active</div>
-        <div class="arc-course">Augusta National GC</div>
+      <!-- ACTIVE ROUND (shown conditionally by syncActiveRoundCard) -->
+      <div class="active-round-card" style="display:none;margin:0 0 12px;">
+        <div class="arc-eyebrow">Round In Progress</div>
+        <div class="arc-course"></div>
         <div class="arc-progress">
-          <span class="arc-hole-info">Hole 9 of 18 · Par 4</span>
+          <span class="arc-hole-info"></span>
           <div class="arc-score-display">
-            <span class="arc-score-num">−2</span>
-            <span class="arc-score-par">thru 8</span>
+            <span class="arc-score-num"></span>
+            <span class="arc-score-par">thru 0</span>
           </div>
         </div>
         <div class="hole-progress">
-          <div class="hole-dot done"></div><div class="hole-dot done"></div>
-          <div class="hole-dot done"></div><div class="hole-dot done"></div>
-          <div class="hole-dot done"></div><div class="hole-dot done"></div>
-          <div class="hole-dot done"></div><div class="hole-dot done"></div>
-          <div class="hole-dot current"></div><div class="hole-dot"></div>
+          <div class="hole-dot"></div><div class="hole-dot"></div>
+          <div class="hole-dot"></div><div class="hole-dot"></div>
+          <div class="hole-dot"></div><div class="hole-dot"></div>
+          <div class="hole-dot"></div><div class="hole-dot"></div>
+          <div class="hole-dot"></div><div class="hole-dot"></div>
           <div class="hole-dot"></div><div class="hole-dot"></div>
           <div class="hole-dot"></div><div class="hole-dot"></div>
           <div class="hole-dot"></div><div class="hole-dot"></div>
           <div class="hole-dot"></div><div class="hole-dot"></div>
         </div>
-        <div class="arc-players">
-          <div class="arc-player-chip">
-            <span class="arc-player-name">You</span>
-            <span class="arc-player-score" style="color:var(--antique-gold)">−2</span>
+        <div class="arc-players"></div>
+      </div>
+
+      <!-- CELL 1: PLAYERS -->
+      <div class="bento-cell" id="bento-players-cell">
+        <div class="bento-label">PLAYERS</div>
+        <div class="bento-players-grid" id="bento-players-grid">
+          <div class="bento-player-slot filled locked" data-slot="0" id="bento-slot-0">
+            <span class="bento-slot-lock">&#128274;</span>
+            <div class="bento-player-avatar" id="bento-slot-0-avatar">?</div>
+            <div class="bento-player-name" id="bento-slot-0-name">You</div>
           </div>
-          <div class="arc-player-chip">
-            <span class="arc-player-name">Harrington</span>
-            <span class="arc-player-score">E</span>
+          <div class="bento-player-slot empty" data-slot="1" onclick="openBentoPlayerSheet(1)">
+            <span class="bento-slot-plus">+</span>
           </div>
-          <div class="arc-player-chip">
-            <span class="arc-player-name">Whitmore</span>
-            <span class="arc-player-score">+1</span>
+          <div class="bento-player-slot empty" data-slot="2" onclick="openBentoPlayerSheet(2)">
+            <span class="bento-slot-plus">+</span>
           </div>
-          <div class="arc-player-chip">
-            <span class="arc-player-name">Osei</span>
-            <span class="arc-player-score">+3</span>
+          <div class="bento-player-slot empty" data-slot="3" onclick="openBentoPlayerSheet(3)">
+            <span class="bento-slot-plus">+</span>
           </div>
         </div>
       </div>
 
-      <!-- NEW ROUND -->
-      <div class="play-new-section">
-        <div class="play-new-eyebrow">New Round</div>
-
-        <!-- Format pills -->
-        <div class="format-pills">
-          <div class="format-pill selected" onclick="selectFormat(this)">
-            <span class="format-pill-name">Nassau</span>
-            <span class="format-pill-sub">Front · Back · Match</span>
-          </div>
-          <div class="format-pill" onclick="selectFormat(this)">
-            <span class="format-pill-name">Skins</span>
-            <span class="format-pill-sub">Hole by hole</span>
-          </div>
-          <div class="format-pill" onclick="selectFormat(this)">
-            <span class="format-pill-name">Wolf</span>
-            <span class="format-pill-sub">Rotating</span>
-          </div>
+      <!-- CELL 2: COURSE -->
+      <div class="bento-cell" id="bento-course-cell">
+        <div class="bento-label">COURSE</div>
+        <div class="bento-course-search">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input class="bento-course-input" id="bento-course-input" type="text" placeholder="Search courses" autocomplete="off">
         </div>
-
-        <!-- Bet — the one visible control -->
-        <div class="bet-control">
-          <span class="bet-label">Bet per nine</span>
-          <div class="stepper">
-            <button class="stepper-btn" onclick="adjustBet(-5)">−</button>
-            <span class="stepper-val" id="bet-val">$20</span>
-            <button class="stepper-btn" onclick="adjustBet(5)">+</button>
-          </div>
+        <div class="bento-course-results" id="bento-course-results"></div>
+        <div class="bento-course-selected" id="bento-course-selected" style="display:none;">
+          <span class="bento-course-flag">&#9872;</span>
+          <span class="bento-course-name" id="bento-selected-course-name"></span>
+          <button class="bento-course-clear" onclick="clearBentoCourse()">&times;</button>
         </div>
+      </div>
 
-        <!-- Advanced disclosure -->
-        <button class="advanced-toggle" onclick="toggleAdvanced(this)">
-          <span class="advanced-toggle-label">Advanced options</span>
-          <span class="advanced-toggle-icon" id="adv-icon">▾</span>
-        </button>
-
-        <!-- Collapsed config -->
-        <div class="nassau-config" id="nassau-config">
-          <div class="nc-row">
-            <span class="nc-label">Auto Press</span>
-            <div class="toggle on" onclick="this.classList.toggle('on')"></div>
-          </div>
-          <div class="nc-row">
-            <span class="nc-label">Stroke play handicaps</span>
-            <div class="toggle" onclick="this.classList.toggle('on')"></div>
-          </div>
-          <div class="nc-row">
-            <span class="nc-label">Skins alongside</span>
-            <div class="toggle on" onclick="this.classList.toggle('on')"></div>
-          </div>
-          <div class="nc-row">
-            <span class="nc-label">Players</span>
-            <span class="nc-value">4 selected</span>
-          </div>
+      <!-- CELL 3: FORMAT -->
+      <div class="bento-cell" id="bento-format-cell">
+        <div class="bento-label">FORMAT</div>
+        <div class="bento-format-pills" id="bento-format-pills">
+          <div class="bento-format-pill active" onclick="selectBentoFormat(this,'individual')">Individual</div>
         </div>
+        <div class="bento-teams" id="bento-teams" style="display:none;"></div>
+      </div>
 
-        <!-- The singular CTA -->
-        <button class="start-cta" onclick="enterEngineFlow('screen-course')">
-          <span class="start-cta-text">Start Round</span>
-        </button>
-
-      </div><!-- end play-new-section -->
-
-      <div class="bottom-pad"></div>
+      <div style="height:72px;"></div>
     </div>
 
+    <!-- CTA -->
+    <button class="bento-cta" id="bento-cta" disabled onclick="bentoCTATapped()">SET UP BETS &rarr;</button>
+  </div>
+
+  <!-- Player search bottom sheet -->
+  <div class="bento-sheet-overlay" id="bento-sheet-overlay" onclick="closeBentoPlayerSheet()">
+    <div class="bento-sheet" onclick="event.stopPropagation()">
+      <div class="bento-sheet-handle"></div>
+      <div class="bento-sheet-header">
+        <input class="bento-sheet-search" id="bento-sheet-search" type="text" placeholder="Search friends or add guest" autocomplete="off">
+      </div>
+      <div class="bento-sheet-results" id="bento-sheet-results">
+        <button class="bento-sheet-guest-btn" onclick="addBentoGuest()">+ Add guest by name</button>
+      </div>
+    </div>
   </div>
 
   <!-- ═══ SCREEN: BIRDHOUSE ═══ -->
@@ -9642,7 +9873,7 @@ function renderRunningMoney() {
   var rows = state.players.map(function(p, i) {
     var amt = money[i];
     var cls  = amt > 0 ? 'positive' : amt < 0 ? 'negative' : 'neutral';
-    var sign = amt > 0 ? '+' : '';
+    var sign = amt > 0 ? '+' : amt < 0 ? '−' : '';
     return '<div class="money-row"><span class="money-label">'+p.name+'</span>' +
       '<span class="money-amount '+cls+'">'+sign+'$'+Math.abs(amt).toFixed(0)+'</span></div>';
   }).join('');
@@ -12688,10 +12919,17 @@ function navigate(screen) {
 }
 
 function syncTabBar(screen) {
+  var bar = document.getElementById('condor-tab-bar');
   document.querySelectorAll('.condor-tab').forEach(tab => {
     tab.classList.remove('active');
     if (tab.getAttribute('data-tab') === screen) tab.classList.add('active');
   });
+  // Light tab bar for Play screen, dark for others
+  if (screen === 'play') {
+    bar.classList.add('tab-bar-light');
+  } else {
+    bar.classList.remove('tab-bar-light');
+  }
 }
 
 // ─── CONDOR NAV WRAPPER ───
@@ -12702,6 +12940,7 @@ async function condorNavigate(tab) {
   document.getElementById('engine-overlay').classList.remove('visible');
   if (tab === 'play') {
     syncActiveRoundCard();
+    initBentoPlay();
   }
   if (tab === 'card') {
     populateCondorCard();
@@ -12725,6 +12964,294 @@ function enterEngineFlow(screenId) {
 function exitEngineToShell(tab) {
   document.getElementById('engine-overlay').classList.remove('visible');
   condorNavigate(tab || 'play');
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// BENTO PLAY SCREEN
+// ═══════════════════════════════════════════════════════════════════
+
+var _bentoPlayers = [null, null, null, null]; // slot 0 = current user
+var _bentoCourse = null;
+var _bentoFormat = 'individual';
+var _bentoActiveSlot = -1;
+var _bentoSearchTimer = null;
+
+// Populate slot 0 with current user
+async function initBentoPlay() {
+  // Set date
+  var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var d = new Date();
+  var el = document.getElementById('bento-play-date');
+  if (el) el.textContent = days[d.getDay()] + ', ' + d.toLocaleTimeString([], {hour:'numeric', minute:'2-digit'});
+
+  try {
+    var sess = await sb.auth.getSession();
+    if (!sess.data.session) return;
+    var uid = sess.data.session.user.id;
+    var { data: player } = await sb.from('players')
+      .select('id, username, hdcp_index, avatar_url')
+      .eq('id', uid).maybeSingle();
+    if (player) {
+      _bentoPlayers[0] = { id: player.id, name: player.username || 'You', hdcp: player.hdcp_index, avatar_url: player.avatar_url };
+      renderBentoSlot(0);
+    }
+    // Load recent course
+    var { data: recent } = await sb.from('round_players')
+      .select('rounds ( course_name, played_at )')
+      .eq('player_id', uid)
+      .order('created_at', { ascending: false })
+      .limit(1);
+    if (recent && recent.length && recent[0].rounds) {
+      var rd = recent[0].rounds;
+      var resultsEl = document.getElementById('bento-course-results');
+      var dateStr = rd.played_at ? new Date(rd.played_at).toLocaleDateString('en-US', {month:'short', day:'numeric'}) : '';
+      resultsEl.innerHTML = '<div class="bento-course-result" onclick="selectBentoCourse(\'' + (rd.course_name||'').replace(/'/g,"\\'") + '\')">' +
+        '<span class="bento-course-flag">&#9872;</span>' +
+        '<span class="bento-course-name">' + (rd.course_name||'') + '</span>' +
+        '<span class="bento-course-date">' + dateStr + '</span></div>';
+    }
+  } catch(e) { console.warn('initBentoPlay error:', e); }
+  updateBentoCTA();
+  updateBentoFormatPills();
+}
+
+function renderBentoSlot(idx) {
+  var slot = document.getElementById('bento-slot-' + idx);
+  if (!slot) return;
+  var p = _bentoPlayers[idx];
+  if (!p) {
+    slot.className = 'bento-player-slot empty';
+    slot.setAttribute('onclick', 'openBentoPlayerSheet(' + idx + ')');
+    slot.innerHTML = '<span class="bento-slot-plus">+</span>';
+    return;
+  }
+  var locked = idx === 0 ? ' locked' : '';
+  slot.className = 'bento-player-slot filled' + locked;
+  slot.removeAttribute('onclick');
+  var initials = (p.name || '?').split(' ').map(function(w){return w[0]||''}).join('').toUpperCase().substring(0,2);
+  var avatarContent = p.avatar_url
+    ? '<img src="' + p.avatar_url + '" alt="">'
+    : initials;
+  var removeBtn = idx === 0
+    ? '<span class="bento-slot-lock">&#128274;</span>'
+    : '<button class="bento-slot-remove" onclick="event.stopPropagation();removeBentoPlayer(' + idx + ')">&times;</button>';
+  slot.innerHTML = removeBtn +
+    '<div class="bento-player-avatar">' + avatarContent + '</div>' +
+    '<div class="bento-player-name">' + (p.name||'').split(' ')[0] + '</div>';
+}
+
+function removeBentoPlayer(idx) {
+  if (idx === 0) return;
+  _bentoPlayers[idx] = null;
+  renderBentoSlot(idx);
+  updateBentoCTA();
+  updateBentoFormatPills();
+}
+
+// Player search sheet
+function openBentoPlayerSheet(slotIdx) {
+  _bentoActiveSlot = slotIdx;
+  document.getElementById('bento-sheet-overlay').classList.add('open');
+  var input = document.getElementById('bento-sheet-search');
+  input.value = '';
+  input.focus();
+  renderBentoSheetResults([]);
+}
+function closeBentoPlayerSheet() {
+  document.getElementById('bento-sheet-overlay').classList.remove('open');
+  _bentoActiveSlot = -1;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  var searchInput = document.getElementById('bento-sheet-search');
+  if (searchInput) {
+    searchInput.addEventListener('input', function() {
+      clearTimeout(_bentoSearchTimer);
+      var q = this.value.trim();
+      if (q.length < 1) { renderBentoSheetResults([]); return; }
+      _bentoSearchTimer = setTimeout(async function() {
+        var results = await searchPlayers(q);
+        renderBentoSheetResults(results || []);
+      }, 300);
+    });
+  }
+});
+
+function renderBentoSheetResults(results) {
+  var el = document.getElementById('bento-sheet-results');
+  var takenIds = _bentoPlayers.filter(Boolean).map(function(p){return p.id});
+  var html = results.map(function(p) {
+    if (takenIds.includes(p.id)) return '';
+    var initials = (p.username||'?').split(' ').map(function(w){return w[0]||''}).join('').toUpperCase().substring(0,2);
+    var avatar = p.avatar_url
+      ? '<div class="bento-sheet-avatar"><img src="' + p.avatar_url + '"></div>'
+      : '<div class="bento-sheet-avatar">' + initials + '</div>';
+    var hdcp = p.hdcp_index != null ? 'HCP ' + parseFloat(p.hdcp_index).toFixed(1) : '';
+    return '<div class="bento-sheet-row" onclick="selectBentoPlayer(\'' + p.id + '\',\'' + (p.username||'').replace(/'/g,"\\'") + '\',' + (p.hdcp_index||0) + ',\'' + (p.avatar_url||'').replace(/'/g,"\\'") + '\')">' +
+      avatar +
+      '<div class="bento-sheet-info"><div class="bento-sheet-name">' + (p.username||'Unknown') + '</div>' +
+      '<div class="bento-sheet-hdcp">' + hdcp + '</div></div></div>';
+  }).join('');
+  html += '<button class="bento-sheet-guest-btn" onclick="addBentoGuest()">+ Add guest by name</button>';
+  el.innerHTML = html;
+}
+
+function selectBentoPlayer(id, name, hdcp, avatarUrl) {
+  if (_bentoActiveSlot < 0) return;
+  _bentoPlayers[_bentoActiveSlot] = { id: id, name: name, hdcp: hdcp, avatar_url: avatarUrl || '' };
+  renderBentoSlot(_bentoActiveSlot);
+  closeBentoPlayerSheet();
+  updateBentoCTA();
+  updateBentoFormatPills();
+}
+
+function addBentoGuest() {
+  var name = prompt('Guest name:');
+  if (!name || !name.trim()) return;
+  if (_bentoActiveSlot < 0) return;
+  _bentoPlayers[_bentoActiveSlot] = { id: 'guest-' + Date.now(), name: name.trim(), hdcp: 0, avatar_url: '' };
+  renderBentoSlot(_bentoActiveSlot);
+  closeBentoPlayerSheet();
+  updateBentoCTA();
+  updateBentoFormatPills();
+}
+
+// Course
+function selectBentoCourse(name) {
+  _bentoCourse = name;
+  document.getElementById('bento-course-results').innerHTML = '';
+  document.getElementById('bento-course-input').value = '';
+  document.getElementById('bento-course-input').style.display = 'none';
+  document.querySelector('.bento-course-search').style.display = 'none';
+  var sel = document.getElementById('bento-course-selected');
+  sel.style.display = 'flex';
+  document.getElementById('bento-selected-course-name').textContent = name;
+  updateBentoCTA();
+}
+function clearBentoCourse() {
+  _bentoCourse = null;
+  document.getElementById('bento-course-selected').style.display = 'none';
+  document.querySelector('.bento-course-search').style.display = 'flex';
+  document.getElementById('bento-course-input').style.display = '';
+  document.getElementById('bento-course-results').innerHTML = '';
+  updateBentoCTA();
+}
+
+// Course search input wiring
+document.addEventListener('DOMContentLoaded', function() {
+  var courseInput = document.getElementById('bento-course-input');
+  if (courseInput) {
+    var timer;
+    courseInput.addEventListener('input', function() {
+      clearTimeout(timer);
+      var q = this.value.trim();
+      if (q.length < 2) { document.getElementById('bento-course-results').innerHTML = ''; return; }
+      timer = setTimeout(function() {
+        // Use existing COURSES array for local search
+        var results = (typeof COURSES !== 'undefined' ? COURSES : [])
+          .filter(function(c) { return c.name.toLowerCase().includes(q.toLowerCase()); })
+          .slice(0, 8);
+        var html = results.map(function(c) {
+          return '<div class="bento-course-result" onclick="selectBentoCourse(\'' + c.name.replace(/'/g,"\\'") + '\')">' +
+            '<span class="bento-course-flag">&#9872;</span>' +
+            '<span class="bento-course-name">' + c.name + '</span></div>';
+        }).join('');
+        document.getElementById('bento-course-results').innerHTML = html;
+        // Also search API if available
+        if (q.length >= 3 && typeof searchAPIcourses === 'function') {
+          searchAPIcourses(q);
+        }
+      }, 400);
+    });
+  }
+});
+
+// Format pills
+function updateBentoFormatPills() {
+  var count = _bentoPlayers.filter(Boolean).length;
+  var container = document.getElementById('bento-format-pills');
+  var pills = [];
+  pills.push({ label:'Individual', value:'individual' });
+  if (count === 3) pills.push({ label:'2 v 1', value:'2v1' });
+  if (count === 4) {
+    pills.push({ label:'2 v 2', value:'2v2' });
+    pills.push({ label:'3 v 1', value:'3v1' });
+  }
+  container.innerHTML = pills.map(function(p) {
+    var cls = p.value === _bentoFormat ? 'bento-format-pill active' : 'bento-format-pill';
+    return '<div class="' + cls + '" onclick="selectBentoFormat(this,\'' + p.value + '\')">' + p.label + '</div>';
+  }).join('');
+  // Reset format if no longer available
+  var valid = pills.map(function(p){return p.value});
+  if (!valid.includes(_bentoFormat)) {
+    _bentoFormat = 'individual';
+    updateBentoFormatPills();
+  }
+  updateBentoTeams();
+}
+
+function selectBentoFormat(el, format) {
+  _bentoFormat = format;
+  el.parentElement.querySelectorAll('.bento-format-pill').forEach(function(p){p.classList.remove('active')});
+  el.classList.add('active');
+  updateBentoTeams();
+}
+
+function updateBentoTeams() {
+  var container = document.getElementById('bento-teams');
+  if (_bentoFormat === 'individual' || _bentoFormat === '') {
+    container.style.display = 'none';
+    return;
+  }
+  container.style.display = 'flex';
+  var players = _bentoPlayers.filter(Boolean);
+  if (!players.length) { container.innerHTML = ''; return; }
+  // Initialize teams
+  if (!window._bentoTeamAssign) window._bentoTeamAssign = {};
+  players.forEach(function(p, i) {
+    if (!(p.id in window._bentoTeamAssign)) window._bentoTeamAssign[p.id] = i < 2 ? 'a' : 'b';
+  });
+  container.innerHTML = players.map(function(p) {
+    var team = window._bentoTeamAssign[p.id] || 'a';
+    var cls = team === 'a' ? 'bento-team-chip team-a' : 'bento-team-chip team-b';
+    var label = team === 'a' ? 'TEAM A' : 'TEAM B';
+    return '<div class="' + cls + '" onclick="toggleBentoTeam(\'' + p.id + '\')">' +
+      '<span class="bento-team-label">' + label + '</span> ' + (p.name||'').split(' ')[0] + '</div>';
+  }).join('');
+}
+
+function toggleBentoTeam(playerId) {
+  if (!window._bentoTeamAssign) window._bentoTeamAssign = {};
+  window._bentoTeamAssign[playerId] = window._bentoTeamAssign[playerId] === 'a' ? 'b' : 'a';
+  updateBentoTeams();
+}
+
+// CTA state
+function updateBentoCTA() {
+  var btn = document.getElementById('bento-cta');
+  var playerCount = _bentoPlayers.filter(Boolean).length;
+  btn.disabled = playerCount < 2 || !_bentoCourse;
+}
+
+// CTA tap — go to game setup (legacy course/players screens bypassed)
+function bentoCTATapped() {
+  if (document.getElementById('bento-cta').disabled) return;
+  // Build state.players from bento selections
+  var players = _bentoPlayers.filter(Boolean);
+  // Pre-populate the engine state with selected players and course
+  if (typeof state !== 'undefined') {
+    state.players = players.map(function(p, i) {
+      return { name: p.name, hdcp: p.hdcp || 0, playerId: p.id, tee: null };
+    });
+    state.playerCount = players.length;
+    // Try to set course from COURSES array
+    if (typeof COURSES !== 'undefined' && _bentoCourse) {
+      var match = COURSES.find(function(c) { return c.name === _bentoCourse; });
+      if (match) state.course = match;
+    }
+  }
+  // Go to game setup screen (bypassing course and players screens)
+  enterEngineFlow('screen-games');
 }
 
 // ─── POPULATE CONDOR CARD ───
