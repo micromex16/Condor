@@ -13123,6 +13123,7 @@ document.getElementById('card-avatar-input').addEventListener('change', async fu
 // Resume active round — navigate back into the scoring engine
 function resumeActiveRound() {
   if (typeof _roundInProgress !== 'undefined' && _roundInProgress && state.currentHole > 0) {
+    document.getElementById('engine-overlay').classList.add('visible');
     goTo('screen-round');
   }
 }
