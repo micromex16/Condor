@@ -1852,7 +1852,7 @@ body::before { display:none; }
   display:flex; align-items:center; justify-content:center;
   width:54px; min-height:60px;
   background:transparent; border:none; cursor:pointer;
-  color:rgba(27,58,45,.35); font-size:24px;
+  color:rgba(27,58,45,.5); font-size:24px;
   font-family:var(--sans); font-weight:300;
   transition:background .1s, color .1s;
   -webkit-tap-highlight-color:transparent;
@@ -1866,8 +1866,8 @@ body::before { display:none; }
   display:flex; align-items:center; justify-content:center;
   width:36px; height:36px; border-radius:50%;
   border:none;
-  background:rgba(27,58,45,.06);
-  font-size:20px; line-height:1;
+  background:rgba(27,58,45,.08);
+  font-size:22px; line-height:1;
   color:inherit;
 }
 
@@ -1886,9 +1886,9 @@ body::before { display:none; }
   transition:opacity .15s ease;
 }
 .score-hero-label {
-  font-family:var(--sans); font-size:7px; font-weight:600;
-  letter-spacing:2.5px; text-transform:uppercase;
-  color:rgba(27,58,45,.3); margin-top:2px;
+  font-family:var(--sans); font-size:8px; font-weight:700;
+  letter-spacing:2px; text-transform:uppercase;
+  color:rgba(27,58,45,.45); margin-top:2px;
   transition:opacity .15s ease;
 }
 /* Score coloring — light surface */
@@ -1910,22 +1910,22 @@ body::before { display:none; }
 .score-info { flex:1; min-width:0; }
 .score-player-line { display:flex; align-items:center; gap:4px; flex-wrap:wrap; }
 .score-player-name {
-  font-family:var(--serif); font-size:14px; font-weight:500;
+  font-family:var(--serif); font-size:16px; font-weight:600;
   color:var(--green-deep); letter-spacing:.1px;
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
 }
 .score-meta {
-  font-family:var(--sans); font-size:10px; color:rgba(27,58,45,.4);
-  margin-top:2px; letter-spacing:.3px;
+  font-family:var(--sans); font-size:11px; color:rgba(27,58,45,.55);
+  margin-top:3px; letter-spacing:.3px;
 }
 
 /* ── POPS BADGE ── */
 .score-pops-badge {
   display:inline-flex; align-items:center; gap:3px;
-  font-family:var(--sans); font-size:10px; font-weight:600;
+  font-family:var(--sans); font-size:10px; font-weight:700;
   color:var(--gold-rule); letter-spacing:.3px; margin-left:6px;
-  padding:1px 6px; border-radius:8px;
-  background:rgba(196,164,86,.08); border:1px solid rgba(196,164,86,.15);
+  padding:2px 8px; border-radius:8px;
+  background:rgba(196,164,86,.1); border:1px solid rgba(196,164,86,.2);
 }
 .score-pops-pip {
   width:5px; height:5px; border-radius:50%; background:var(--gold-rule);
@@ -1933,13 +1933,13 @@ body::before { display:none; }
 
 /* ── INLINE MONEY ── */
 .score-money {
-  font-family:var(--sans); font-size:11px; font-weight:500;
-  margin-top:3px; letter-spacing:.3px;
-  color:rgba(27,58,45,.4);
+  font-family:var(--sans); font-size:13px; font-weight:600;
+  margin-top:4px; letter-spacing:.3px;
+  color:rgba(27,58,45,.55);
 }
-.score-money.positive { color:var(--gold-rule); }
-.score-money.negative { color:#c0392b; }
-.score-money.neutral  { color:rgba(27,58,45,.25); }
+.score-money.positive { color:var(--gold-rule); font-weight:700; }
+.score-money.negative { color:#c0392b; font-weight:700; }
+.score-money.neutral  { color:rgba(27,58,45,.3); }
 .score-money.leader {
   color:var(--gold-rule); font-weight:700;
 }
@@ -2062,32 +2062,33 @@ body::before { display:none; }
    NASSAU STANDINGS — BENTO GRID
 ══════════════════════════════════════════ */
 .standings-inline {
-  display:flex; gap:8px; padding:10px 0 4px; overflow-x:auto;
-  -webkit-overflow-scrolling:touch;
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(80px, 1fr));
+  gap:10px; padding:14px 0 6px;
 }
-.standings-inline::-webkit-scrollbar { display:none; }
-.standings-inline:empty { padding:0; }
+.standings-inline:empty { padding:0; display:none; }
 .standing-micro {
-  display:flex; flex-direction:column; align-items:center;
-  gap:2px; padding:6px 12px; border-radius:10px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:4px; padding:14px 10px; border-radius:12px;
   font-family:var(--sans); font-size:10px; font-weight:600;
-  letter-spacing:.5px; white-space:nowrap; flex-shrink:0;
+  letter-spacing:.5px; white-space:nowrap;
   border:none; background:#fff;
-  color:rgba(27,58,45,.35);
-  box-shadow:0 1px 6px rgba(0,0,0,.04);
+  color:rgba(27,58,45,.45);
+  box-shadow:0 2px 12px rgba(0,0,0,.06);
+  min-height:56px;
 }
 .standing-micro .standing-label {
-  font-size:7px; letter-spacing:2px; text-transform:uppercase;
-  color:rgba(27,58,45,.35);
+  font-size:8px; letter-spacing:2px; text-transform:uppercase;
+  color:rgba(27,58,45,.4); font-weight:700;
 }
 .standing-micro .standing-value {
-  font-size:13px; color:var(--green-deep);
+  font-size:18px; font-weight:700; color:var(--green-deep);
 }
-.standing-micro.winning { color:var(--gold-rule); }
+.standing-micro.winning { background:rgba(196,164,86,.06); }
+.standing-micro.winning .standing-label { color:var(--gold-rule); }
 .standing-micro.winning .standing-value { color:var(--gold-rule); }
-.standing-micro.losing { color:#c0392b; }
 .standing-micro.losing .standing-value { color:#c0392b; }
-.standing-micro.even { color:rgba(27,58,45,.25); }
+.standing-micro.losing .standing-label { color:rgba(192,57,43,.5); }
+.standing-micro.even .standing-value { color:rgba(27,58,45,.35); }
 
 /* Details drawer — light */
 .details-drawer-toggle {
