@@ -13751,32 +13751,35 @@ async function bhOpenProfile(playerId) {
 }
 
 // ── SECTION 4: CONDOR BULLETIN ──
-function bhLoadBulletin() {
+async function bhLoadBulletin() {
   var contentEl = document.getElementById('bh-bulletin-content');
   var genBtn = document.getElementById('bh-generate-btn');
   if (!contentEl) return;
 
-  sb.auth.getSession().then(function(res) {
-    var session = res.data.session;
+  try {
+    var { data: { session } } = await sb.auth.getSession();
     var isAdmin = session && session.user.id === BH_ADMIN_ID;
 
-    var stored = localStorage.getItem('condor_bulletin_latest');
-    if (stored) {
-      try {
-        var b = JSON.parse(stored);
-        bhRenderBulletin(b, isAdmin);
-        return;
-      } catch(e) {}
-    }
+    var { data: latest } = await sb
+      .from('bulletins')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
 
-    if (isAdmin) {
+    if (latest) {
+      bhRenderBulletin(latest, isAdmin);
+    } else if (isAdmin) {
       contentEl.innerHTML = '';
       genBtn.style.display = '';
     } else {
       contentEl.innerHTML = '<div class="bh-placeholder">Bulletin coming soon</div>';
       genBtn.style.display = 'none';
     }
-  });
+  } catch(e) {
+    console.error('Load bulletin:', e);
+    contentEl.innerHTML = '<div class="bh-placeholder">Bulletin coming soon</div>';
+  }
 }
 
 function bhRenderBulletin(b, isAdmin) {
@@ -13879,17 +13882,20 @@ async function bhGenerateBulletin(btn) {
     if (!resp.ok) throw new Error(result.error?.message || 'API error');
     var text = result.content[0].text;
 
-    var history = JSON.parse(localStorage.getItem('condor_bulletin_history') || '[]');
-    var edition = history.length + 1;
-    var bulletin = {
-      text: text, edition: edition,
-      date: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
-      timestamp: Date.now()
-    };
-    localStorage.setItem('condor_bulletin_latest', JSON.stringify(bulletin));
-    history.push(bulletin);
-    if (history.length > 4) history = history.slice(-4);
-    localStorage.setItem('condor_bulletin_history', JSON.stringify(history));
+    // Get next edition number from Supabase
+    var { count } = await sb.from('bulletins').select('*', { count: 'exact', head: true });
+    var edition = (count || 0) + 1;
+    var dateStr = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+
+    var { error: insertErr } = await sb.from('bulletins').insert({
+      edition: edition,
+      text: text,
+      date: dateStr,
+      created_by: session.user.id
+    });
+    if (insertErr) throw insertErr;
+
+    var bulletin = { text: text, edition: edition, date: dateStr };
     bhRenderBulletin(bulletin, true);
   } catch(e) {
     console.error('Bulletin error:', e);
@@ -13916,27 +13922,36 @@ async function bhShareBulletin() {
   } catch(e) { console.error('Share bulletin:', e); }
 }
 
-function bhShowPrevEditions() {
-  var history = JSON.parse(localStorage.getItem('condor_bulletin_history') || '[]');
-  if (!history.length) { alert('No previous editions.'); return; }
-  var html = '<div style="font-family:var(--sans);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-rule);margin-bottom:16px;">Previous Editions</div>';
-  history.slice().reverse().forEach(function(b, i) {
-    var idx = history.length - 1 - i;
-    html += '<div class="bh-prev-edition" onclick="bhViewPastBulletin(' + idx + ')">' +
-      '<div class="bh-prev-headline">' + (b.text.split('\n')[0] || 'Edition ' + b.edition) + '</div>' +
-      '<div class="bh-prev-date">' + b.date + '</div></div>';
-  });
-  bhOpenSheet(html);
+async function bhShowPrevEditions() {
+  try {
+    var { data: history } = await sb
+      .from('bulletins')
+      .select('id, edition, text, date')
+      .order('created_at', { ascending: false })
+      .limit(4);
+    if (!history || !history.length) { alert('No previous editions.'); return; }
+    var html = '<div style="font-family:var(--sans);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-rule);margin-bottom:16px;">Previous Editions</div>';
+    history.forEach(function(b) {
+      html += '<div class="bh-prev-edition" onclick="bhViewPastBulletin(\'' + b.id + '\')">' +
+        '<div class="bh-prev-headline">' + (b.text.split('\n')[0] || 'Edition ' + b.edition) + '</div>' +
+        '<div class="bh-prev-date">' + b.date + '</div></div>';
+    });
+    bhOpenSheet(html);
+  } catch(e) {
+    console.error('Prev editions:', e);
+    alert('Could not load previous editions.');
+  }
 }
 
-function bhViewPastBulletin(idx) {
-  var history = JSON.parse(localStorage.getItem('condor_bulletin_history') || '[]');
-  if (!history[idx]) return;
+async function bhViewPastBulletin(bulletinId) {
   bhCloseSheet();
-  sb.auth.getSession().then(function(res) {
-    var isAdmin = res.data.session && res.data.session.user.id === BH_ADMIN_ID;
-    bhRenderBulletin(history[idx], isAdmin);
-  });
+  try {
+    var { data: b } = await sb.from('bulletins').select('*').eq('id', bulletinId).maybeSingle();
+    if (!b) return;
+    var { data: { session } } = await sb.auth.getSession();
+    var isAdmin = session && session.user.id === BH_ADMIN_ID;
+    bhRenderBulletin(b, isAdmin);
+  } catch(e) { console.error('View bulletin:', e); }
 }
 </script>
 
