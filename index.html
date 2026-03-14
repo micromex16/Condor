@@ -4359,7 +4359,7 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
       </div>
 
       <!-- ACTIVE ROUND -->
-      <div class="active-round-card">
+      <div class="active-round-card" onclick="resumeActiveRound()" style="cursor:pointer;">
         <div class="arc-eyebrow">Round In Progress · Nassau Active</div>
         <div class="arc-course">Augusta National GC</div>
         <div class="arc-progress">
@@ -13120,6 +13120,13 @@ document.getElementById('card-avatar-input').addEventListener('change', async fu
 });
 
 // ─── SYNC ACTIVE ROUND CARD ───
+// Resume active round — navigate back into the scoring engine
+function resumeActiveRound() {
+  if (typeof _roundInProgress !== 'undefined' && _roundInProgress && state.currentHole > 0) {
+    goTo('screen-round');
+  }
+}
+
 // Shows/hides the active-round-card on the Play tab based on engine state
 function syncActiveRoundCard() {
   const card = document.querySelector('.active-round-card');
