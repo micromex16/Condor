@@ -2725,7 +2725,7 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
 .player-search-sheet {
   width:100%; background:var(--cream); border-radius:12px 12px 0 0;
   overflow:hidden; animation:slideUp .22s ease;
-  max-height:78vh; display:flex; flex-direction:column;
+  max-height:calc(100vh - 60px - env(safe-area-inset-bottom)); display:flex; flex-direction:column;
   box-shadow:0 -4px 32px rgba(15,31,20,.35);
 }
 .player-search-input-wrap {
@@ -2739,7 +2739,7 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
   color:var(--ink); outline:none;
 }
 .player-search-input:focus { border-color:var(--gold); }
-.player-search-results { overflow-y:auto; flex:1; }
+.player-search-results { overflow-y:auto; flex:1; padding-bottom:calc(60px + env(safe-area-inset-bottom) + 16px); }
 .player-search-row {
   display:flex; align-items:center; gap:12px;
   padding:13px 16px; border-bottom:1px solid var(--rule);
