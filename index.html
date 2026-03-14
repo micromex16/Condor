@@ -379,10 +379,11 @@ html, body {
   padding-top: 14px;
   border-top: 1px solid rgba(244,241,230,0.07);
 }
-.card-qr {
-  width: 44px;
-  height: 44px;
-  opacity: 0.35;
+.card-qr-logo {
+  height: 48px;
+  width: auto;
+  mix-blend-mode: screen;
+  opacity: 0.5;
 }
 .card-season-note {
   text-align: right;
@@ -4138,7 +4139,7 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
           <div class="condor-card-inner">
 
             <div class="card-top-row">
-              <span class="card-wordmark">Condor Golf Society</span>
+              <span class="card-wordmark">Condor Card</span>
               <span class="card-id" id="cc-member-id">№ ——</span>
             </div>
 
@@ -4180,24 +4181,8 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
             </div>
 
             <div class="card-qr-row">
-              <!-- QR code — SVG approximation -->
-              <svg class="card-qr" viewBox="0 0 44 44" fill="none">
-                <rect x="2" y="2" width="14" height="14" rx="2" stroke="rgba(244,241,230,0.6)" stroke-width="1.2" fill="none"/>
-                <rect x="5" y="5" width="8" height="8" rx="1" fill="rgba(244,241,230,0.55)"/>
-                <rect x="28" y="2" width="14" height="14" rx="2" stroke="rgba(244,241,230,0.6)" stroke-width="1.2" fill="none"/>
-                <rect x="31" y="5" width="8" height="8" rx="1" fill="rgba(244,241,230,0.55)"/>
-                <rect x="2" y="28" width="14" height="14" rx="2" stroke="rgba(244,241,230,0.6)" stroke-width="1.2" fill="none"/>
-                <rect x="5" y="31" width="8" height="8" rx="1" fill="rgba(244,241,230,0.55)"/>
-                <rect x="20" y="20" width="4" height="4" fill="rgba(244,241,230,0.4)"/>
-                <rect x="26" y="20" width="4" height="4" fill="rgba(244,241,230,0.4)"/>
-                <rect x="32" y="20" width="4" height="4" fill="rgba(244,241,230,0.4)"/>
-                <rect x="38" y="20" width="4" height="4" fill="rgba(244,241,230,0.4)"/>
-                <rect x="20" y="26" width="4" height="4" fill="rgba(244,241,230,0.4)"/>
-                <rect x="26" y="26" width="4" height="4" fill="rgba(244,241,230,0.3)"/>
-                <rect x="32" y="32" width="4" height="4" fill="rgba(244,241,230,0.4)"/>
-                <rect x="20" y="32" width="4" height="4" fill="rgba(244,241,230,0.4)"/>
-                <rect x="38" y="38" width="4" height="4" fill="rgba(244,241,230,0.4)"/>
-              </svg>
+              <!-- Condor logo mark -->
+              <img src="condor-logo.png" alt="Condor" style="height:48px;width:auto;background:none;border:none;box-shadow:none;mix-blend-mode:screen;opacity:0.5;">
               <div class="card-season-note">
                 <span class="card-season-val" id="cc-season-net">—</span>
                 <span class="card-season-label">Season · 2026</span>
@@ -12788,7 +12773,7 @@ async function populateCondorCard() {
     // Player identity (same query as populateCondorCard)
     const { data: player } = await sb
       .from('players')
-      .select('username, hdcp_index, home_course, city, avatar_url')
+      .select('username, hdcp_index, home_course, city, avatar_url, created_at')
       .eq('id', session.user.id)
       .maybeSingle();
 
@@ -12814,9 +12799,21 @@ async function populateCondorCard() {
       }
     }
 
-    // Member ID — last 4 of Supabase user ID
-    var uid = session.user.id || '';
-    document.getElementById('cc-member-id').textContent = '№ ' + uid.slice(-4).toUpperCase();
+    // Member ID — sequential rank from players table
+    try {
+      if (player && player.created_at) {
+        const { count } = await sb
+          .from('players')
+          .select('*', { count: 'exact', head: true })
+          .lt('created_at', player.created_at);
+        var memberNumber = String((count != null ? count : 0) + 1).padStart(4, '0');
+        document.getElementById('cc-member-id').textContent = '№ C' + memberNumber;
+      } else {
+        document.getElementById('cc-member-id').textContent = '№ C????';
+      }
+    } catch(e) {
+      document.getElementById('cc-member-id').textContent = '№ C????';
+    }
 
     // Stats (same query as populateCondorCard stats block)
     const { data: myRounds } = await sb
