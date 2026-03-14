@@ -13124,7 +13124,7 @@ async function populateLastRound() {
   // Step 1: Get the user's most recent round_player entry with round info
   const { data, error } = await sb
     .from('round_players')
-    .select('gross_score, money_result, finish_position, round_id, rounds ( course_name, played_at, game_tags )')
+    .select('gross_score, money_result, finish_position, round_id, rounds ( course_name, played_at, games_played )')
     .eq('player_id', session.user.id)
     .order('created_at', { ascending: false })
     .limit(1)
@@ -13143,7 +13143,7 @@ async function populateLastRound() {
   document.querySelector('.lrc-winnings').textContent =
     money >= 0 ? '+$' + money : '\u2212$' + Math.abs(money);
   document.querySelector('.lrc-meta').textContent =
-    (data.rounds?.game_tags || '') + ' \u00B7 ' +
+    (Array.isArray(data.rounds?.games_played) ? data.rounds.games_played.join(' \u00B7 ') : '') + ' \u00B7 ' +
     new Date(data.rounds?.played_at).toLocaleDateString('en-US',
       { month: 'short', day: 'numeric' });
   document.querySelector('.lrc-score-num').style.color =
