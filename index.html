@@ -19,8 +19,6 @@
   --antique-gold: #C6A46A;
   --scorecard-black: #1A1A1A;
   --saddle-brown: #7A5A3A;
-  --cream-dark: #E8E4D4;
-  --green-light: rgba(28,59,42,0.05);
 
   --font-display: 'Playfair Display', serif;
   --font-editorial: 'Cormorant Garamond', serif;
@@ -1422,40 +1420,47 @@ html, body {
    Deep Augusta green · Warm cream · Aged gold · Zero clutter
 ════════════════════════════════════════════════════════════════════════ */
 :root {
-  /* ── PALETTE ── */
-  --green-deep:    #1b3a2d;
-  --green-augusta: #244d38;
-  --green-mid:     #2e6147;
-  --green-pine:    #3a6b52;
-  --green-light:   #e6eeea;
-  --green-pale:    #f0f5f2;
-  --cream:         #f4efe4;
-  --cream-warm:    #ede5d2;
-  --cream-dark:    #ddd3bc;
-  --cream-card:    #faf7f1;
-  --parchment:     #e8e0cb;
-  --gold:          #8a6d2f;
-  --gold-bright:   #b8922f;
-  --gold-pale:     #d4b86a;
-  --gold-faint:    #e8d9a8;
-  --gold-rule:     #c4a456;
-  --sand:          #c9b99a;
-  --ink:           #0f1f14;
-  --ink-mid:       #1e3828;
-  --ink-dim:       #3a5242;
-  --ink-muted:     #6a7e6d;
-  --ink-faint:     #b0bfb2;
-  --rule:          rgba(27,58,45,0.12);
-  --rule-gold:     rgba(138,109,47,0.25);
+  /* ── PALETTE — remapped to Condor design tokens ── */
+  /* Greens */
+  --green-deep:    var(--condor-green);
+  --green-augusta: var(--augusta-green);
+  --green-mid:     var(--augusta-green);
+  --green-pine:    var(--augusta-green);
+  --green-light:   rgba(28,59,42,0.08);
+  --green-pale:    rgba(28,59,42,0.04);
+  /* Creams */
+  --cream:         var(--vintage-cream);
+  --cream-warm:    var(--vintage-cream);
+  --cream-dark:    var(--vintage-cream);
+  --cream-card:    #FFFFFF;
+  --parchment:     var(--vintage-cream);
+  /* Golds & browns */
+  --gold:          var(--saddle-brown);
+  --gold-bright:   var(--antique-gold);
+  --gold-pale:     var(--antique-gold);
+  --gold-faint:    rgba(198,164,106,0.35);
+  --gold-rule:     var(--antique-gold);
+  --sand:          var(--antique-gold);
+  /* Inks */
+  --ink:           var(--scorecard-black);
+  --ink-mid:       var(--condor-green);
+  --ink-dim:       rgba(28,59,42,0.65);
+  --ink-muted:     rgba(28,59,42,0.50);
+  --ink-faint:     rgba(28,59,42,0.30);
+  /* Rules & borders */
+  --rule:          rgba(28,59,42,0.12);
+  --rule-gold:     rgba(198,164,106,0.25);
+  /* Functional */
   --sky-blue:      #5a82a0;
-  --score-eagle:   #8a6d2f;
-  --score-birdie:  #1b3a2d;
-  --score-bogey:   #7a3a28;
-  --score-double:  #9a2a1a;
+  /* Score colors */
+  --score-eagle:   var(--antique-gold);
+  --score-birdie:  var(--condor-green);
+  --score-bogey:   var(--saddle-brown);
+  --score-double:  var(--saddle-brown);
 
-  /* ── FONTS ── */
-  --serif:  'Cormorant Garamond', 'Libre Baskerville', Georgia, serif;
-  --sans:   'Jost', system-ui, sans-serif; font-weight: 400;
+  /* ── FONTS — aliased to Condor tokens ── */
+  --serif:  var(--font-editorial);
+  --sans:   var(--font-ui);
 
   /* ── SPACING SCALE ── */
   --space-xs:  4px;
@@ -1485,42 +1490,43 @@ html, body {
   --radius-lg: 14px;
 
   /* ── OPACITY COLORS (for replacing hardcoded RGBAs) ── */
-  --green-deep-rgb:  27,58,45;
-  --gold-rgb:        138,109,47;
-  --gold-light-rgb:  196,164,86;
-  --cream-gold-rgb:  212,200,154;
-  --bogey-rgb:       122,58,40;
-  --green-mid-rgb:   46,97,71;
+  /* RGB components — aligned to Condor tokens */
+  --green-deep-rgb:  28,59,42;     /* condor-green */
+  --gold-rgb:        122,90,58;    /* saddle-brown */
+  --gold-light-rgb:  198,164,106;  /* antique-gold */
+  --cream-gold-rgb:  198,164,106;  /* antique-gold */
+  --bogey-rgb:       122,90,58;    /* saddle-brown */
+  --green-mid-rgb:   35,75,55;     /* augusta-green */
 
-  /* ── FUNCTIONAL ALIASES (backwards compat with JS color refs) ── */
-  --neon:        var(--green-mid);
-  --neon-dim:    rgba(46,97,71,.12);
+  /* ── FUNCTIONAL ALIASES — remapped to Condor tokens ── */
+  --neon:        var(--augusta-green);
+  --neon-dim:    rgba(28,59,42,.12);
   --neon-glow:   none;
-  --gold-dim:    rgba(138,109,47,.12);
-  --red:         var(--score-bogey);
-  --red-dim:     rgba(122,58,40,.12);
+  --gold-dim:    rgba(198,164,106,.12);
+  --red:         var(--saddle-brown);
+  --red-dim:     rgba(122,90,58,.12);
   --blue:        var(--sky-blue);
-  --bg:          var(--cream);
-  --panel:       var(--cream-card);
-  --panel2:      var(--cream-warm);
-  --panel3:      var(--parchment);
-  --panel4:      var(--cream-dark);
-  --border:      rgba(27,58,45,0.1);
-  --border2:     rgba(27,58,45,0.18);
-  --text:        var(--ink);
-  --text-dim:    var(--ink-dim);
-  --text-muted:  var(--ink-muted);
+  --bg:          var(--vintage-cream);
+  --panel:       #FFFFFF;
+  --panel2:      var(--vintage-cream);
+  --panel3:      var(--vintage-cream);
+  --panel4:      var(--vintage-cream);
+  --border:      rgba(28,59,42,0.1);
+  --border2:     rgba(28,59,42,0.18);
+  --text:        var(--scorecard-black);
+  --text-dim:    rgba(28,59,42,0.65);
+  --text-muted:  rgba(28,59,42,0.50);
   --radius:      8px;
-  --ff-display:  var(--serif);
-  --ff-body:     var(--sans);
-  --ff-mono:     var(--sans);
-  --green:       var(--green-mid);
-  --green-muted: rgba(46,97,71,.15);
-  --gold-light:  var(--gold-pale);
-  --gold-pale:   var(--gold-faint);
-  --gold-deep:   var(--gold);
-  --white:       var(--cream-card);
-  --dark:        var(--green-deep);
+  --ff-display:  var(--font-editorial);
+  --ff-body:     var(--font-ui);
+  --ff-mono:     var(--font-ui);
+  --green:       var(--augusta-green);
+  --green-muted: rgba(28,59,42,.15);
+  --gold-light:  var(--antique-gold);
+  --gold-pale:   rgba(198,164,106,0.35);
+  --gold-deep:   var(--saddle-brown);
+  --white:       #FFFFFF;
+  --dark:        var(--condor-green);
   --surface:     var(--cream-card);
   --surface2:    var(--cream-warm);
   --surface3:    var(--parchment);
@@ -1537,11 +1543,8 @@ html, body { height:100%; overflow:hidden; background:var(--cream); color:var(--
   font-family:var(--sans); -webkit-font-smoothing:antialiased; }
 
 /* Subtle paper texture */
-body::before {
-  content:''; position:fixed; inset:0; pointer-events:none; z-index:9999;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.018'/%3E%3C/svg%3E");
-  opacity:.8;
-}
+/* paper texture removed — Condor uses clean backgrounds */
+body::before { display:none; }
 
 /* ── SCREENS ── */
 .screen { position:absolute; inset:0; display:flex; flex-direction:column;
@@ -3577,6 +3580,158 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
 #screen-settlement .money-amount.negative {
   color: var(--saddle-brown);
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   CONDOR RESKIN — screen-course
+   Visual-only overrides. No layout/logic changes.
+═══════════════════════════════════════════════════════════════ */
+
+/* ── Background ── */
+#screen-course {
+  background: var(--vintage-cream);
+}
+#screen-course .body {
+  background: var(--vintage-cream);
+  padding: 8px 22px 24px;
+}
+
+/* ── Header — clean, minimal, Condor-branded ── */
+#screen-course .header {
+  background: var(--condor-green);
+  padding: 52px 22px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* ── Hamburger — lighter for dark header ── */
+#screen-course .hamburger-btn span {
+  background: var(--antique-gold);
+  opacity: 0.8;
+}
+#screen-course .hamburger-btn:active span {
+  opacity: 1;
+}
+
+/* ── Profile avatar button — subtle on dark header ── */
+#screen-course #profile-avatar-btn {
+  background: rgba(198,164,106,0.12) !important;
+  border-color: rgba(198,164,106,0.3) !important;
+  color: var(--antique-gold) !important;
+}
+
+/* ── "Select Your Course" label ── */
+#screen-course .body > div:first-child {
+  padding: 12px 0 16px !important;
+}
+#screen-course .body > div:first-child > div {
+  font-family: var(--font-display) !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  letter-spacing: 3px !important;
+  color: var(--condor-green) !important;
+}
+
+/* ── Search input — refined ── */
+#screen-course .form-group {
+  margin-bottom: 18px;
+}
+#screen-course .form-input {
+  background: #fff;
+  border: 1px solid rgba(28,59,42,0.12);
+  border-radius: 14px;
+  padding: 14px 18px;
+  font-family: var(--font-ui);
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--scorecard-black);
+  box-shadow: 0 1px 4px rgba(28,59,42,0.06);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+#screen-course .form-input:focus {
+  border-color: var(--condor-green);
+  box-shadow: 0 2px 8px rgba(28,59,42,0.1);
+}
+#screen-course .form-input::placeholder {
+  color: rgba(28,59,42,0.35);
+  font-weight: 300;
+}
+
+/* ── Course list cards — premium card style ── */
+#screen-course .course-item {
+  background: #fff;
+  border: none;
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 6px rgba(28,59,42,0.07), 0 1px 2px rgba(0,0,0,0.04);
+  transition: box-shadow 0.15s, transform 0.15s;
+}
+#screen-course .course-item:first-child {
+  border-radius: 14px;
+}
+#screen-course .course-item:last-child {
+  border-radius: 14px;
+  border-bottom: none;
+  margin-bottom: 10px;
+}
+#screen-course .course-item:only-child {
+  border-radius: 14px;
+  border-bottom: none;
+}
+#screen-course .course-item:active {
+  background: rgba(28,59,42,0.03);
+  box-shadow: 0 1px 3px rgba(28,59,42,0.05);
+  transform: scale(0.995);
+}
+
+/* ── Course name & meta typography ── */
+#screen-course .course-name {
+  font-family: var(--font-editorial);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--scorecard-black);
+  letter-spacing: 0.1px;
+}
+#screen-course .course-meta {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  color: var(--saddle-brown);
+  letter-spacing: 0.2px;
+  margin-top: 3px;
+  opacity: 0.75;
+}
+
+/* ── Favorites section header ── */
+#screen-course .section-title {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--condor-green);
+  padding: 14px 0 8px;
+}
+
+/* ── Empty state ── */
+#screen-course #course-list:empty::before {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  color: rgba(28,59,42,0.4);
+  padding: 48px 24px;
+}
+
+/* ── Loading spinner — match tokens ── */
+#screen-course .search-loading {
+  font-family: var(--font-ui);
+  color: var(--condor-green);
+  opacity: 0.6;
+}
+#screen-course .search-spinner {
+  border-color: rgba(28,59,42,0.15);
+  border-top-color: var(--condor-green);
+}
 </style>
 
 </head>
@@ -4390,7 +4545,7 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
 <!-- ═══ MEMBER PROFILE — read-only view ═══ -->
 <div class="screen engine-screen hidden" id="screen-member-profile">
   <div class="header" style="padding:46px 18px 16px">
-    <button class="back-btn" onclick="goTo('screen-clubhouse')">&#8592; Back</button>
+    <button class="back-btn" onclick="exitEngineToShell('birdhouse')">&#8592; Back</button>
   </div>
   <div class="body" style="padding:16px 16px 24px;">
     <!-- Avatar -->
@@ -5165,10 +5320,10 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
       <div class="nav-drawer-item" onclick="closeNavDrawer();openProfileSheet();">
         <span class="nav-drawer-item-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span> Profile
       </div>
-      <div class="nav-drawer-item" data-screen="screen-clubhouse" onclick="navTo('screen-clubhouse')">
+      <div class="nav-drawer-item" data-screen="screen-clubhouse" onclick="closeNavDrawer();exitEngineToShell('birdhouse')">
         <span class="nav-drawer-item-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span> Clubhouse
       </div>
-      <div class="nav-drawer-item" data-screen="screen-locker" onclick="navTo('screen-locker');if(typeof openLocker==='function')openLocker();">
+      <div class="nav-drawer-item" data-screen="screen-locker" onclick="closeNavDrawer();exitEngineToShell('card')">
         <span class="nav-drawer-item-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 7V5a4 4 0 0 0-8 0v2"/></svg></span> My Locker
       </div>
       <div class="nav-drawer-divider"></div>
@@ -5194,7 +5349,7 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
 <!-- ═══ RULES OF THE GAMES ═══ -->
 <div class="screen engine-screen hidden" id="screen-rules">
   <div class="header" style="padding:46px 18px 16px">
-    <button class="back-btn" onclick="goTo('screen-clubhouse')">&#8592; Back</button>
+    <button class="back-btn" onclick="exitEngineToShell('birdhouse')">&#8592; Back</button>
     <div class="header-title">Rules of the Games</div>
   </div>
   <div class="body" style="padding:16px 20px 40px;">
@@ -5308,7 +5463,7 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
 <!-- ═══ ABOUT ═══ -->
 <div class="screen engine-screen hidden" id="screen-about">
   <div class="header" style="padding:46px 18px 16px">
-    <button class="back-btn" onclick="goTo('screen-clubhouse')">&#8592; Back</button>
+    <button class="back-btn" onclick="exitEngineToShell('birdhouse')">&#8592; Back</button>
     <div class="header-title">About</div>
   </div>
   <div class="body" style="padding:24px 22px 40px;">
@@ -5332,7 +5487,7 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
 <!-- ═══ TERMS & CONDITIONS ═══ -->
 <div class="screen engine-screen hidden" id="screen-terms">
   <div class="header" style="padding:46px 18px 16px">
-    <button class="back-btn" onclick="goTo('screen-clubhouse')">&#8592; Back</button>
+    <button class="back-btn" onclick="exitEngineToShell('birdhouse')">&#8592; Back</button>
     <div class="header-title">Terms & Conditions</div>
   </div>
   <div class="body" style="padding:24px 22px 40px;">
@@ -11046,6 +11201,8 @@ function saveRoundToClubhouse() {
         // Clear localStorage checkpoint on success
         try { localStorage.removeItem('condor_round_checkpoint'); } catch(e) {}
         showToast('Round saved to Clubhouse!', 'success');
+        // Return to Birdhouse shell after brief delay so toast is visible
+        setTimeout(function() { exitEngineToShell('birdhouse'); }, 1200);
       }
     })
     .catch(function(err) {
@@ -12753,6 +12910,12 @@ async function condorNavigate(tab) {
 function enterEngineFlow(screenId) {
   document.getElementById('engine-overlay').classList.add('visible');
   goTo(screenId);
+}
+
+// Exit engine overlay and return to a shell tab
+function exitEngineToShell(tab) {
+  document.getElementById('engine-overlay').classList.remove('visible');
+  condorNavigate(tab || 'play');
 }
 
 // ─── POPULATE CONDOR CARD ───
