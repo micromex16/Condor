@@ -4541,7 +4541,7 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
       <span class="sgr-check">✦</span>
     </div>
   </div>
-  <div class="sheet-new-group" onclick="closeFlockSheet()">
+  <div class="sheet-new-group" onclick="closeFlockSheet();openCreateGroupModal()">
     <span class="sheet-new-label">Create a new Flock</span>
   </div>
 </div>
@@ -13323,8 +13323,7 @@ async function populateFlockPills() {
     // Build pills — first group is active by default
     var pillsHtml = groups.map(function(g, i) {
       var activeClass = i === 0 ? ' active' : '';
-      var safeName = (g.name || 'Group').replace(/'/g, "\\'");
-      return '<div class="flock-pill' + activeClass + '" onclick="switchFlock(this, \'' + safeName + '\')">' +
+      return '<div class="flock-pill' + activeClass + '" data-group-id="' + g.id + '" onclick="switchFlock(this, \'' + g.id + '\')">' +
         '<div class="flock-pill-dot"></div>' +
         '<span class="flock-pill-name">' + (g.name || 'Group') + '</span>' +
       '</div>';
@@ -13340,9 +13339,8 @@ async function populateFlockPills() {
     if (sheetGroups) {
       sheetGroups.innerHTML = groups.map(function(g, i) {
         var currentClass = i === 0 ? ' current' : '';
-        var safeName = (g.name || 'Group').replace(/'/g, "\\'");
         var meta = g.description || '';
-        return '<div class="sheet-group-row' + currentClass + '" onclick="selectFlock(this, \'' + safeName + '\')">' +
+        return '<div class="sheet-group-row' + currentClass + '" data-group-id="' + g.id + '" onclick="selectFlock(this, \'' + g.id + '\')">' +
           '<div class="sgr-dot"></div>' +
           '<div class="sgr-info">' +
             '<span class="sgr-name">' + (g.name || 'Group') + '</span>' +
@@ -13472,20 +13470,26 @@ function closeFlockSheet() {
   document.getElementById('sheet-overlay').classList.remove('open');
   document.getElementById('flock-sheet').classList.remove('open');
 }
-function selectFlock(row, name) {
+function selectFlock(row, groupId) {
   document.querySelectorAll('.sheet-group-row').forEach(r => r.classList.remove('current'));
   row.classList.add('current');
+  // Sync pill active state
   document.querySelectorAll('.flock-pill:not(.add-pill)').forEach(p => {
-    p.classList.toggle('active', p.querySelector('.flock-pill-name').textContent === name);
+    p.classList.toggle('active', p.getAttribute('data-group-id') === groupId);
   });
-  setTimeout(closeFlockSheet, 220);
+  closeFlockSheet();
+  document.getElementById('engine-overlay').classList.add('visible');
+  openGroupDetail(groupId);
 }
-function switchFlock(pill, name) {
+function switchFlock(pill, groupId) {
   document.querySelectorAll('.flock-pill:not(.add-pill)').forEach(p => p.classList.remove('active'));
   pill.classList.add('active');
+  // Sync sheet row state
   document.querySelectorAll('.sheet-group-row').forEach(r => {
-    r.classList.toggle('current', r.querySelector('.sgr-name').textContent === name);
+    r.classList.toggle('current', r.getAttribute('data-group-id') === groupId);
   });
+  document.getElementById('engine-overlay').classList.add('visible');
+  openGroupDetail(groupId);
 }
 </script>
 
