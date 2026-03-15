@@ -10567,7 +10567,9 @@ function renderScorecard() {
       var has=isB?bH[pi]:fH[pi];
       var pops=0;
       for(var si=start;si<=end;si++) pops+=strokesOnHole(state.playingHandicaps[pi],holes[si].hcp);
-      var tp=has?gt-pTot:null;
+      var playedPar=0;
+      for(var si=start;si<=end;si++){if(state.scores[pi]&&state.scores[pi][si]!=null)playedPar+=holes[si].par;}
+      var tp=has?gt-playedPar:null;
       var tpS=tp===null?'\u2014':tp===0?'E':(tp>0?'+':'')+tp;
       var tpC=tp===null?INKF:tp<0?GN+' ':tp>0?RED:INKM;
 
@@ -10608,7 +10610,9 @@ function renderScorecard() {
     if(!fH[pi]&&!bH[pi]) return '';
     var holesScored = (state.scores[pi]||[]).filter(function(s){return s!=null;}).length;
     var tot=fG[pi]+bG[pi],totN=fN[pi]+bN[pi];
-    var tp=tot-totPar;
+    var scoredPar=0;
+    for(var hi=0;hi<holes.length;hi++){if(state.scores[pi]&&state.scores[pi][hi]!=null)scoredPar+=holes[hi].par;}
+    var tp=tot-scoredPar;
     var tpS=tp===0?'E':(tp>0?'+':'')+tp;
     var m=money[pi],mS=m>=0?'+':'';
     var mC=m>0?GN:m<0?RED:INKM;
