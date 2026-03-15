@@ -7415,6 +7415,112 @@ function getRunningMoney() {
   return money.map(m => Math.round(m));
 }
 
+// Settled money only — bets that are complete/resolved
+function getSettledMoney() {
+  const tempDebts = [];
+  const ne = getEntityCount();
+  const h = state.currentHole;
+
+  if (state.games.nassau) {
+    const fS = parseFloat(state.stakes.nassauFront)||0;
+    const bS = parseFloat(state.stakes.nassauBack)||0;
+    const mS = parseFloat(state.stakes.nassauMatch)||0;
+
+    // Front settled if past hole 9
+    if (h > 9 && ne === 2 && fS > 0) {
+      const s = calcSideScores(0,1);
+      if (s.frontA > s.frontB) addEntityDebt(tempDebts,1,0,fS,'f');
+      else if (s.frontB > s.frontA) addEntityDebt(tempDebts,0,1,fS,'f');
+    }
+    // Back settled if past hole 18
+    if (h > 18 && ne === 2 && bS > 0) {
+      const s = calcSideScores(0,1);
+      if (s.backA > s.backB) addEntityDebt(tempDebts,1,0,bS,'b');
+      else if (s.backB > s.backA) addEntityDebt(tempDebts,0,1,bS,'b');
+    }
+    // Match settled if past hole 18
+    if (h > 18 && ne === 2 && mS > 0) {
+      const s = calcSideScores(0,1);
+      if (s.matchA > s.matchB) addEntityDebt(tempDebts,1,0,mS,'m');
+      else if (s.matchB > s.matchA) addEntityDebt(tempDebts,0,1,mS,'m');
+    }
+    // Resolved presses only
+    state.nassau.presses.filter(p => !p.declined && p.resolved).forEach(p => {
+      if (p.leader < 0) return;
+      const loser = p.leader === 0 ? 1 : 0;
+      addEntityDebt(tempDebts, loser, p.leader, p.stake, 'press');
+    });
+  }
+
+  // Skins are settled per-hole as they happen
+  if (state.games.skins) {
+    state.skins.results.forEach((r, hi) => {
+      if (!r || r.winner < 0) return;
+      const losers = state.players.map((_,i)=>i).filter(i=>i!==r.winner);
+      losers.forEach(lpi => {
+        tempDebts.push({from: lpi, to: r.winner, amount: parseFloat(state.stakes.skins)||0});
+      });
+    });
+  }
+
+  // Resolved custom wagers
+  state.customWagers.forEach(function(w) {
+    if (w.type !== 'cash' || !w.amount || !w.resolved) return;
+    if (w.winnerId != null && w.winnerId >= 0) {
+      var participants = w.players || state.players.map(function(_,i){ return i; });
+      participants.forEach(function(pi) {
+        if (pi !== w.winnerId) tempDebts.push({ from: pi, to: w.winnerId, amount: w.amount });
+      });
+    }
+  });
+
+  // Side games are settled per-hole
+  if (state.games.sidegames) {
+    const sgStake = parseFloat(state.stakes.sidegames)||5;
+    state.sideGameResults.forEach(function(sg, hi) {
+      if (!sg) return;
+      SIDE_GAME_TYPES.forEach(function(t) {
+        const winner = sg[t.key];
+        if (winner == null || winner < 0) return;
+        state.players.forEach(function(_, pi) {
+          if (pi !== winner) tempDebts.push({ from: pi, to: winner, amount: sgStake });
+        });
+      });
+    });
+  }
+
+  // Birdie bets settled per-hole
+  if (state.games.birdiebets) {
+    const bb = state.stakes.birdieBets || {};
+    const bbPayouts = [
+      { threshold: -1, key: 'birdie' }, { threshold: -2, key: 'eagle' },
+      { threshold: -3, key: 'albatross' }, { threshold: -4, key: 'ace' },
+      { threshold: -5, key: 'condor' },
+    ];
+    state.players.forEach(function(_, pi) {
+      (getPlayerTee(pi).holes || []).forEach(function(hole, hi) {
+        const gross = (state.scores[pi]||[])[hi];
+        if (gross == null) return;
+        const diff = gross - hole.par;
+        bbPayouts.forEach(function(bp) {
+          if (diff === bp.threshold && parseFloat(bb[bp.key]||0) > 0) {
+            state.players.forEach(function(_, oi) {
+              if (oi !== pi) tempDebts.push({ from: oi, to: pi, amount: parseFloat(bb[bp.key]) });
+            });
+          }
+        });
+      });
+    });
+  }
+
+  const money = state.players.map(()=>0);
+  tempDebts.forEach(d => {
+    if (d.from>=0) money[d.from] -= d.amount;
+    if (d.to>=0)   money[d.to]   += d.amount;
+  });
+  return money.map(m => Math.round(m));
+}
+
 // ═══════════════════════════════════════════════════════════════════
 
 // ═══════════════════════════════════════════════════════════════════
@@ -10264,16 +10370,32 @@ function renderBetsList() {
   }, 0);
 
   // ── RENDER ──
-  // Running money card
+  // Running money card — split settled vs live
   var money = getRunningMoney();
+  var settled = getSettledMoney();
   var moneyHtml = '<div class="card" style="margin:0 0 10px">' +
     '<div class="card-title" style="margin-bottom:10px">Running Money</div>' +
     state.players.map(function(p, pi) {
       var m = money[pi];
+      var s = settled[pi];
+      var l = m - s;
       var cls = m > 0 ? 'positive' : m < 0 ? 'negative' : 'neutral';
-      var sign = m > 0 ? '+' : '';
-      return '<div class="money-row"><span class="money-label">' + p.name + '</span>' +
-        '<span class="money-amount ' + cls + '">' + sign + '$' + Math.abs(m).toFixed(0) + '</span></div>';
+      var sign = m > 0 ? '+' : m < 0 ? '\u2212' : '';
+      var sSign = s > 0 ? '+' : s < 0 ? '\u2212' : '';
+      var lSign = l > 0 ? '+' : l < 0 ? '\u2212' : '';
+      var sCls = s > 0 ? 'color:var(--green-deep)' : s < 0 ? 'color:#c0392b' : 'color:var(--ink-muted)';
+      var lCls = l > 0 ? 'color:var(--green-deep)' : l < 0 ? 'color:#c0392b' : 'color:var(--ink-muted)';
+      return '<div class="money-row" style="flex-wrap:wrap">' +
+        '<span class="money-label" style="flex:1;min-width:100px">' + p.name + '</span>' +
+        '<span class="money-amount ' + cls + '" style="font-size:16px;font-weight:700">' + sign + '$' + Math.abs(m).toFixed(0) + '</span>' +
+        '<div style="width:100%;display:flex;justify-content:flex-end;gap:14px;margin-top:2px">' +
+          '<span style="font-family:var(--sans);font-size:10px;letter-spacing:.5px;' + sCls + '">' +
+            '<span style="color:var(--ink-muted);font-weight:400">Settled</span> ' + sSign + '$' + Math.abs(s).toFixed(0) + '</span>' +
+          '<span style="font-family:var(--sans);font-size:10px;letter-spacing:.5px;' + lCls + '">' +
+            '<span style="display:inline-block;width:5px;height:5px;border-radius:50%;background:#2d6a4f;margin-right:3px;vertical-align:middle"></span>' +
+            '<span style="color:var(--ink-muted);font-weight:400">Live</span> ' + lSign + '$' + Math.abs(l).toFixed(0) + '</span>' +
+        '</div>' +
+      '</div>';
     }).join('') + '</div>';
 
   // Active bets card
