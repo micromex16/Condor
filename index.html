@@ -6981,49 +6981,66 @@ function updateNassauState() {
 }
 
 function updatePressStates() {
-  state.nassau.presses.forEach(p => {
+  state.nassau.presses.forEach(function(p, idx) {
     if (p.resolved || p.declined) return;
-    // Recalc press score from startHole to currentHole
-    let pA=0, pB=0;
-    for (let h = p.startHole-1; h < 18; h++) {
-      const sA = getNassauScore(0, h);
-      const sB = getNassauScore(1, h);
-      if (sA===null||sB===null) break; // stop at unplayed
+    // Assign pressNumber if not set
+    if (p.pressNumber == null) {
+      var sameSide = state.nassau.presses.filter(function(x, xi) { return xi < idx && x.side === p.side && !x.declined; });
+      p.pressNumber = sameSide.length + 1;
+    }
+    // Recalc press score from startHole to end of side
+    var endHole = p.side==='front' ? 9 : 18;
+    var pA=0, pB=0;
+    for (var h = p.startHole-1; h < endHole; h++) {
+      var sA = getNassauScore(0, h);
+      var sB = getNassauScore(1, h);
+      if (sA===null||sB===null) break;
       if (sA < sB) pA++;
       else if (sB < sA) pB++;
     }
     if (pA > pB)      { p.leader=0; p.holesUp=pA-pB; }
     else if (pB > pA) { p.leader=1; p.holesUp=pB-pA; }
     else              { p.leader=-1; p.holesUp=0; }
-    // Resolve at end of side
-    const endHole = p.side==='front' ? 9 : p.side==='back' ? 18 : 18;
     if (state.currentHole > endHole) p.resolved = true;
   });
 }
 
 function checkAutoPress() {
   if (!state.games.nassau || !state.pressConfig.autoEnabled) return [];
-  const h = state.currentHole;
-  const alerts = [];
+  var h = state.currentHole;
+  var alerts = [];
 
-  const tryAlert = (side, stakeKey, configKey, minHole, maxHole) => {
+  var tryAlert = function(side, stakeKey, configKey, minHole, maxHole) {
     if (!state.pressConfig[configKey]) return;
     if (h < minHole || h > maxHole) return;
-    const s = state.nassau[side];
+    var s = state.nassau[side];
     if (s.leader < 0 || s.holesUp !== 2) return;
-    // Has it been offered already for this hole+side?
-    const offerKey = `${side}_${h}`;
+    var offerKey = side + '_' + h;
     if (state.nassau.pressOffered[offerKey]) return;
-    // Has there already been a press on this side started at this hole?
-    const alreadyPressed = state.nassau.presses.some(p => p.side===side && p.startHole===h && !p.declined);
+    var alreadyPressed = state.nassau.presses.some(function(p) { return p.side===side && p.startHole===h && !p.declined; });
     if (alreadyPressed) return;
-    const trailing = s.leader === 0 ? 1 : 0;
-    alerts.push({ side, player: trailing, stakeKey, label: side==='front'?'Front 9':side==='back'?'Back 9':'Match' });
+    var trailing = s.leader === 0 ? 1 : 0;
+    alerts.push({ side: side, player: trailing, stakeKey: stakeKey, label: side==='front'?'Front 9':side==='back'?'Back 9':'Match' });
   };
 
   tryAlert('front', 'nassauFront', 'applyFront', 2, 8);
   tryAlert('back',  'nassauBack',  'applyBack',  11, 17);
   tryAlert('match', 'nassauMatch', 'applyMatch', 2, 17);
+
+  // Check active presses for 2-down (press on press)
+  state.nassau.presses.forEach(function(p, idx) {
+    if (p.resolved || p.declined) return;
+    if (p.leader < 0 || p.holesUp < 2) return;
+    var endHole = p.side==='front' ? 8 : 17;
+    if (h > endHole) return;
+    var pressOfferKey = 'press_' + idx + '_' + h;
+    if (state.nassau.pressOffered[pressOfferKey]) return;
+    var alreadyRepressed = state.nassau.presses.some(function(q) { return q.parentIndex === idx && q.startHole === h && !q.declined; });
+    if (alreadyRepressed) return;
+    var trailing = p.leader === 0 ? 1 : 0;
+    var pressNum = (p.pressNumber || 1);
+    alerts.push({ side: p.side, player: trailing, stakeKey: null, stake: p.stake, label: 'Press #' + pressNum, parentIndex: idx });
+  });
 
   return alerts;
 }
@@ -9963,14 +9980,18 @@ function acceptPress() {
   var el = document.getElementById('press-alert');
   var data = el._pressData;
   if (!data) return;
-  var stake = parseFloat(state.stakes[data.stakeKey]) || 0;
+  var stake = data.stake || parseFloat(state.stakes[data.stakeKey]) || 0;
+  var pressNum = state.nassau.presses.filter(function(p) { return p.side === data.side && !p.declined; }).length + 1;
   state.nassau.presses.push({
     side: data.side, startHole: state.currentHole,
     leader: -1, holesUp: 0, stake: stake,
     resolved: false, declined: false,
+    pressNumber: pressNum,
+    parentIndex: data.parentIndex != null ? data.parentIndex : null,
   });
   // Mark as offered so it doesn't repeat
-  state.nassau.pressOffered[data.side + '_' + state.currentHole] = true;
+  var offerKey = data.parentIndex != null ? 'press_' + data.parentIndex + '_' + state.currentHole : data.side + '_' + state.currentHole;
+  state.nassau.pressOffered[offerKey] = true;
   el.style.display = 'none';
   updateNassauState();
   renderStandingsStrip();
@@ -10031,6 +10052,38 @@ function showManualPressMenu() {
         action: function(){ doManualPress('match', 'nassauMatch'); }
       });
     }
+  }
+
+  // Active presses — can be re-pressed if trailing
+  if (state.games.nassau) {
+    state.nassau.presses.forEach(function(p, idx) {
+      if (p.resolved || p.declined) return;
+      var endHole = p.side === 'front' ? 9 : 18;
+      if (h > endHole) return;
+      var pressNum = p.pressNumber || (idx + 1);
+      var sideName = p.side === 'front' ? 'Front 9' : p.side === 'back' ? 'Back 9' : 'Match';
+      var statusText = p.leader >= 0 ? getEntityFullLabel(p.leader) + ' — ' + p.holesUp + ' up' : 'All Even';
+      var pressIdx = idx;
+      options.push({
+        icon: 'P',
+        gameLabel: 'Press #' + pressNum + ' · ' + sideName,
+        teamsLabel: 'Opened hole ' + p.startHole,
+        statusText: statusText,
+        isLeading: p.leader >= 0,
+        stake: p.stake || 0,
+        action: (function(pi, side) { return function() {
+          var newPressNum = state.nassau.presses.filter(function(q) { return q.side === side && !q.declined; }).length + 1;
+          state.nassau.presses.push({
+            side: side, startHole: state.currentHole,
+            leader: -1, holesUp: 0, stake: p.stake || 0,
+            resolved: false, declined: false,
+            pressNumber: newPressNum,
+            parentIndex: pi,
+          });
+          updateNassauState();
+        }; })(pressIdx, p.side)
+      });
+    });
   }
 
   // Custom matchups
@@ -10121,11 +10174,14 @@ function showManualPressMenu() {
 
 function doManualPress(side, stakeKey) {
   var h = state.currentHole;
+  var pressNum = state.nassau.presses.filter(function(p) { return p.side === side && !p.declined; }).length + 1;
   state.nassau.presses.push({
     side: side, startHole: h,
     leader: -1, holesUp: 0,
     stake: parseFloat(state.stakes[stakeKey]) || 0,
     resolved: false, declined: false,
+    pressNumber: pressNum,
+    parentIndex: null,
   });
   updateNassauState();
   renderStandingsStrip();
@@ -10209,30 +10265,29 @@ function renderBetsList() {
       });
     });
 
-    // ── PRESSES ──
-    var pressCount = 0;
-    state.nassau.presses.forEach(function(p) {
+    // ── PRESSES (including presses on presses) ──
+    state.nassau.presses.forEach(function(p, idx) {
       if (p.declined) return;
-      pressCount++;
       totalExposure += p.stake;
 
+      var pressNum = p.pressNumber || (idx + 1);
       var sideName = p.side === 'front' ? 'Front 9' : p.side === 'back' ? 'Back 9' : 'Overall';
       var endHole  = p.side === 'front' ? 9 : 18;
       var statusTxt = 'All Even';
-      var dotClass = 'press';
       if (p.leader >= 0) {
         statusTxt = getEntityName(p.leader) + ' ' + p.holesUp + ' UP';
       }
       var isResolved = p.resolved;
+      var parentNote = p.parentIndex != null ? ' (re-press)' : '';
 
       activeBets.push({
-        label: 'Press #' + pressCount + ' — ' + sideName,
+        label: 'Press #' + pressNum + ' — ' + sideName + parentNote,
         startHole: p.startHole,
         endHole: endHole,
         stake: p.stake,
-        status: isResolved ? 'Resolved' : statusTxt,
+        status: isResolved ? 'Resolved' : statusTxt + ' · opened hole ' + p.startHole,
         dotClass: isResolved ? 'resolved' : 'press',
-        tag: isResolved ? 'SETTLED' : 'H' + p.startHole + '–' + endHole,
+        tag: isResolved ? 'SETTLED' : 'LIVE',
         isPress: true,
       });
     });
