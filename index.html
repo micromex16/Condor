@@ -13474,18 +13474,10 @@ async function populateFlightBoard() {
     var goldClass = i === 0 ? ' gold' : '';
     var moneySign = p.money >= 0 ? '+$' : '\u2212$';
     var moneyClass = p.money >= 0 ? 'pos' : 'neg';
-    var avgText = '';
-    if (p.scoredRounds > 0) {
-      var avg = (p.totalToPar / p.scoredRounds);
-      avgText = avg === 0 ? 'E' : avg < 0 ? '\u2212' + Math.abs(avg).toFixed(1) : '+' + avg.toFixed(1);
-    } else {
-      avgText = '\u2014';
-    }
     return '<div class="fb-row' + goldClass + '">' +
       '<span class="fb-rank">' + (ranks[i] || (i + 1)) + '</span>' +
       '<div class="fb-avatar"' + avStyle + '>' + avContent + '</div>' +
       '<span class="fb-name">' + (p.name || 'Unknown') + '</span>' +
-      '<span class="fb-score">' + avgText + '</span>' +
       '<span class="fb-tag ' + moneyClass + '">' + moneySign + Math.abs(p.money) + '</span>' +
     '</div>';
   }).join('');
@@ -13924,9 +13916,12 @@ async function bhOpenProfile(playerId) {
     } catch(e) {}
 
     var { data: rounds } = await sb.from('round_players').select('finish_position, money_result').eq('player_id', playerId);
+    console.log('Profile ID query:', playerId, 'found:', (rounds||[]).length, 'rows');
     // Fallback: if no rounds found by player_id, try matching by player_name
     if ((!rounds || rounds.length === 0) && player.username) {
-      var { data: nameRounds } = await sb.from('round_players').select('finish_position, money_result').eq('player_name', player.username);
+      console.log('Falling back to name match:', player.username);
+      var { data: nameRounds, error: nameErr } = await sb.from('round_players').select('finish_position, money_result, player_name').ilike('player_name', player.username);
+      console.log('Name match result:', nameRounds, nameErr);
       if (nameRounds && nameRounds.length > 0) rounds = nameRounds;
     }
     var total = (rounds || []).length;
