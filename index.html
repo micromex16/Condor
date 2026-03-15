@@ -13767,25 +13767,30 @@ async function bhLoadLeaderboard() {
     if (!session) return;
     var { data: rp, error } = await sb
       .from('round_players')
-      .select('player_id, money_result, rounds!inner(played_at)')
+      .select('player_id, player_name, money_result, rounds!inner(played_at)')
       .gte('rounds.played_at', '2026-01-01');
     if (error) throw error;
     if (!rp || !rp.length) {
       el.innerHTML = '<div class="bh-placeholder">No rounds this season</div>';
       return;
     }
+    // Aggregate by player_id, fall back to player_name for null IDs
     var agg = {};
     rp.forEach(function(r) {
-      if (!agg[r.player_id]) agg[r.player_id] = { total: 0, rounds: 0 };
-      agg[r.player_id].total += (r.money_result || 0);
-      agg[r.player_id].rounds++;
+      var key = r.player_id || ('name:' + (r.player_name || 'Unknown'));
+      if (!agg[key]) agg[key] = { total: 0, rounds: 0, name: r.player_name, hasId: !!r.player_id };
+      agg[key].total += (r.money_result || 0);
+      agg[key].rounds++;
     });
-    var ids = Object.keys(agg);
-    var { data: players } = await sb.from('players').select('id, username, avatar_url').in('id', ids);
+    var ids = Object.keys(agg).filter(function(k) { return agg[k].hasId; });
+    var { data: players } = ids.length ? await sb.from('players').select('id, username, avatar_url').in('id', ids) : { data: [] };
     var pm = {};
     (players || []).forEach(function(p) { pm[p.id] = p; });
-    var sorted = ids.map(function(id) {
-      return { id: id, total: agg[id].total, rounds: agg[id].rounds, p: pm[id] || {} };
+    var allKeys = Object.keys(agg);
+    var sorted = allKeys.map(function(key) {
+      var a = agg[key];
+      var p = a.hasId ? (pm[key] || { username: a.name }) : { username: a.name };
+      return { id: key, total: a.total, rounds: a.rounds, p: p };
     }).sort(function(a, b) { return b.total - a.total; }).slice(0, 10);
 
     el.innerHTML = sorted.map(function(item, i) {
@@ -13919,6 +13924,11 @@ async function bhOpenProfile(playerId) {
     } catch(e) {}
 
     var { data: rounds } = await sb.from('round_players').select('finish_position, money_result').eq('player_id', playerId);
+    // Fallback: if no rounds found by player_id, try matching by player_name
+    if ((!rounds || rounds.length === 0) && player.username) {
+      var { data: nameRounds } = await sb.from('round_players').select('finish_position, money_result').eq('player_name', player.username);
+      if (nameRounds && nameRounds.length > 0) rounds = nameRounds;
+    }
     var total = (rounds || []).length;
     var wins = (rounds || []).filter(function(r) { return r.finish_position === 1; }).length;
     var money = (rounds || []).reduce(function(s, r) { return s + (r.money_result || 0); }, 0);
