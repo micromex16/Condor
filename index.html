@@ -7978,10 +7978,12 @@ async function searchPlayers(query) {
   try {
     const { data: friends } = await sb
       .from('friends')
-      .select('friend_id')
-      .eq('player_id', userId)
+      .select('from_id, to_id')
+      .or('from_id.eq.' + userId + ',to_id.eq.' + userId)
       .eq('status', 'accepted');
-    (friends || []).forEach(f => friendIds.add(f.friend_id));
+    (friends || []).forEach(function(f) {
+      friendIds.add(f.from_id === userId ? f.to_id : f.from_id);
+    });
   } catch(e) { /* friends table may not exist yet — degrade gracefully */ }
 
   return players
@@ -13958,6 +13960,10 @@ function bhCloseSheet() {
 async function bhOpenProfile(playerId) {
   bhOpenSheet('<div class="bh-placeholder">Loading...</div>');
   try {
+    var { data: { session } } = await sb.auth.getSession();
+    var myId = session ? session.user.id : null;
+    var isSelf = myId === playerId;
+
     var { data: player } = await sb
       .from('players')
       .select('username, hdcp_index, home_course, city, created_at')
@@ -13971,12 +13977,8 @@ async function bhOpenProfile(playerId) {
     } catch(e) {}
 
     var { data: rounds } = await sb.from('round_players').select('finish_position, money_result').eq('player_id', playerId);
-    console.log('Profile ID query:', playerId, 'found:', (rounds||[]).length, 'rows');
-    // Fallback: if no rounds found by player_id, try matching by player_name
     if ((!rounds || rounds.length === 0) && player.username) {
-      console.log('Falling back to name match:', player.username);
-      var { data: nameRounds, error: nameErr } = await sb.from('round_players').select('finish_position, money_result, player_name').ilike('player_name', player.username);
-      console.log('Name match result:', nameRounds, nameErr);
+      var { data: nameRounds } = await sb.from('round_players').select('finish_position, money_result, player_name').ilike('player_name', player.username);
       if (nameRounds && nameRounds.length > 0) rounds = nameRounds;
     }
     var total = (rounds || []).length;
@@ -13985,6 +13987,25 @@ async function bhOpenProfile(playerId) {
     var winPct = total > 0 ? Math.round((wins / total) * 100) : 0;
     var moneyStr = (money >= 0 ? '+$' : '\u2212$') + Math.abs(money);
     var courseCity = [player.home_course, player.city].filter(Boolean).join(' \u00b7 ');
+
+    // Check friendship status
+    var friendBtn = '';
+    if (!isSelf && myId) {
+      var { data: existing } = await sb.from('friends')
+        .select('id, status')
+        .or('and(from_id.eq.' + myId + ',to_id.eq.' + playerId + '),and(from_id.eq.' + playerId + ',to_id.eq.' + myId + ')')
+        .maybeSingle();
+
+      if (existing && existing.status === 'accepted') {
+        friendBtn = '<div style="text-align:center;margin-top:16px;font-family:var(--sans);font-size:11px;color:rgba(255,255,255,.4);letter-spacing:1px;">✓ FRIENDS</div>';
+      } else if (existing && existing.status === 'pending') {
+        friendBtn = '<div style="text-align:center;margin-top:16px;font-family:var(--sans);font-size:11px;color:var(--gold-rule);letter-spacing:1px;">REQUEST PENDING</div>';
+      } else {
+        friendBtn = '<div style="text-align:center;margin-top:16px;">' +
+          '<button onclick="bhSendFriendRequest(\'' + playerId + '\',this)" style="background:transparent;border:1px solid var(--gold-rule);color:var(--gold-rule);font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:10px 24px;border-radius:8px;cursor:pointer;">Add Friend</button>' +
+        '</div>';
+      }
+    }
 
     bhOpenSheet(
       '<div class="bh-ms-name">' + (player.username || 'Unknown') + '</div>' +
@@ -13995,11 +14016,26 @@ async function bhOpenProfile(playerId) {
         '<div class="bh-ms-stat"><div class="bh-ms-stat-val">' + total + '</div><div class="bh-ms-stat-label">Rounds</div></div>' +
         '<div class="bh-ms-stat"><div class="bh-ms-stat-val">' + moneyStr + '</div><div class="bh-ms-stat-label">Winnings</div></div>' +
         '<div class="bh-ms-stat"><div class="bh-ms-stat-val">' + winPct + '%</div><div class="bh-ms-stat-label">Win Rate</div></div>' +
-      '</div>'
+      '</div>' +
+      friendBtn
     );
   } catch(e) {
     console.error('BH profile:', e);
     bhCloseSheet();
+  }
+}
+
+async function bhSendFriendRequest(playerId, btn) {
+  try {
+    btn.disabled = true;
+    btn.textContent = 'SENDING...';
+    await sendFriendRequest(playerId);
+    btn.parentElement.innerHTML = '<div style="font-family:var(--sans);font-size:11px;color:var(--gold-rule);letter-spacing:1px;">REQUEST SENT ✓</div>';
+  } catch(e) {
+    console.error('Friend request error:', e);
+    btn.disabled = false;
+    btn.textContent = 'ADD FRIEND';
+    alert('Error: ' + e.message);
   }
 }
 
