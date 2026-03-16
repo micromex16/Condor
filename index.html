@@ -5383,6 +5383,7 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:
       <div style="flex:1;display:flex;align-items:center;gap:8px">
         <span style="font-family:var(--serif);font-weight:600;color:var(--gold);font-style:italic;font-size:13px">Press</span>
         <span class="press-alert-text" id="press-alert-text" style="font-family:var(--sans);font-size:12px;color:var(--ink)">Press available</span>
+        <div class="press-alert-sub" id="press-alert-sub"></div>
       </div>
       <button class="press-btn" onclick="acceptPress()" style="padding:5px 12px;font-size:11px">Press</button>
       <button class="press-btn" onclick="declinePress()" style="background:var(--ink-muted);margin-left:4px;padding:5px 10px;font-size:11px">Skip</button>
@@ -6102,13 +6103,6 @@ function exportNotationCell(score, par, size, fontSize, cellW) {
 }
 
 // Net-aware notation for full card (uses handicap strokes)
-function exportNetNotationCell(score, pHoles, pi, size, fontSize, cellW) {
-  if (score == null) return exportNotationCell(null, 0, size, fontSize, cellW);
-  var strokes = strokesOnHole(state.playingHandicaps[pi], pHoles.hcp);
-  var net = score - strokes;
-  return exportNotationCell(score, pHoles.par + strokes, size, fontSize, cellW);
-}
-
 // ── CARD BUILDERS — Wallet-Card Design ────────────────────────────
 
 function buildFullExportCard() {
@@ -6683,14 +6677,12 @@ async function exportMemberCard() {
       if (myRounds && myRounds.length) {
         const total = myRounds.length;
         const money = myRounds.reduce((s, r) => s + (r.money_result || 0), 0);
-        const grossScores = myRounds.filter(r => r.gross_score != null).map(r => r.gross_score);
-        const avgGross = grossScores.length ? grossScores.reduce((a,b) => a+b, 0) / grossScores.length : null;
+        const toParValues = myRounds.filter(r => r.to_par != null).map(r => r.to_par);
+        const avgToPar = toParValues.length ? toParValues.reduce((a,b) => a+b, 0) / toParValues.length : null;
         stats.rounds = '' + total;
         stats.netNum = money;
         stats.net = (money >= 0 ? '+$' : '\u2212$') + Math.abs(money);
-        if (avgGross != null) {
-          // Show avg as to-par relative to 72
-          var avgToPar = avgGross - 72;
+        if (avgToPar != null) {
           stats.avgScoreNum = avgToPar;
           stats.avgScore = avgToPar === 0 ? 'E' : avgToPar < 0 ? '\u2212' + Math.abs(avgToPar).toFixed(1) : '+' + avgToPar.toFixed(1);
         }
@@ -6776,10 +6768,6 @@ async function sharePlayerScorecard(playerIdx) {
 }
 
 // Legacy wrapper for backward compatibility
-async function shareScorecard() {
-  await shareFullScorecard();
-}
-
 // ═══════════════════════════════════════════════════════════════════
 // COURSE DATABASE (5 realistic courses with full 18-hole data)
 // ═══════════════════════════════════════════════════════════════════
@@ -6887,8 +6875,6 @@ function getNet(playerIdx, holeIdx) {
 // ═══════════════════════════════════════════════════════════════════
 // NASSAU ENGINE — Team-aware, correct math
 // ═══════════════════════════════════════════════════════════════════
-function nassauHoleSide(holeN) { return holeN <= 9 ? 'front' : 'back'; }
-
 // Get the "score" for a side in Nassau — for teams, use best ball net
 function getNassauScore(entityIdx, holeIdx) {
   if (!state.teams) {
@@ -6929,15 +6915,6 @@ function getEntityFullLabel(idx) {
 }
 
 // Short display name — for space-constrained spots
-function getEntityShortName(idx) {
-  if (!state.teams) return state.players[idx].name.split(' ')[0];
-  const custom = state.teamNames && state.teamNames[idx];
-  const hasCustom = custom && custom.trim() && custom !== 'Team A' && custom !== 'Team B' && custom !== 'Team C';
-  if (hasCustom) return custom.trim();
-  const members = state.teams[idx];
-  return members.map(pi => state.players[pi].name.split(' ')[0]).join(' & ');
-}
-
 // Recalculate front/back/match for entity A vs entity B from scratch
 function calcSideScores(aIdx, bIdx) {
   let frontA=0,frontB=0,backA=0,backB=0;
@@ -7115,17 +7092,40 @@ function calcSettlement() {
 
   // ── SKINS ──
   if (state.games.skins) {
-    // Each player antes the stake per hole. Winner collects the stake from each loser.
-    // e.g. $5/hole with 4 players: each of 3 losers pays $5 to winner = $15 total. Always round.
+    // Skins with carryover: winner of a hole collects the accumulated pot (stake × carried holes + current)
+    // Each loser pays their share of the pot to the winner: pot / (numPlayers - 1) per loser
     const skinStake = parseFloat(state.stakes.skins) || 0;
+    const numPlayers = state.players.length;
+
+    // Force-settle remaining carryover on hole 18 (or last hole played):
+    // If carryover remains after all holes, split it evenly among all players who won at least one skin.
+    // If no one won any skin, carryover is voided (push — no money changes hands).
+    var skinWinners = [];
     state.skins.results.forEach((r, hi) => {
       if (!r || r.winner < 0) return;
-      // Each loser owes the stake directly to the winner — $5/player, always round
-      const losers = state.players.map((_,i)=>i).filter(i=>i!==r.winner);
+      // Pot is the accumulated value (includes carryover from prior ties)
+      var pot = r.pot || skinStake;
+      var perLoser = pot / (numPlayers - 1);
+      var losers = state.players.map((_,i)=>i).filter(i=>i!==r.winner);
       losers.forEach(lpi => {
-        debts.push({ from:lpi, to:r.winner, amount: skinStake, label:`Skin H${hi+1}` });
+        debts.push({ from:lpi, to:r.winner, amount: Math.round(perLoser), label:'Skin H'+(hi+1)+' (pot $'+Math.round(pot)+')' });
       });
+      if (skinWinners.indexOf(r.winner) === -1) skinWinners.push(r.winner);
     });
+
+    // Force-settle remaining carryover if any
+    if (state.skins.carryover > 0 && skinWinners.length > 0) {
+      var remainingPot = state.skins.carryover;
+      var perWinner = remainingPot / skinWinners.length;
+      var nonWinners = state.players.map((_,i)=>i).filter(i => skinWinners.indexOf(i) === -1);
+      var perLoserShare = (perWinner * skinWinners.length) / nonWinners.length;
+      nonWinners.forEach(function(lpi) {
+        skinWinners.forEach(function(wpi) {
+          var share = Math.round(perLoserShare / skinWinners.length);
+          if (share > 0) debts.push({ from:lpi, to:wpi, amount: share, label:'Skins carryover' });
+        });
+      });
+    }
   }
 
   // ── STROKE PLAY ──
@@ -7163,23 +7163,29 @@ function calcSettlement() {
       { threshold: -1, key: 'birdie',    label: 'Birdie' },
       { threshold: -2, key: 'eagle',     label: 'Eagle' },
       { threshold: -3, key: 'albatross', label: 'Albatross' },
-      { threshold: -4, key: 'ace',       label: 'Hole in One' },
       { threshold: -5, key: 'condor',    label: 'Condor' },
     ];
-    var bbHoles = getPlayerTee(0).holes || [];
     state.players.forEach(function(_, pi) {
+      var bbHoles = getPlayerTee(pi).holes || [];
       bbHoles.forEach(function(hole, hi) {
         var gross = (state.scores[pi]||[])[hi];
         if (gross == null) return;
         var diff = gross - hole.par;
         bbPayouts.forEach(function(bp) {
-          if (diff === bp.threshold && parseFloat(bb[bp.key]||0) > 0) {
+          if (diff <= bp.threshold && parseFloat(bb[bp.key]||0) > 0) {
             var payout = parseFloat(bb[bp.key]);
             state.players.forEach(function(_, oi) {
               if (oi !== pi) debts.push({ from: oi, to: pi, amount: payout, label: bp.label+' H'+(hi+1) });
             });
           }
         });
+        // Ace (hole-in-one): gross score === 1, regardless of par
+        if (gross === 1 && parseFloat(bb['ace']||0) > 0) {
+          var acePayout = parseFloat(bb['ace']);
+          state.players.forEach(function(_, oi) {
+            if (oi !== pi) debts.push({ from: oi, to: pi, amount: acePayout, label: 'Hole in One H'+(hi+1) });
+          });
+        }
       });
     });
   }
@@ -7591,7 +7597,6 @@ function selectCourse(id) {
   goTo('screen-players');
 }
 async function searchAPIcourses(q) {
-  console.log('searchAPIcourses called with:', q);
   const old = document.getElementById('api-course-results');
   if (old) old.remove();
 
@@ -7632,7 +7637,6 @@ async function searchAPIcourses(q) {
     );
 
     const details = await Promise.all(detailPromises);
-console.log('details fetched:', details);
     let cardsHtml = '';
     details.forEach((detail, i) => {
       if (!detail) return;
@@ -8336,10 +8340,11 @@ async function openClubhouse() {
   // Reset section loaded flags
   window._chLoaded = { matches: false, merit: false, trophies: false, groups: false, members: false };
 
-  // Load profile + leaderboard data in parallel
+  // Load profile + leaderboard data in parallel (season-filtered)
+  var seasonStart = new Date().getFullYear() + '-01-01';
   var [meResult, allRoundsResult] = await Promise.all([
     sb.from('players').select('username, hdcp_index, avatar_url').eq('id', userId).maybeSingle(),
-    sb.from('round_players').select('player_id, finish_position, money_result, gross_score, to_par, eagles, birdies, players(username, hdcp_index, avatar_url)')
+    sb.from('round_players').select('player_id, finish_position, money_result, gross_score, to_par, eagles, birdies, created_at, players(username, hdcp_index, avatar_url)').gte('created_at', seasonStart)
   ]);
   var me = meResult.data;
   var allRounds = allRoundsResult.data;
@@ -9363,25 +9368,6 @@ function dismissWelcome() {
 // ═══════════════════════════════════════════════════════════════════
 // GAME SETUP SCREEN
 // ═══════════════════════════════════════════════════════════════════
-function checkSkinsStake() {
-  const stake = parseFloat(document.getElementById('skins-stake').value) || 0;
-  const n = state.players.length;
-  const losers = n - 1;
-  const hint = document.getElementById('skins-stake-hint');
-  if (!hint || !stake || !losers) return;
-  const perLoser = stake / losers;
-  const isClean = Number.isInteger(perLoser);
-  if (!isClean) {
-    // Find nearest higher clean stake that divides evenly
-    let suggest = stake + 1;
-    while (suggest % losers !== 0 && suggest < stake + 20) suggest++;
-    hint.style.display = 'block';
-    hint.innerHTML = `$${stake} ÷ ${losers} players = $${perLoser.toFixed(2)} each — not round. Try <strong>$${suggest}</strong> for clean splits.`;
-  } else {
-    hint.style.display = 'none';
-  }
-}
-
 function toggleGame(game) {
   state.games[game] = !state.games[game];
   const sw = document.getElementById(`switch-${game}`);
@@ -12329,16 +12315,6 @@ function buildMatchCard(label, pA, pB, teeA, teeB, piA, piB, s, stake, pressesA,
   </div>`;
 }
 
-function buildHbhCells(results, startNum) {
-  return results.map((r, i) => {
-    const num = startNum + i;
-    const isCur = num === state.currentHole;
-    const cls = isCur ? 'current' : r;
-    const numClass = (r === 'a' || r === 'b') ? 'hbh-num' : 'hbh-num-dark';
-    return `<div class="hbh-cell ${cls}"><div class="${numClass}">${num}</div></div>`;
-  }).join('');
-}
-
 // ═══════════════════════════════════════════════════════════════════
 // DOWNLOAD SCORECARD — generates shareable HTML file
 // ═══════════════════════════════════════════════════════════════════
@@ -13049,24 +13025,28 @@ function syncTabBar(screen) {
 // ─── CONDOR NAV WRAPPER ───
 // Bridges the new 3-tab shell to the old engine's goTo() routing
 async function condorNavigate(tab) {
-  navigate(tab);
-  // Return to shell — hide engine overlay
-  document.getElementById('engine-overlay').classList.remove('visible');
-  if (tab === 'play') {
-    syncActiveRoundCard();
-    populatePlayLastRound();
-  }
-  if (tab === 'card') {
-    populateCondorCard();
-  }
-  if (tab === 'birdhouse') {
-    populateFlightBoard();
-    populateFlightLog();
-    populateFlockPills();
-    bhLoadLeaderboard();
-    bhLoadNewMembers();
-    bhLoadDirectory();
-    bhLoadBulletin();
+  try {
+    navigate(tab);
+    // Return to shell — hide engine overlay
+    document.getElementById('engine-overlay').classList.remove('visible');
+    if (tab === 'play') {
+      syncActiveRoundCard();
+      populatePlayLastRound();
+    }
+    if (tab === 'card') {
+      populateCondorCard();
+    }
+    if (tab === 'birdhouse') {
+      populateFlightBoard();
+      populateFlightLog();
+      populateFlockPills();
+      bhLoadLeaderboard();
+      bhLoadNewMembers();
+      bhLoadDirectory();
+      bhLoadBulletin();
+    }
+  } catch (err) {
+    console.error('condorNavigate error:', err);
   }
 }
 
@@ -13135,11 +13115,13 @@ async function populateCondorCard() {
       document.getElementById('cc-member-id').textContent = '№ C????';
     }
 
-    // Stats (same query as populateCondorCard stats block)
+    // Stats — current season only (2026)
+    var seasonStart = new Date().getFullYear() + '-01-01';
     const { data: myRounds } = await sb
       .from('round_players')
-      .select('finish_position, money_result, gross_score')
-      .eq('player_id', session.user.id);
+      .select('finish_position, money_result, gross_score, to_par, created_at')
+      .eq('player_id', session.user.id)
+      .gte('created_at', seasonStart);
 
     if (myRounds && myRounds.length) {
       var total = myRounds.length;
@@ -13152,10 +13134,10 @@ async function populateCondorCard() {
       document.getElementById('cc-season-net').textContent =
         (money >= 0 ? '+$' : '\u2212$') + Math.abs(money);
 
-      // Avg score (same logic as exportMemberCard)
-      var grossScores = myRounds.filter(r => r.gross_score != null).map(r => r.gross_score);
-      if (grossScores.length) {
-        var avgToPar = (grossScores.reduce((a, b) => a + b, 0) / grossScores.length) - 72;
+      // Avg score - use to_par from Supabase
+      var toParValues = myRounds.filter(r => r.to_par != null).map(r => r.to_par);
+      if (toParValues.length) {
+        var avgToPar = toParValues.reduce((a, b) => a + b, 0) / toParValues.length;
         document.getElementById('cc-avg-score').textContent =
           avgToPar === 0 ? 'E' : avgToPar < 0 ? '\u2212' + Math.abs(avgToPar).toFixed(1) : '+' + avgToPar.toFixed(1);
       }
@@ -13249,7 +13231,6 @@ async function saveCardField(el, input, field) {
       updates[field] = newValue || null;
     }
     var result = await sb.from('players').update(updates).eq('id', session.user.id);
-    console.log('Card save:', field, '=', newValue, result.error ? 'ERROR: ' + result.error.message : 'OK');
     if (result.error) throw result.error;
   } catch (e) {
     console.error('Save field failed:', e);
@@ -13487,10 +13468,12 @@ setTimeout(populateCondorCard, 500);
 async function populateFlightBoard() {
   var boardMap = window._chBoardMap;
   if (!boardMap || !Object.keys(boardMap).length) {
-    // _chBoardMap not ready yet — build it ourselves
+    // _chBoardMap not ready yet — build it ourselves (season-filtered)
+    var seasonStart = new Date().getFullYear() + '-01-01';
     const { data: allRounds } = await sb
       .from('round_players')
-      .select('player_id, finish_position, money_result, gross_score, to_par, eagles, birdies, players(username, hdcp_index, avatar_url)');
+      .select('player_id, finish_position, money_result, gross_score, to_par, eagles, birdies, created_at, players(username, hdcp_index, avatar_url)')
+      .gte('created_at', seasonStart);
     boardMap = {};
     (allRounds || []).forEach(function(r) {
       if (!r.player_id || !r.players) return;
@@ -13663,51 +13646,6 @@ window.addEventListener('load', () => {
 // ─── BET STEPPER ───
 // Updates the display and writes into the engine's Nassau stake inputs
 let betAmount = 20;
-function adjustBet(delta) {
-  betAmount = Math.max(5, Math.min(200, betAmount + delta));
-  document.getElementById('bet-val').textContent = '$' + betAmount;
-
-  var front = document.getElementById('nassau-front-stake');
-  var back  = document.getElementById('nassau-back-stake');
-  var match = document.getElementById('nassau-match-stake');
-  if (front) front.value = betAmount;
-  if (back)  back.value  = betAmount;
-  if (match) match.value = betAmount;
-}
-
-// ─── FORMAT PILLS ───
-// Pre-select the game format so the engine picks it up on screen-games
-function selectFormat(el) {
-  el.closest('.format-pills').querySelectorAll('.format-pill').forEach(p => p.classList.remove('selected'));
-  el.classList.add('selected');
-
-  var name = el.querySelector('.format-pill-name').textContent.trim().toLowerCase();
-  if (typeof state !== 'undefined' && state.games) {
-    state.games.nassau = (name === 'nassau');
-    state.games.skins  = (name === 'skins');
-    state.games.wolf   = (name === 'wolf');
-  }
-
-  // Sync engine toggle switches so screen-games reflects the pill selection
-  var toggleMap = { nassau: 'nassau', skins: 'skins', wolf: 'wolf' };
-  Object.keys(toggleMap).forEach(function(game) {
-    var sw = document.getElementById('switch-' + game);
-    var tg = document.getElementById('toggle-' + game);
-    var pn = document.getElementById(game + '-config-panel');
-    if (sw) sw.classList.toggle('on', game === name);
-    if (tg) tg.classList.toggle('active', game === name);
-    if (pn) pn.classList.toggle('open', game === name);
-  });
-}
-
-// ─── ADVANCED TOGGLE ───
-function toggleAdvanced(btn) {
-  const config = document.getElementById('nassau-config');
-  const icon = document.getElementById('adv-icon');
-  const isOpen = config.classList.toggle('open');
-  icon.classList.toggle('open', isOpen);
-}
-
 // ─── SAVE CARD (PNG download) ───
 async function saveCondorCard() {
   var btn = document.querySelector('.card-action-btn.primary');
