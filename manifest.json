@@ -1,0 +1,16 @@
+{
+  "name": "Condor Golf Society",
+  "short_name": "Condor",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1C3B2A",
+  "theme_color": "#1C3B2A",
+  "icons": [
+    {
+      "src": "condor-icon.jpg",
+      "sizes": "1024x1536",
+      "type": "image/jpeg",
+      "purpose": "any"
+    }
+  ]
+}
