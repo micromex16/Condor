@@ -3,6 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="condor-logo.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#1C3B2A">
 <title>CONDOR</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14179,6 +14185,11 @@ async function bhViewPastBulletin(bulletinId) {
     var isAdmin = session && session.user.id === BH_ADMIN_ID;
     bhRenderBulletin(b, isAdmin);
   } catch(e) { console.error('View bulletin:', e); }
+}
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js');
 }
 </script>
 
